@@ -1,0 +1,15 @@
+{
+  "scan_date": "July 07, 2026",
+  "scan_time": "6:06 AM CDT",
+  "total_properties": 89,
+  "stats": {
+    "live_normalized": 276,
+    "accepted_pre_dedup": 89,
+    "rejected_renovated_flip": 49,
+    "rejected_no_distress": 136,
+    "rejected_out_of_zone": 2,
+    "duplicates_merged": 0,
+    "final_count": 89
+  },
+  "live_fetched": 276
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "address": "125 Presidential Blvd, Oswego, IL 60543",
+    "list_price": 349777,
+    "original_list_price": 359777,
+    "beds": 3,
+    "baths": 2.5,
+    "sqft": 1773,
+    "lot_size": 4983,
+    "year_built": 2000,
+    "dom": 172,
+    "price_cuts": 1,
+    "total_reduced": -10000,
+    "distress_keywords": [
+      "as-is",
+      "sold as-is"
+    ],
+    "status": "Active",
+    "url": "https://www.redfin.com/IL/Oswego/125-Presidential-Blvd-60543/home/14256255",
+    "photo_url": "https://ssl.cdn-redfin.com/photo/68/mbphotov2/14256255_0.webp",
+    "property_type": "Single Family",
+    "source": "Redfin",
+    "notes": "DOM 172, listed Oct 25 2025 at $359,777, price reduced Dec 5 2025 to $349,777 (-$10,000). Remarks: \"sold in As-Is conditions\". Seller may credit buyer. Corner lot. 0.98mi from Oswego center."
+  },
+  {
+    "address": "385 Mcgrath Dr, Oswego, IL 60543",
+    "list_price": 340000,
+    "original_list_price": 340000,
+    "beds": 3,
+    "baths": 2.5,
+    "sqft": 1627,
+    "lot_size": null,
+    "year_built": 2006,
+    "dom": 5,
+    "price_cuts": 0,
+    "total_reduced": 0,
+    "distress_keywords": [
+      "investor"
+    ],
+    "status": "Active",
+    "url": "https://www.redfin.com/IL/Oswego/385-McGrath-Dr-60543/home/14252278",
+    "photo_url": "https://ssl.cdn-redfin.com/photo/68/mbphotov2/14252278_0.webp",
+    "property_type": "Townhouse",
+    "source": "Redfin",
+    "notes": "DOM 5, listed Apr 10 2026 at $340,000. Remarks target investors - property is leased with 12-month tenancy. Townhome in Churchill Club Subdivision. 2.9mi from Oswego center."
+  }
+]

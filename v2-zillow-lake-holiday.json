@@ -1,0 +1,22 @@
+[
+  {
+    "address": "116 Tammy Ln, Somonauk, IL 60552",
+    "list_price": 385000,
+    "original_list_price": 385000,
+    "beds": 6,
+    "baths": 4,
+    "sqft": null,
+    "lot_size": "0.34 acres",
+    "year_built": null,
+    "dom": 27,
+    "price_cuts": 0,
+    "total_reduced": 0,
+    "distress_keywords": ["Real Estate Owned", "SOLD AS-IS", "Foreclosure"],
+    "status": "PENDING (was Active; went Pending ~3/25/2026 per MLS data). NOTE: No longer active as of April 15, 2026.",
+    "url": "https://www.zillow.com/homedetails/116-Tammy-Ln-Somonauk-IL-60552/115680946_zpid/",
+    "photo_url": "https://photos.zillowstatic.com/fp/116-tammy-ln-somonauk-il-60552.jpg",
+    "property_type": "Single Family Residence",
+    "source": "Zillow",
+    "notes": "Located in Lake Holiday subdivision (mailing address Somonauk IL 60552). Zillow shows Special Conditions: 'Real Estate Owned' (REO/Bank-Owned Foreclosure). Description says 'SOLD AS-IS.' HOA $86/mo ($1,029/year). MLS #12595555. Listed 3/18/2026. Went Pending quickly (~27 days DOM). Also listed on realtor.com as 'Foreclosure' with 28 DOM as of April 10, 2026 update. Annual taxes: $8,966. County: LaSalle. School District 432. Zillow BLOCKED via browser bot-detection; listing data obtained from Zillow cached search results via web search. CRITICAL NOTE: Zillow was completely inaccessible due to bot-detection (Press & Hold challenge). All Zillow data compiled from web search engine cached/indexed Zillow pages. Property is PENDING (not active) as of April 15, 2026 — seller has accepted an offer. This is the ONLY confirmed REO/Foreclosure listing found on Zillow in the Lake Holiday, Sheridan, Wedron, Serena, Leland area."
+  }
+]

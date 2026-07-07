@@ -1,0 +1,65 @@
+# Distressed Property Scanner configuration
+# Scope: ~3 mile radius around each target town
+
+scan:
+  radius_miles: 3
+  exclude_pending: true
+  include_foreclosure_search: true
+  include_land: true
+  include_mobile: true
+
+towns:
+  Wheaton:
+    search_location: "Wheaton, IL"
+    county: DuPage
+    cities: [wheaton]
+  Oswego:
+    search_location: "Oswego, IL"
+    county: Kendall
+    cities: [oswego, montgomery, boulder hill]
+  Sandwich:
+    search_location: "Sandwich, IL"
+    county: DeKalb
+    cities: [sandwich]
+  Somonauk:
+    search_location: "Somonauk, IL"
+    county: DeKalb
+    cities: [somonauk]
+  Lake Holiday:
+    search_location: "Lake Holiday, IL"
+    county: LaSalle
+    # Lake Holiday CDP + Wildwood subdivisions. NOT Sheridan village (~6 mi south).
+
+# Minimum distress thresholds
+distress:
+  high_dom_days: 90
+  land_max_price_signal: 30000
+  mobile_max_price_signal: 50000
+  min_price_reduction_pct: 0.02  # ignore trivial cuts on renovated flips
+
+# Status values treated as NOT for sale
+inactive_statuses:
+  - sold
+  - closed
+  - pending
+  - contingent
+  - under contract
+  - off market
+  - off-market
+  - expired
+  - withdrawn
+  - cancelled
+  - canceled
+
+# Phrases that indicate a listing is NOT distressed (exclude unless other strong signals)
+not_distressed_phrases:
+  - not a distressed sale
+  - not distressed
+  - fully renovated
+  - move-in ready
+  - turnkey
+  - newly renovated
+  - completely updated
+  - beautifully maintained
+  - immaculate
+  - like new
