@@ -1,15 +1,23 @@
 {
-  "scan_date": "July 07, 2026",
-  "scan_time": "6:06 AM CDT",
-  "total_properties": 89,
+  "scan_date": "July 08, 2026",
+  "scan_time": "5:18 PM CDT",
+  "total_properties": 150,
   "stats": {
-    "live_normalized": 276,
-    "accepted_pre_dedup": 89,
-    "rejected_renovated_flip": 49,
-    "rejected_no_distress": 136,
+    "live_normalized": 353,
+    "negative_check_inventory": 597,
+    "accepted_pre_dedup": 150,
+    "rejected_renovated_flip": 48,
+    "rejected_no_distress": 153,
     "rejected_out_of_zone": 2,
     "duplicates_merged": 0,
-    "final_count": 89
+    "final_count": 150,
+    "reverify_kept": 150,
+    "reverify_rejected": 0
   },
-  "live_fetched": 276
+  "live_fetched": 950,
+  "changes": {
+    "newly_active": 61,
+    "removed": 2,
+    "price_cuts": 2
+  }
 }

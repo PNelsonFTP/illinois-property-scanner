@@ -6,16 +6,15 @@ import json
 import logging
 from collections import Counter
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any
 
+from scanner.audit import write_rejection_audit
 from scanner.config import COMPILED_PATH, LEGACY_RAW_GLOB, PROJECT_ROOT, load_config
 from scanner.dedup import deduplicate
 from scanner.distress import calculate_score, detect_distress_signals
+from scanner.geo import classify_town
 from scanner.normalize import normalize_legacy_record, normalize_realtor_record
 from scanner.status import is_active_legacy, is_verified_active
-
-from scanner.geo import classify_town
 
 log = logging.getLogger(__name__)
 
@@ -43,12 +42,22 @@ def compile_records(
     *,
     include_legacy: bool = True,
     config: dict | None = None,
-) -> tuple[list[dict[str, Any]], dict[str, int]]:
+) -> tuple[list[dict[str, Any]], dict[str, int], list[dict[str, Any]]]:
+    """
+    Returns (final_properties, stats, rejections_audit).
+    Negative-check sold/pending records are excluded from publishing but kept
+    available via raw data for the verify pass.
+    """
     config = config or load_config()
     stats = Counter()
+    rejections: list[dict[str, Any]] = []
 
     normalized: list[dict[str, Any]] = []
     for raw in live_records:
+        # Sold/pending inventory is for negative checks only — never publish as active
+        if raw.get("_negative_check") or raw.get("_listing_type_query") in ("sold", "pending"):
+            stats["negative_check_inventory"] += 1
+            continue
         normalized.append(normalize_realtor_record(raw))
         stats["live_normalized"] += 1
 
@@ -61,9 +70,14 @@ def compile_records(
     verified_at = datetime.now(timezone.utc).isoformat()
 
     for rec in normalized:
+        addr = rec.get("address", "")
         town, county = classify_town(rec, config)
         if town is None:
             stats["rejected_out_of_zone"] += 1
+            rejections.append({
+                "address": addr, "city": rec.get("city"),
+                "reason": "out_of_zone", "detail": "city not in enabled towns",
+            })
             continue
 
         rec["nearest_target"] = town
@@ -80,24 +94,39 @@ def compile_records(
 
         if not active:
             stats["rejected_inactive"] += 1
-            log.debug("Rejected inactive: %s — %s", rec.get("address"), reason)
+            rejections.append({
+                "address": addr, "city": rec.get("city"),
+                "reason": "inactive", "detail": reason,
+                "status": rec.get("mls_status") or rec.get("status"),
+            })
             continue
 
         distress = detect_distress_signals(rec, config)
         if distress.get("excluded_as_flip"):
             stats["rejected_renovated_flip"] += 1
+            rejections.append({
+                "address": addr, "city": rec.get("city"),
+                "reason": "renovated_flip", "detail": "weak signals only on flip/turnkey",
+            })
             continue
         if not distress.get("has_signal"):
             stats["rejected_no_distress"] += 1
+            rejections.append({
+                "address": addr, "city": rec.get("city"),
+                "reason": "no_distress", "detail": "no distress signal detected",
+            })
             continue
 
-        # Land needs stronger signal than just existing
         ptype = (rec.get("property_type") or "").lower()
         if ptype == "land":
             land_tags = set(distress["tags"])
             if not (land_tags & {"high-dom", "price-reduced", "below-market", "foreclosure", "auction", "motivated"}):
-                if not any(k in distress["reasons"] for k in distress["reasons"] if "keyword" in k):
+                if not any("keyword" in k for k in distress["reasons"]):
                     stats["rejected_land_no_signal"] += 1
+                    rejections.append({
+                        "address": addr, "city": rec.get("city"),
+                        "reason": "land_no_signal", "detail": "land without strong distress",
+                    })
                     continue
 
         rec["distress_types"] = distress["tags"]
@@ -107,6 +136,7 @@ def compile_records(
 
         rec["distress_score"] = calculate_score(rec, distress["tags"])
         rec["verified_at"] = verified_at if is_live else rec.get("verified_at")
+        rec["last_seen_active_at"] = verified_at if is_live else rec.get("last_seen_active_at")
         rec["status"] = rec.get("mls_status") or rec.get("status") or "Active"
         rec["verification_note"] = reason
         accepted.append(rec)
@@ -145,8 +175,11 @@ def compile_records(
             "status": rec.get("status", ""),
             "mls_status": rec.get("mls_status", ""),
             "verified_at": rec.get("verified_at"),
+            "last_seen_active_at": rec.get("last_seen_active_at"),
             "verification_source": rec.get("verification_source", ""),
             "verification_note": rec.get("verification_note", ""),
+            "is_stale": False,
+            "needs_review": False,
             "notes": rec.get("notes", ""),
             "all_sources": rec.get("all_sources", []),
             "all_urls": rec.get("all_urls", []),
@@ -162,10 +195,11 @@ def compile_records(
         prop["id"] = i + 1
 
     stats["final_count"] = len(final)
-    return final, dict(stats)
+    write_rejection_audit(rejections, label="compile")
+    return final, dict(stats), rejections
 
 
-def save_compiled(records: list[dict[str, Any]], path: Path | None = None) -> Path:
+def save_compiled(records: list[dict[str, Any]], path=None):
     out = path or COMPILED_PATH
     with open(out, "w") as f:
         json.dump(records, f, indent=2, default=str)
@@ -175,7 +209,7 @@ def save_compiled(records: list[dict[str, Any]], path: Path | None = None) -> Pa
 
 def print_summary(records: list[dict[str, Any]], stats: dict[str, int]) -> None:
     print(f"\n{'=' * 60}")
-    print(f"COMPILE SUMMARY")
+    print("COMPILE SUMMARY")
     print(f"{'=' * 60}")
     for key, val in sorted(stats.items()):
         print(f"  {key}: {val}")
@@ -185,8 +219,14 @@ def print_summary(records: list[dict[str, Any]], stats: dict[str, int]) -> None:
     for town, count in by_town.most_common():
         print(f"  {town}: {count}")
 
-    verified = sum(1 for p in records if p.get("verification_source") == "realtor.com-live")
+    verified = sum(
+        1 for p in records
+        if "realtor.com" in (p.get("verification_source") or "")
+    )
     print(f"\nLive-verified: {verified}/{len(records)}")
+    stale = sum(1 for p in records if p.get("is_stale"))
+    if stale:
+        print(f"Stale: {stale}")
 
     print(f"\nTop 15 by score:")
     for p in records[:15]:

@@ -149,7 +149,13 @@ def main():
     area_map = {
         "wheaton": "Wheaton", "oswego": "Oswego", "sandwich": "Sandwich",
         "somonauk": "Somonauk", "lake-holiday": "Lake Holiday",
+        "leland": "Leland", "earlville": "Earlville",
+        "waterman": "Waterman", "sheridan": "Sheridan",
     }
+    # Only emit area files for towns that appear in data (or always for core five)
+    core = {"Wheaton", "Oswego", "Sandwich", "Somonauk", "Lake Holiday"}
+    present = {d.get("nearest_target") for d in data}
+    area_map = {k: v for k, v in area_map.items() if v in core or v in present}
 
     print("Building by-area files...")
     for slug, town in area_map.items():
@@ -180,14 +186,18 @@ def main():
     print("Building _index.md...")
     total = len(data)
     by_town = Counter(d["nearest_target"] for d in data)
-    verified = sum(1 for d in data if d.get("verification_source") == "realtor.com-live")
+    verified = sum(1 for d in data if "realtor.com" in (d.get("verification_source") or ""))
+    reverified = sum(1 for d in data if d.get("verification_source") == "realtor.com-reverified")
+    stale = sum(1 for d in data if d.get("is_stale"))
     ts = f"{SCAN_DATE} at {SCAN_TIME}" if SCAN_TIME else SCAN_DATE
 
     idx = f"# Distressed Properties Index — Illinois\n\n"
     idx += f"**Scan Date:** {ts}  \n"
     idx += f"**Scope:** {SCOPE}  \n"
     idx += f"**Total Properties:** {total}  \n"
-    idx += f"**Live-Verified:** {verified}/{total} (via Realtor.com MLS status)\n\n"
+    idx += f"**Live-Verified:** {verified}/{total}  \n"
+    idx += f"**Re-verified:** {reverified}/{total}  \n"
+    idx += f"**Stale:** {stale}\n\n"
     idx += "## Summary Statistics\n\n### By Town\n\n| Town | Count |\n|------|-------|\n"
     for town, cnt in sorted(by_town.items(), key=lambda x: -x[1]):
         idx += f"| {town} | {cnt} |\n"

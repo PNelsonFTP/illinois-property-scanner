@@ -24,5 +24,7 @@ def load_config(path: Path | None = None) -> dict[str, Any]:
 
 def ensure_dirs() -> None:
     RAW_DIR.mkdir(parents=True, exist_ok=True)
+    (DATA_DIR / "audit").mkdir(parents=True, exist_ok=True)
+    (DATA_DIR / "history").mkdir(parents=True, exist_ok=True)
     (PROJECT_ROOT / "distressed-properties").mkdir(parents=True, exist_ok=True)
     (PROJECT_ROOT / "dashboard").mkdir(parents=True, exist_ok=True)

@@ -1,43 +1,113 @@
 # Distressed Property Scanner configuration
-# Scope: ~3 mile radius around each target town
 
 scan:
   radius_miles: 3
+  rural_radius_miles: 6
   exclude_pending: true
   include_foreclosure_search: true
   include_land: true
   include_mobile: true
+  include_optional_towns: true
+  include_zip_searches: true
+  include_county_searches: false  # set true for county-wide sweeps (slow / large)
+  include_distress_passes: true
+  include_sold_pending_checks: true
+  reverify_after_compile: true
+  check_listing_urls: true
+  stale_hours: 48
+  include_new_listings: true
+  new_listings_days: 7
+
+verification:
+  require_reverify: true
+  sold_lookback_days: 90
+  pending_lookback_days: 30
+  dead_link_timeout_sec: 12
+  consensus_min_sources: 1
 
 towns:
   Wheaton:
     search_location: "Wheaton, IL"
     county: DuPage
     cities: [wheaton]
+    zips: ["60187", "60189"]
+    radius_miles: 3
   Oswego:
     search_location: "Oswego, IL"
     county: Kendall
     cities: [oswego, montgomery, boulder hill]
+    zips: ["60543"]
+    radius_miles: 3
   Sandwich:
     search_location: "Sandwich, IL"
     county: DeKalb
     cities: [sandwich]
+    zips: ["60548"]
+    radius_miles: 3
   Somonauk:
     search_location: "Somonauk, IL"
     county: DeKalb
     cities: [somonauk]
+    zips: ["60552"]
+    radius_miles: 3
   Lake Holiday:
     search_location: "Lake Holiday, IL"
     county: LaSalle
-    # Lake Holiday CDP + Wildwood subdivisions. NOT Sheridan village (~6 mi south).
+    cities: [lake holiday]
+    zips: ["60548", "60552"]
+    radius_miles: 3
 
-# Minimum distress thresholds
+# Optional towns — enabled when include_optional_towns is true or --include-optional
+optional_towns:
+  Leland:
+    search_location: "Leland, IL"
+    county: LaSalle
+    cities: [leland]
+    zips: ["60531"]
+    radius_miles: 6
+  Earlville:
+    search_location: "Earlville, IL"
+    county: LaSalle
+    cities: [earlville]
+    zips: ["60518"]
+    radius_miles: 6
+  Waterman:
+    search_location: "Waterman, IL"
+    county: DeKalb
+    cities: [waterman]
+    zips: ["60556"]
+    radius_miles: 6
+  Sheridan:
+    search_location: "Sheridan, IL"
+    county: LaSalle
+    cities: [sheridan]
+    zips: ["60551"]
+    radius_miles: 6
+
+# Extra county-level searches for edge parcels
+counties:
+  - "DeKalb County, IL"
+  - "LaSalle County, IL"
+  - "Kendall County, IL"
+
+# Targeted distress query passes (beyond plain for_sale)
+distress_passes:
+  - name: foreclosure
+    foreclosure: true
+  - name: price_reduced
+    # HomeHarvest has no direct price-reduced flag; we filter post-fetch
+    filter: price_reduced
+  - name: land
+    property_type: land
+  - name: mobile
+    property_type: mobile
+
 distress:
   high_dom_days: 90
   land_max_price_signal: 30000
   mobile_max_price_signal: 50000
-  min_price_reduction_pct: 0.02  # ignore trivial cuts on renovated flips
+  min_price_reduction_pct: 0.02
 
-# Status values treated as NOT for sale
 inactive_statuses:
   - sold
   - closed
@@ -51,7 +121,6 @@ inactive_statuses:
   - cancelled
   - canceled
 
-# Phrases that indicate a listing is NOT distressed (exclude unless other strong signals)
 not_distressed_phrases:
   - not a distressed sale
   - not distressed

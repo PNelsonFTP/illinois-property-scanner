@@ -1,9 +1,11 @@
 # Distressed Properties Index — Illinois
 
-**Scan Date:** July 07, 2026 at 6:06 AM CDT  
+**Scan Date:** July 09, 2026 at 5:40 AM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
-**Total Properties:** 89  
-**Live-Verified:** 89/89 (via Realtor.com MLS status)
+**Total Properties:** 150  
+**Live-Verified:** 150/150  
+**Re-verified:** 150/150  
+**Stale:** 0
 
 ## Summary Statistics
 
@@ -11,31 +13,39 @@
 
 | Town | Count |
 |------|-------|
-| Oswego | 43 |
-| Wheaton | 22 |
+| Oswego | 45 |
+| Earlville | 26 |
+| Sheridan | 25 |
+| Wheaton | 24 |
+| Sandwich | 11 |
 | Lake Holiday | 10 |
-| Sandwich | 10 |
 | Somonauk | 4 |
+| Leland | 3 |
+| Waterman | 2 |
 
 ## Top 10 Properties by Distress Score
 
 | # | Address | City | Price | Type | Distress Tags | DOM | Score | Status | Link |
 |---|---------|------|-------|------|---------------|-----|-------|--------|------|
-| 1 | 120 Cardinal Ln Unit A | Lake Holiday | $38,900 | Manufactured | below-market, high-dom, price-reduced | 746 | 6 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/120-Cardinal-Ln-A_Sandwich_IL_60548_M76829-52939) |
-| 2 | 2110 State Route 31 | Oswego | $599,000 | SFH | as-is, estate-sale, high-dom, price-reduced | 252 | 6 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2110-State-Route-31_Oswego_IL_60543_M70183-09384) |
-| 3 | 8 Hawthorne Dr | Oswego | $449,900 | SFH | as-is, below-market, investor, motivated, price-reduced | 60 | 6 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/8-Hawthorne-Dr_Oswego_IL_60543_M80193-74401) |
-| 4 | 15655 S Memory Ln | Sandwich | $45,000 | Land | high-dom, price-reduced | 2682 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/15655-S-Memory-Ln_Sandwich_IL_60548_M74377-33348) |
-| 5 | 94 Templeton Dr | Oswego | $295,000 | Land | high-dom, price-reduced | 918 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/94-Templeton-Dr_Oswego_IL_60543_M70987-55791) |
-| 6 | 1 Orchard Rd | Oswego | $264,844 | Land | high-dom, price-reduced | 910 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1-Orchard-Rd_Oswego_IL_60543_M72948-04241) |
-| 7 | 123 Orchard Rd | Oswego | $1,139,528 | Land | high-dom, price-reduced | 909 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/123-Orchard-Rd_Oswego_IL_60543_M99808-30139) |
-| 8 | 3 Orchard Rd | Oswego | $411,206 | Land | high-dom, price-reduced | 909 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/3-Orchard-Rd_Oswego_IL_60543_M98428-72458) |
-| 9 | 2 Orchard Rd | Oswego | $463,478 | Land | high-dom, price-reduced | 909 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2-Orchard-Ave_Oswego_IL_60543_M94778-13037) |
-| 10 | 1 Holiday Dr | Lake Holiday | $399,000 | Land | high-dom, price-reduced | 575 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1-Holiday-Dr_Somonauk_IL_60552_M88032-61634) |
+| 1 | 641 Tally St Lot 15 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/641-Tally-St-15_Earlville_IL_60518_M99454-19966) |
+| 2 | 501 Loraine St Lot 26 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/501-Loraine-St-26_Earlville_IL_60518_M95970-74199) |
+| 3 | 621 Betty St Lot 12 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/621-Betty-St-12_Earlville_IL_60518_M98412-02955) |
+| 4 | 602 Effie Dr Lot 31 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/602-Effie-Dr-31_Earlville_IL_60518_M91396-90767) |
+| 5 | 630 Betty St Lot 18 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/630-Betty-St-18_Earlville_IL_60518_M91218-13725) |
+| 6 | 503 Loraine St Lot 27 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/503-Loraine-St-27_Earlville_IL_60518_M95894-63915) |
+| 7 | 629/631 Effie Dr Lot 4 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/629631-Effie-Dr-Lot-4_Earlville_IL_60518_M96001-25064) |
+| 8 | 617 Betty St Lot 13 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/617-Betty-St-13_Earlville_IL_60518_M90627-02271) |
+| 9 | 637/639 Effie Dr Lot 2 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/637639-Effie-Dr-Lot-2_Earlville_IL_60518_M95604-27553) |
+| 10 | 641/643 Effie Dr Lot 1 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/641643-Effie-Dr-Lot-1_Earlville_IL_60518_M94818-79584) |
 
 ## Quick Links
 
-- [by-area/wheaton.md](by-area/wheaton.md) — Wheaton (22 properties)
-- [by-area/oswego.md](by-area/oswego.md) — Oswego (43 properties)
-- [by-area/sandwich.md](by-area/sandwich.md) — Sandwich (10 properties)
+- [by-area/wheaton.md](by-area/wheaton.md) — Wheaton (24 properties)
+- [by-area/oswego.md](by-area/oswego.md) — Oswego (45 properties)
+- [by-area/sandwich.md](by-area/sandwich.md) — Sandwich (11 properties)
 - [by-area/somonauk.md](by-area/somonauk.md) — Somonauk (4 properties)
 - [by-area/lake-holiday.md](by-area/lake-holiday.md) — Lake Holiday (10 properties)
+- [by-area/leland.md](by-area/leland.md) — Leland (3 properties)
+- [by-area/earlville.md](by-area/earlville.md) — Earlville (26 properties)
+- [by-area/waterman.md](by-area/waterman.md) — Waterman (2 properties)
+- [by-area/sheridan.md](by-area/sheridan.md) — Sheridan (25 properties)
