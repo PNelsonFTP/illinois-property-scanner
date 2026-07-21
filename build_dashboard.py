@@ -18,12 +18,15 @@ SCAN_TIME = os.environ.get("SCAN_TIME", "")
 VERIFIED_NOTE = (
     "Live-verified + re-verified via Realtor.com MLS. "
     "Pending/contingent/sold/removed listings excluded. "
-    "Optional towns: Leland, Earlville, Waterman, Sheridan."
+    "Optional towns: Leland, Earlville, Waterman, Sheridan. "
+    "Open via <strong>Zillow</strong> or <strong>Google</strong> first — "
+    "Realtor.com often blocks direct listing links after scanning."
 )
 NEW_NOTE = (
     "All active for-sale listings that came on the market in the last 7 days "
     "(geo/distance only — no distress filters). "
-    "Refresh with <code>python scan.py --new-listings-only --include-optional</code>."
+    "Refresh with <code>python scan.py --new-listings-only --include-optional</code>. "
+    "Prefer Zillow/Google if Realtor.com shows a block page."
 )
 
 
@@ -89,7 +92,15 @@ def main():
         *(p.get("nearest_target") for p in data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in new_data if p.get("nearest_target")),
     })
-    town_options = "".join(f"<option>{t}</option>" for t in towns_present)
+    towns_json = json.dumps(towns_present, separators=(",", ":"))
+    town_toggles = "".join(
+        f'<label class="loc-toggle" data-town="{t}">'
+        f'<input type="checkbox" class="loc-cb" value="{t}" checked onchange="onTownToggle()">'
+        f'<span class="loc-switch" aria-hidden="true"></span>'
+        f'<span class="loc-name">{t}</span>'
+        f'</label>'
+        for t in towns_present
+    )
 
     props_json = json.dumps(data, separators=(",", ":"))
     new_json = json.dumps(new_data, separators=(",", ":"))
@@ -131,6 +142,23 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .mode-btn{{padding:8px 14px;border:1px solid var(--border);border-radius:var(--rs);background:var(--card);color:var(--text2);font-size:.8rem;font-weight:600;cursor:pointer}}
 .mode-btn:hover{{border-color:var(--accent);color:var(--text)}}
 .mode-btn.active{{background:var(--accent);border-color:var(--accent);color:#fff}}
+.loc-panel{{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}}
+.loc-head{{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}}
+.loc-head h2{{font-size:.7rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}}
+.loc-actions{{display:flex;gap:6px;flex-wrap:wrap}}
+.loc-actions button{{padding:4px 10px;border:1px solid var(--border);border-radius:var(--rs);background:var(--card);color:var(--text2);font-size:.7rem;font-weight:600;cursor:pointer}}
+.loc-actions button:hover{{border-color:var(--accent);color:var(--text)}}
+.loc-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}}
+.loc-toggle{{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);cursor:pointer;user-select:none}}
+.loc-toggle:hover{{border-color:var(--accent)}}
+.loc-toggle.off{{opacity:.55;border-style:dashed}}
+.loc-cb{{position:absolute;opacity:0;pointer-events:none}}
+.loc-switch{{position:relative;width:36px;height:20px;border-radius:999px;background:#3a3f4d;flex-shrink:0;transition:background .15s ease}}
+.loc-switch::after{{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s ease}}
+.loc-cb:checked + .loc-switch{{background:var(--accent)}}
+.loc-cb:checked + .loc-switch::after{{transform:translateX(16px)}}
+.loc-name{{font-size:.8rem;font-weight:600;color:var(--text)}}
+.loc-meta{{font-size:.65rem;color:var(--muted);margin-left:auto}}
 .ctrls{{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:14px;background:var(--bg2);padding:12px;border-radius:var(--r);border:1px solid var(--border)}}
 .cg label{{display:block;font-size:.65rem;font-weight:600;color:var(--text2);margin-bottom:3px;text-transform:uppercase}}
 .cg select,.cg input{{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:var(--rs);background:var(--card);color:var(--text);font-size:.75rem}}
@@ -151,6 +179,9 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .s-h{{background:var(--orange)}}.s-m{{background:var(--yellow);color:#000}}.s-l{{background:var(--green)}}
 .s-new{{background:var(--purple)}}
 .vb{{display:inline-flex;padding:5px 12px;background:var(--accent);color:#fff;border-radius:var(--rs);font-size:.7rem;font-weight:600}}
+.vb-sm{{padding:4px 8px;font-size:.65rem;background:var(--card);color:var(--text2);border:1px solid var(--border)}}
+.vb-sm:hover{{border-color:var(--accent);color:var(--text);text-decoration:none}}
+.link-row{{display:flex;flex-wrap:wrap;gap:5px;align-items:center}}
 .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}}
 .cd{{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;position:relative}}
 .cd:hover{{border-color:var(--accent)}}
@@ -204,8 +235,18 @@ body.mode-new .new-only-flex{{display:flex}}
   </div>
   <div class="src-note distress-only">{VERIFIED_NOTE} Run <code>python scan.py --include-optional</code> to refresh. Use <code>--reverify-only</code> for a status-only pass.</div>
   <div class="src-note new-only">{NEW_NOTE}</div>
+  <div class="loc-panel">
+    <div class="loc-head">
+      <h2>Locations</h2>
+      <div class="loc-actions">
+        <button type="button" onclick="setAllTowns(true)">All on</button>
+        <button type="button" onclick="setAllTowns(false)">All off</button>
+        <button type="button" onclick="invertTowns()">Invert</button>
+      </div>
+    </div>
+    <div class="loc-grid" id="locGrid">{town_toggles}</div>
+  </div>
   <div class="ctrls">
-    <div class="cg"><label>Town</label><select id="fA" onchange="go()"><option value="">All</option>{town_options}</select></div>
     <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Manufactured">Manufactured</option><option value="Land">Land</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
     <div class="cg distress-only"><label>Distress</label><select id="fD" onchange="go()"><option value="">All</option><option value="foreclosure">Foreclosure</option><option value="as-is">As-Is/Fixer</option><option value="price-reduced">Price Reduced</option><option value="high-dom">High DOM</option><option value="below-market">Below Market</option></select></div>
     <div class="cg distress-only"><label>Verified</label><select id="fV" onchange="go()"><option value="">All</option><option value="live">Verified Only</option><option value="reverified">Re-verified Only</option></select></div>
@@ -236,7 +277,9 @@ const PN={new_json};
 const B={badges_json};
 const ASD={area_json};
 const ASN={new_area_json};
+const TOWNS={towns_json};
 const NEW_DAYS={new_days};
+const LOC_KEY='dps-enabled-towns';
 const TC={{'foreclosure':'t-fc','as-is':'t-ai','as is':'t-ai','fixer':'t-ai','price-reduced':'t-pr','high-dom':'t-hd','below-market':'t-d','investor':'t-ai','estate':'t-d'}};
 let mode='distress';
 function $(id){{return document.getElementById(id)}}
@@ -248,6 +291,83 @@ function ageDays(p){{
   if(p.days_since_listed!=null)return p.days_since_listed;
   if(p.dom!=null)return p.dom;
   return null;
+}}
+function fullAddr(p){{
+  return [p.address,p.city||p.nearest_target,p.state||'IL',p.zip].filter(Boolean).join(' ');
+}}
+function googleUrl(p){{
+  if(p.google_url)return p.google_url;
+  return 'https://www.google.com/search?q='+encodeURIComponent(fullAddr(p)+' for sale');
+}}
+function zillowUrl(p){{
+  if(p.zillow_url)return p.zillow_url;
+  return 'https://www.zillow.com/homes/'+encodeURIComponent(fullAddr(p))+'_rb/';
+}}
+function redfinUrl(p){{
+  if(p.redfin_url)return p.redfin_url;
+  return 'https://www.redfin.com/stingray/do/location-search?location='+encodeURIComponent(fullAddr(p));
+}}
+function linkButtons(p){{
+  // Prefer Zillow/Google — Realtor.com frequently serves bot-block pages
+  const z=zillowUrl(p), g=googleUrl(p), r=redfinUrl(p), rd=p.listing_url||'';
+  return `<div class="link-row" onclick="event.stopPropagation()">
+    <a href="${{e(z)}}" target="_blank" rel="noopener noreferrer" class="vb">Zillow →</a>
+    <a href="${{e(g)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Google</a>
+    <a href="${{e(r)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Redfin</a>
+    ${{rd?`<a href="${{e(rd)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm" title="May be blocked by Realtor.com">Realtor</a>`:''}}
+  </div>`;
+}}
+function linkButtonsCompact(p){{
+  const z=zillowUrl(p), g=googleUrl(p);
+  return `<span class="link-row" onclick="event.stopPropagation()">
+    <a href="${{e(z)}}" target="_blank" rel="noopener noreferrer" class="vb">Zillow →</a>
+    <a href="${{e(g)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Google</a>
+  </span>`;
+}}
+function enabledTowns(){{
+  return new Set([...document.querySelectorAll('.loc-cb:checked')].map(cb=>cb.value));
+}}
+function syncTownVisuals(){{
+  document.querySelectorAll('.loc-toggle').forEach(el=>{{
+    const on=el.querySelector('.loc-cb').checked;
+    el.classList.toggle('off', !on);
+  }});
+}}
+function saveTownPrefs(){{
+  try{{
+    localStorage.setItem(LOC_KEY, JSON.stringify([...enabledTowns()]));
+  }}catch(_err){{}}
+}}
+function loadTownPrefs(){{
+  try{{
+    const raw=localStorage.getItem(LOC_KEY);
+    if(!raw)return;
+    const saved=new Set(JSON.parse(raw));
+    // Only apply if at least one known town is present (avoid wiping on empty/corrupt)
+    const known=TOWNS.filter(t=>saved.has(t));
+    if(!known.length && saved.size){{
+      // Saved prefs exist but none match current towns — leave defaults (all on)
+      return;
+    }}
+    if(!known.length)return;
+    document.querySelectorAll('.loc-cb').forEach(cb=>{{
+      cb.checked=saved.has(cb.value);
+    }});
+  }}catch(_err){{}}
+}}
+function onTownToggle(){{
+  syncTownVisuals();
+  saveTownPrefs();
+  renderStats();
+  go();
+}}
+function setAllTowns(on){{
+  document.querySelectorAll('.loc-cb').forEach(cb=>{{cb.checked=!!on}});
+  onTownToggle();
+}}
+function invertTowns(){{
+  document.querySelectorAll('.loc-cb').forEach(cb=>{{cb.checked=!cb.checked}});
+  onTownToggle();
 }}
 function setMode(m){{
   mode=m;
@@ -272,22 +392,25 @@ function setMode(m){{
 function renderStats(){{
   const P=mode==='new'?PN:PD;
   const AS=mode==='new'?ASN:ASD;
+  const towns=enabledTowns();
   let h='';
-  AS.forEach(a=>{{h+=`<tr><td>${{a.area}}</td><td>${{a.count}}</td><td>${{a.avgPrice}}</td><td>${{a.avgDom}} ${{mode==='new'?'days':'DOM'}}</td></tr>`}});
-  $('sA').innerHTML=h||'<tr><td colspan="4">No data yet — run new-listings scan</td></tr>';
+  AS.filter(a=>towns.has(a.area)).forEach(a=>{{h+=`<tr><td>${{a.area}}</td><td>${{a.count}}</td><td>${{a.avgPrice}}</td><td>${{a.avgDom}} ${{mode==='new'?'days':'DOM'}}</td></tr>`}});
+  $('sA').innerHTML=h||'<tr><td colspan="4">No locations enabled</td></tr>';
   if(mode==='distress'){{
     h='';B.forEach(b=>{{h+=`<tr><td>${{b.tag}}</td><td>${{b.count}}</td></tr>`}});$('sD').innerHTML=h;
     $('hBdg').innerHTML=B.map(b=>`<span class="bdg">${{b.tag}}<span class="n">${{b.count}}</span></span>`).join('');
   }}
-  h='';const ty={{}};P.forEach(p=>{{ty[p.property_type]=(ty[p.property_type]||0)+1}});
+  const filtered=P.filter(p=>towns.has(p.nearest_target));
+  h='';const ty={{}};filtered.forEach(p=>{{ty[p.property_type]=(ty[p.property_type]||0)+1}});
   Object.entries(ty).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{{h+=`<tr><td>${{k}}</td><td>${{v}}</td></tr>`}});
   $('sT').innerHTML=h||'<tr><td colspan="2">—</td></tr>';
 }}
 function go(){{
   const P=mode==='new'?PN:PD;
   let f=[...P];
-  const a=$('fA').value,t=$('fT').value,d=$('fD').value,v=$('fV').value,fr=$('fFresh').value,mp=parseFloat($('fP').value)||Infinity,ms=parseInt($('fS').value)||0,o=$('fO').value,q=$('fQ').value.toLowerCase().trim();
-  if(a)f=f.filter(p=>p.nearest_target===a);
+  const towns=enabledTowns();
+  const t=$('fT').value,d=$('fD').value,v=$('fV').value,fr=$('fFresh').value,mp=parseFloat($('fP').value)||Infinity,ms=parseInt($('fS').value)||0,o=$('fO').value,q=$('fQ').value.toLowerCase().trim();
+  f=f.filter(p=>towns.has(p.nearest_target));
   if(t)f=f.filter(p=>p.property_type===t);
   if(mode==='distress'){{
     if(v==='live')f=f.filter(p=>(p.verification_source||'').includes('realtor.com'));
@@ -314,11 +437,12 @@ function go(){{
     }}
   }});
   const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:'properties';
-  $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}}`;
+  const onCount=towns.size;
+  $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · <strong>${{onCount}}</strong>/${{TOWNS.length}} locations on`;
   if(mode==='new'){{
-    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-new">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}} · listed ${{e(listDate(p)||'?')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div><a href="${{e(p.listing_url)}}" target="_blank" class="vb">View →</a></div>`).join('')||'<div class="tpi"><div class="tpi-a">No new listings yet. Run the new-listings scan.</div></div>';
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-new">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}} · listed ${{e(listDate(p)||'?')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No new listings yet. Run the new-listings scan.</div></div>';
   }}else{{
-    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div><a href="${{e(p.listing_url)}}" target="_blank" class="vb">View →</a></div>`).join('');
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('');
   }}
   $('grd').innerHTML=f.map(p=>{{
     if(mode==='new'){{
@@ -331,7 +455,7 @@ function go(){{
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
         <div class="cd-price">${{fmt(p.list_price)}}</div><div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
         <div class="cd-tags"><span class="t t-new">new listing</span><span class="t t-d">${{e(p.property_type||'')}}</span></div>
-        <div class="cd-ft"><a href="${{e(p.listing_url)}}" target="_blank" class="vb" onclick="event.stopPropagation()">View →</a><span class="cd-src">${{e(p.listing_source)}}</span></div>
+        <div class="cd-ft">${{linkButtons(p)}}</div>
         <div class="cd-x"><div class="xg">
           <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
           <div class="xi"><span class="l">List date:</span> <span class="v">${{e(listDate(p)||'N/A')}}</span></div>
@@ -351,7 +475,7 @@ function go(){{
     return`<div class="cd" data-stale="${{p.is_stale?1:0}}" onclick="this.classList.toggle('open')"><div class="cd-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div>${{img}}<div class="cd-b">
       <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
       <div class="cd-price">${{fmt(p.list_price)}}</div><div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div><div class="cd-tags">${{tags}}</div>
-      <div class="cd-ft"><a href="${{e(p.listing_url)}}" target="_blank" class="vb" onclick="event.stopPropagation()">View →</a><span class="cd-src">${{e(p.listing_source)}}</span></div>
+      <div class="cd-ft">${{linkButtons(p)}}</div>
       <div class="cd-x"><div class="xg">
         <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
         <div class="xi"><span class="l">Verified:</span> <span class="v ${{verified?'v-ok':(p.is_stale?'v-stale':'v-warn')}}">${{vlabel}}</span></div>
@@ -362,6 +486,8 @@ function go(){{
     </div></div>`;
   }}).join('');
 }}
+loadTownPrefs();
+syncTownVisuals();
 renderStats();
 go();
 </script>

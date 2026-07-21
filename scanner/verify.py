@@ -86,12 +86,23 @@ def check_listing_url(url: str, *, timeout: float = 12.0) -> tuple[bool, str]:
             r = client.get(url)
             if r.status_code in (404, 410):
                 return False, f"http {r.status_code}"
-            if r.status_code == 403:
-                return True, "http 403 (blocked — inconclusive)"
+            # Realtor.com bot-protection / rate limits — not proof the listing is dead
+            if r.status_code in (403, 429):
+                return True, f"http {r.status_code} (blocked/rate-limited — inconclusive)"
             if r.status_code >= 500:
                 return True, f"http {r.status_code} (server error — inconclusive)"
 
             text = (r.text or "").lower()[:80000]
+            block_markers = (
+                "your request could not be processed",
+                "unblockrequest@realtor.com",
+                "reference id is",
+                "access denied",
+                "attention required",
+            )
+            if any(m in text for m in block_markers):
+                return True, "realtor block page (inconclusive)"
+
             for marker in DEAD_PAGE_MARKERS:
                 if marker in text:
                     return False, f"page marker: {marker}"

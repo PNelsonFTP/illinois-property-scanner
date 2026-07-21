@@ -1,8 +1,8 @@
 # Distressed Properties — Sheridan, IL
 
-**Scan Date:** July 09, 2026 at 5:40 AM CDT  
+**Scan Date:** July 20, 2026 at 5:31 PM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
-**Properties:** 25
+**Properties:** 26
 
 | # | Address | City | Price | Type | Distress Tags | DOM | Score | Status | Link |
 |---|---------|------|-------|------|---------------|-----|-------|--------|------|
@@ -22,12 +22,13 @@
 | 14 | 2420 N 4210th Rd | Sheridan | $32,900 | Land | high-dom | 1666 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2420-N-4210th-Rd_Sheridan_IL_60551_M75970-23606) |
 | 15 | 2419 N 4210th Rd | Sheridan | $32,900 | Farm | high-dom | 1665 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2419-N-4210th-Rd_Sheridan_IL_60551_M96630-33041) |
 | 16 |  | Sheridan | $32,900 | Land | high-dom | 1665 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/Sheridan_IL_60551_M75954-95703) |
-| 17 | 2444 N 4210th Rd | Sheridan | $32,900 | Land | high-dom | 1665 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2444-N-4210th-Rd_Sheridan_IL_60551_M81099-19541) |
+| 17 |  | Sheridan | $32,900 | Land | high-dom | 1665 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/Sheridan_IL_60551_M75978-06191) |
 | 18 | 2440 N 4210th Rd | Sheridan | $32,900 | Land | high-dom | 1665 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2440-N-4210th-Rd_Sheridan_IL_60551_M75982-90648) |
-| 19 |  | Sheridan | $32,900 | Land | high-dom | 1665 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/Sheridan_IL_60551_M75978-06191) |
+| 19 | 2444 N 4210th Rd | Sheridan | $32,900 | Land | high-dom | 1665 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2444-N-4210th-Rd_Sheridan_IL_60551_M81099-19541) |
 | 20 | 2432 N 4210th Rd | Sheridan | $32,900 | Land | high-dom | 1665 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2432-N-4210th-Rd_Sheridan_IL_60551_M75970-60872) |
 | 21 | 2426 N 4220th Rd | Sheridan | $32,900 | Land | high-dom | 1651 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2426-N-4220th-Rd_Sheridan_IL_60551_M81028-01746) |
 | 22 | 2618 N 3689th Rd | Sheridan | $69,900 | Land | high-dom | 1083 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2618-N-3689th-Rd_Sheridan_IL_60551_M88888-22159) |
 | 23 | 2434 N 4220th Rd | Sheridan | $32,500 | Land | high-dom | 765 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2434-N-4220th-Rd_Sheridan_IL_60551_M70344-80050) |
 | 24 | 2790 N 4201st Rd | Sheridan | $3,334,500 | Farm | high-dom | 371 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2790-N-4201st-Rd_Sheridan_IL_60551_M98476-68344) |
 | 25 | 2616 N 3689th Rd | Sheridan | $25,000 | Land | below-market | 35 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2616-N-3689th-Rd_Sheridan_IL_60551_M91252-69299) |
+| 26 | 101 S Sheridan St | Sheridan | $150,000 | SFH | price-reduced | 39 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/101-S-Sheridan-St_Lostant_IL_61334_M79247-55835) |

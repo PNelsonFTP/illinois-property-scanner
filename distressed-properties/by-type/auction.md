@@ -1,6 +1,6 @@
 # Distressed Properties — Auction Listings
 
-**Scan Date:** July 09, 2026 at 5:40 AM CDT  
+**Scan Date:** July 20, 2026 at 5:31 PM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
 **Properties:** 0
 

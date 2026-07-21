@@ -13,6 +13,7 @@ from scanner.config import COMPILED_PATH, LEGACY_RAW_GLOB, PROJECT_ROOT, load_co
 from scanner.dedup import deduplicate
 from scanner.distress import calculate_score, detect_distress_signals
 from scanner.geo import classify_town
+from scanner.links import attach_alt_links
 from scanner.normalize import normalize_legacy_record, normalize_realtor_record
 from scanner.status import is_active_legacy, is_verified_active
 
@@ -186,6 +187,7 @@ def compile_records(
             "property_id": rec.get("property_id"),
             "listing_id": rec.get("listing_id"),
         }
+        attach_alt_links(entry)
         if entry["list_price"] and entry["sqft"] and entry["sqft"] > 0:
             entry["price_per_sqft"] = round(entry["list_price"] / entry["sqft"], 2)
         final.append(entry)

@@ -17,6 +17,7 @@ from scanner.config import PROJECT_ROOT, RAW_DIR
 from scanner.dedup import deduplicate
 from scanner.fetch import fetch_town_listings, _merge_unique, _record_key
 from scanner.geo import classify_town, enabled_towns
+from scanner.links import attach_alt_links
 from scanner.normalize import normalize_realtor_record
 from scanner.status import is_verified_active
 
@@ -187,6 +188,7 @@ def compile_new_listings(
             "is_new_listing": True,
             "new_listing_window_days": days,
         }
+        attach_alt_links(entry)
         if entry["list_price"] and entry["sqft"] and entry["sqft"] > 0:
             entry["price_per_sqft"] = round(entry["list_price"] / entry["sqft"], 2)
 
