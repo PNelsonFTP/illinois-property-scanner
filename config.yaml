@@ -17,6 +17,7 @@ scan:
   stale_hours: 48
   include_new_listings: true
   new_listings_days: 7
+  include_pool_listings: true
 
 verification:
   require_reverify: true

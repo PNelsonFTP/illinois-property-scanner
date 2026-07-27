@@ -36,6 +36,11 @@ from scanner.new_listings import (  # noqa: E402
     print_new_listings_summary,
     save_new_listings,
 )
+from scanner.pool_listings import (  # noqa: E402
+    compile_pool_listings,
+    print_pool_listings_summary,
+    save_pool_listings,
+)
 from scanner.verify import reverify_properties  # noqa: E402
 
 logging.basicConfig(
@@ -193,6 +198,31 @@ def main() -> int:
         f"-{len(changes.get('removed_or_inactive') or [])} removed, "
         f"{len(changes.get('price_cuts') or [])} price cuts"
     )
+
+    # --- Pool listings from the complete active inventory ---
+    pool_records, pool_stats = compile_pool_listings(live_records, config=config)
+    pool_kept, pool_rejected = reverify_properties(
+        pool_records,
+        raw_records=live_records,
+        config=config,
+        # Pool records came from this run's live for-sale inventory. Validate
+        # against sold/pending inventories without causing a second wave of
+        # immediately rate-limited Realtor requests.
+        check_urls=False,
+        do_reverify=False,
+        max_reverify=None,
+    )
+    write_rejection_audit(pool_rejected, label="pool-validation")
+    pool_stats["validation_kept"] = len(pool_kept)
+    pool_stats["validation_rejected"] = len(pool_rejected)
+    pool_stats["final_count"] = len(pool_kept)
+    for i, record in enumerate(pool_kept):
+        record["id"] = i + 1
+    save_pool_listings(pool_kept)
+    print_pool_listings_summary(pool_kept, pool_stats)
+    meta["stats"]["pool_listings"] = len(pool_kept)
+    with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
+        json.dump(meta, f, indent=2)
 
     # --- Parallel new-listings (geo only) ---
     if not args.skip_new_listings:

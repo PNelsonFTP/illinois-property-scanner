@@ -10,6 +10,7 @@ Usage:
   python scan.py --no-legacy          # Skip legacy v2-*.json files
   python scan.py --towns Sheridan,Leland
   python scan.py --new-listings-only  # Only refresh last-7-days all-listings view
+  python scan.py --pool-listings-only # Only refresh active homes-with-pools view
 """
 
 from __future__ import annotations
@@ -40,6 +41,11 @@ from scanner.new_listings import (
     fetch_new_listings,
     print_new_listings_summary,
     save_new_listings,
+)
+from scanner.pool_listings import (
+    compile_pool_listings,
+    print_pool_listings_summary,
+    save_pool_listings,
 )
 from scanner.verify import reverify_properties
 
@@ -91,6 +97,46 @@ def _run_new_listings(
     return records, stats
 
 
+def _run_pool_listings(
+    config: dict,
+    *,
+    include_optional: bool,
+    towns_filter: list[str] | None,
+    raw_records: list | None = None,
+) -> tuple[list, dict]:
+    """Compile and reverify all active residential pool listings in scope."""
+    if raw_records is None:
+        log.info("Fetching active inventory for homes-with-pools view...")
+        raw_records = fetch_all_towns(
+            config,
+            include_optional=include_optional,
+            towns_filter=towns_filter,
+        )
+        save_raw(raw_records, label="pool-listings")
+
+    records, stats = compile_pool_listings(raw_records, config=config)
+    kept, rejected = reverify_properties(
+        records,
+        raw_records=raw_records,
+        config=config,
+        # Pool records already come from this run's live for-sale inventory.
+        # Validate against sold/pending inventories without triggering another
+        # immediately rate-limited Realtor fetch.
+        check_urls=False,
+        do_reverify=False,
+        max_reverify=None,
+    )
+    write_rejection_audit(rejected, label="pool-validation")
+    stats["validation_kept"] = len(kept)
+    stats["validation_rejected"] = len(rejected)
+    stats["final_count"] = len(kept)
+    for i, record in enumerate(kept):
+        record["id"] = i + 1
+    save_pool_listings(kept)
+    print_pool_listings_summary(kept, stats)
+    return kept, stats
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Distressed Property Scanner")
     parser.add_argument("--verify-only", action="store_true",
@@ -99,11 +145,15 @@ def main() -> int:
                         help="Re-verify existing v2_compiled.json without rediscovery")
     parser.add_argument("--new-listings-only", action="store_true",
                         help="Only refresh last-N-days all-listings view (no distress scan)")
+    parser.add_argument("--pool-listings-only", action="store_true",
+                        help="Only refresh active homes-with-pools view")
     parser.add_argument("--no-legacy", action="store_true", help="Exclude legacy v2-*.json")
     parser.add_argument("--no-markdown", action="store_true", help="Skip markdown/dashboard rebuild")
     parser.add_argument("--no-reverify", action="store_true", help="Skip post-compile reverify pass")
     parser.add_argument("--no-new-listings", action="store_true",
                         help="Skip the new-listings (7-day) pass")
+    parser.add_argument("--no-pool-listings", action="store_true",
+                        help="Skip the homes-with-pools pass")
     parser.add_argument("--include-optional", action="store_true",
                         help="Include Leland, Earlville, Waterman, Sheridan")
     parser.add_argument("--no-optional", action="store_true", help="Force-exclude optional towns")
@@ -139,6 +189,17 @@ def main() -> int:
             include_optional=include_optional,
             towns_filter=towns_filter,
             days=new_days,
+        )
+        if not args.no_markdown:
+            rebuild_outputs(scan_date, scan_time)
+        return 0
+
+    # --- Pool listings only ---
+    if args.pool_listings_only:
+        _run_pool_listings(
+            config,
+            include_optional=include_optional,
+            towns_filter=towns_filter,
         )
         if not args.no_markdown:
             rebuild_outputs(scan_date, scan_time)
@@ -261,6 +322,21 @@ def main() -> int:
             days=new_days,
         )
         stats["new_listings_7d"] = len(new_records)
+
+    # --- Homes with pools (all active residential, geo only) ---
+    do_pool = (
+        scan_cfg.get("include_pool_listings", True)
+        and not args.no_pool_listings
+        and not args.verify_only
+    )
+    if do_pool:
+        pool_records, _pool_stats = _run_pool_listings(
+            config,
+            include_optional=include_optional,
+            towns_filter=towns_filter,
+            raw_records=live_records,
+        )
+        stats["pool_listings"] = len(pool_records)
 
     if not args.no_markdown and final:
         rebuild_outputs(scan_date, scan_time)

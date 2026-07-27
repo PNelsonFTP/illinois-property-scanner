@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate dashboard HTML from v2_compiled.json + new_listings_7d.json"""
+"""Regenerate dashboard HTML from distressed, new, and pool datasets."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent
 COMPILED = PROJECT_ROOT / "v2_compiled.json"
 NEW_LISTINGS = PROJECT_ROOT / "data" / "new_listings_7d.json"
+POOL_LISTINGS = PROJECT_ROOT / "data" / "pool_listings.json"
 OUT = PROJECT_ROOT / "dashboard" / "distressed-property-dashboard.html"
 
 SCAN_DATE = os.environ.get("SCAN_DATE", "Unknown")
@@ -27,6 +28,11 @@ NEW_NOTE = (
     "(geo/distance only — no distress filters). "
     "Refresh with <code>python scan.py --new-listings-only --include-optional</code>. "
     "Prefer Zillow/Google if Realtor.com shows a block page."
+)
+POOL_NOTE = (
+    "All active residential listings with structured MLS evidence of a "
+    "private or community pool. Geo/distance rules apply; distress and "
+    "listing-age filters do not. Pool type is labeled on every property."
 )
 
 
@@ -74,11 +80,22 @@ def load_new_listings():
     return payload.get("records", []), int(payload.get("window_days", 7))
 
 
+def load_pool_listings():
+    if not POOL_LISTINGS.exists():
+        return []
+    with open(POOL_LISTINGS) as f:
+        payload = json.load(f)
+    if isinstance(payload, list):
+        return payload
+    return payload.get("records", [])
+
+
 def main():
     with open(COMPILED) as f:
         data = json.load(f)
 
     new_data, new_days = load_new_listings()
+    pool_data = load_pool_listings()
 
     verified = sum(1 for p in data if "realtor.com" in (p.get("verification_source") or ""))
     reverified = sum(1 for p in data if p.get("verification_source") == "realtor.com-reverified")
@@ -87,10 +104,12 @@ def main():
     badges = compute_badges(data)
     area_stats = compute_area_stats(data)
     new_area_stats = compute_area_stats(new_data)
+    pool_area_stats = compute_area_stats(pool_data)
 
     towns_present = sorted({
         *(p.get("nearest_target") for p in data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in new_data if p.get("nearest_target")),
+        *(p.get("nearest_target") for p in pool_data if p.get("nearest_target")),
     })
     towns_json = json.dumps(towns_present, separators=(",", ":"))
     town_toggles = "".join(
@@ -104,9 +123,11 @@ def main():
 
     props_json = json.dumps(data, separators=(",", ":"))
     new_json = json.dumps(new_data, separators=(",", ":"))
+    pool_json = json.dumps(pool_data, separators=(",", ":"))
     badges_json = json.dumps(badges, separators=(",", ":"))
     area_json = json.dumps(area_stats, separators=(",", ":"))
     new_area_json = json.dumps(new_area_stats, separators=(",", ":"))
+    pool_area_json = json.dumps(pool_area_stats, separators=(",", ":"))
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -135,6 +156,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .verify-badge{{background:rgba(59,130,246,.1);color:var(--accent);padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .stale-badge{{background:rgba(249,115,22,.15);color:var(--orange);padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .new-badge{{background:rgba(168,85,247,.15);color:var(--purple);padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
+.pool-badge{{background:rgba(6,182,212,.14);color:#22d3ee;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .v-stale{{color:var(--orange)}}
 .cd[data-stale="1"]{{opacity:.85;border-style:dashed}}
 .wrap{{max-width:1200px;margin:0 auto;padding:14px 20px}}
@@ -170,14 +192,18 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .st td:last-child{{text-align:right;font-weight:600}}
 .tp{{background:linear-gradient(135deg,rgba(239,68,68,.06),rgba(249,115,22,.03));border:1px solid rgba(239,68,68,.15);border-radius:var(--r);padding:14px;margin-bottom:16px}}
 .tp.new-mode{{background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(59,130,246,.04));border-color:rgba(168,85,247,.2)}}
+.tp.pool-mode{{background:linear-gradient(135deg,rgba(6,182,212,.09),rgba(59,130,246,.04));border-color:rgba(6,182,212,.24)}}
 .tp h3{{font-size:.8rem;font-weight:700;color:var(--red);margin-bottom:8px}}
 .tp.new-mode h3{{color:var(--purple)}}
+.tp.pool-mode h3{{color:#22d3ee}}
 .tpi{{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(239,68,68,.08);gap:10px}}
 .tp.new-mode .tpi{{border-bottom-color:rgba(168,85,247,.1)}}
+.tp.pool-mode .tpi{{border-bottom-color:rgba(6,182,212,.12)}}
 .tpi-a{{font-weight:600;font-size:.8rem;flex:1}}.tpi-p{{color:var(--green);font-weight:700;font-size:.8rem}}
 .tpi-s{{min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;font-size:.7rem;color:#fff}}
 .s-h{{background:var(--orange)}}.s-m{{background:var(--yellow);color:#000}}.s-l{{background:var(--green)}}
 .s-new{{background:var(--purple)}}
+.s-pool{{background:#0891b2}}
 .vb{{display:inline-flex;padding:5px 12px;background:var(--accent);color:#fff;border-radius:var(--rs);font-size:.7rem;font-weight:600}}
 .vb-sm{{padding:4px 8px;font-size:.65rem;background:var(--card);color:var(--text2);border:1px solid var(--border)}}
 .vb-sm:hover{{border-color:var(--accent);color:var(--text);text-decoration:none}}
@@ -197,6 +223,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .t-hd{{background:rgba(107,114,128,.15);color:#9ca3af}}.t-ai{{background:rgba(234,179,8,.1);color:var(--yellow)}}
 .t-d{{background:rgba(107,114,128,.1);color:#9ca3af}}
 .t-new{{background:rgba(168,85,247,.15);color:var(--purple)}}
+.t-pool{{background:rgba(6,182,212,.15);color:#22d3ee}}
 .cd-ft{{display:flex;justify-content:space-between;align-items:center}}.cd-src{{font-size:.65rem;color:var(--muted)}}
 .cd-x{{display:none;padding:0 12px 12px;border-top:1px solid var(--border);margin-top:8px}}.cd.open .cd-x{{display:block}}
 .xg{{display:grid;grid-template-columns:1fr 1fr;gap:4px}}.xi{{font-size:.7rem}}.xi .l{{color:var(--muted)}}
@@ -205,12 +232,15 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .badges{{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}}
 .bdg{{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:14px;font-size:.65rem;font-weight:600;background:var(--card);border:1px solid var(--border)}}
 .bdg .n{{background:var(--accent);color:#fff;padding:0 5px;border-radius:8px;font-size:.6rem}}
-.distress-only{{}}.new-only{{display:none}}
-body.mode-new .distress-only{{display:none}}
+.distress-only{{}}.new-only,.pool-only{{display:none}}
+body.mode-new .distress-only,body.mode-pool .distress-only{{display:none}}
 body.mode-new .new-only{{display:block}}
 body.mode-new .new-only-inline{{display:inline}}
 body.mode-new .new-only-flex{{display:flex}}
-.new-only-inline,.new-only-flex{{display:none}}
+body.mode-pool .pool-only{{display:block}}
+body.mode-pool .pool-only-inline{{display:inline}}
+body.mode-pool .pool-only-flex{{display:flex}}
+.new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex{{display:none}}
 </style>
 </head>
 <body>
@@ -224,6 +254,7 @@ body.mode-new .new-only-flex{{display:flex}}
       <span class="verify-badge distress-only">{verified} verified ({reverified} re-checked)</span>
       {f'<span class="stale-badge distress-only">{stale} stale</span>' if stale else ''}
       <span class="new-badge new-only-inline">{len(new_data)} new (last {new_days}d)</span>
+      <span class="pool-badge pool-only-inline">{len(pool_data)} pool homes</span>
     </div>
   </div>
   <div class="badges distress-only" id="hBdg"></div>
@@ -232,9 +263,11 @@ body.mode-new .new-only-flex{{display:flex}}
   <div class="mode-bar">
     <button type="button" class="mode-btn active" id="modeDistress" onclick="setMode('distress')">Distressed</button>
     <button type="button" class="mode-btn" id="modeNew" onclick="setMode('new')">New to market ({new_days} days)</button>
+    <button type="button" class="mode-btn" id="modePool" onclick="setMode('pool')">Homes with pools</button>
   </div>
   <div class="src-note distress-only">{VERIFIED_NOTE} Run <code>python scan.py --include-optional</code> to refresh. Use <code>--reverify-only</code> for a status-only pass.</div>
   <div class="src-note new-only">{NEW_NOTE}</div>
+  <div class="src-note pool-only">{POOL_NOTE}</div>
   <div class="loc-panel">
     <div class="loc-head">
       <h2>Locations</h2>
@@ -247,7 +280,8 @@ body.mode-new .new-only-flex{{display:flex}}
     <div class="loc-grid" id="locGrid">{town_toggles}</div>
   </div>
   <div class="ctrls">
-    <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Manufactured">Manufactured</option><option value="Land">Land</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
+    <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Condo">Condo</option><option value="Manufactured">Manufactured</option><option value="Land">Land</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
+    <div class="cg pool-only"><label>Pool</label><select id="fPool" onchange="go()"><option value="">Private + community</option><option value="private">Private pool</option><option value="community">Community pool</option></select></div>
     <div class="cg distress-only"><label>Distress</label><select id="fD" onchange="go()"><option value="">All</option><option value="foreclosure">Foreclosure</option><option value="as-is">As-Is/Fixer</option><option value="price-reduced">Price Reduced</option><option value="high-dom">High DOM</option><option value="below-market">Below Market</option></select></div>
     <div class="cg distress-only"><label>Verified</label><select id="fV" onchange="go()"><option value="">All</option><option value="live">Verified Only</option><option value="reverified">Re-verified Only</option></select></div>
     <div class="cg distress-only"><label>Freshness</label><select id="fFresh" onchange="go()"><option value="">All</option><option value="fresh">Fresh only</option><option value="stale">Stale only</option></select></div>
@@ -256,9 +290,12 @@ body.mode-new .new-only-flex{{display:flex}}
     <div class="cg"><label>Sort</label><select id="fO" onchange="go()">
       <option value="score">Score</option>
       <option value="listed">Newest listed</option>
+      <option value="pool">Pool type</option>
       <option value="dom">DOM / Age</option>
       <option value="price-asc">Price Low</option>
       <option value="price-desc">Price High</option>
+      <option value="ppsqft-asc">$/sqft Low</option>
+      <option value="ppsqft-desc">$/sqft High</option>
     </select></div>
     <div class="cg"><label>Search</label><input type="text" id="fQ" placeholder="Address..." oninput="go()"></div>
   </div>
@@ -274,9 +311,11 @@ body.mode-new .new-only-flex{{display:flex}}
 <script>
 const PD={props_json};
 const PN={new_json};
+const PP={pool_json};
 const B={badges_json};
 const ASD={area_json};
 const ASN={new_area_json};
+const ASP={pool_area_json};
 const TOWNS={towns_json};
 const NEW_DAYS={new_days};
 const LOC_KEY='dps-enabled-towns';
@@ -290,6 +329,11 @@ function listDate(p){{return (p.list_date||'').toString().slice(0,10)}}
 function ageDays(p){{
   if(p.days_since_listed!=null)return p.days_since_listed;
   if(p.dom!=null)return p.dom;
+  return null;
+}}
+function ppsqft(p){{
+  if(p.price_per_sqft!=null&&p.price_per_sqft>0)return p.price_per_sqft;
+  if(p.list_price!=null&&p.sqft!=null&&p.sqft>0)return p.list_price/p.sqft;
   return null;
 }}
 function fullAddr(p){{
@@ -369,29 +413,46 @@ function invertTowns(){{
   document.querySelectorAll('.loc-cb').forEach(cb=>{{cb.checked=!cb.checked}});
   onTownToggle();
 }}
+function currentData(){{
+  if(mode==='new')return PN;
+  if(mode==='pool')return PP;
+  return PD;
+}}
+function currentAreaStats(){{
+  if(mode==='new')return ASN;
+  if(mode==='pool')return ASP;
+  return ASD;
+}}
 function setMode(m){{
   mode=m;
   document.body.classList.toggle('mode-new', m==='new');
+  document.body.classList.toggle('mode-pool', m==='pool');
   $('modeDistress').classList.toggle('active', m==='distress');
   $('modeNew').classList.toggle('active', m==='new');
+  $('modePool').classList.toggle('active', m==='pool');
   const sort=$('fO');
+  $('tpBox').classList.remove('new-mode','pool-mode');
   if(m==='new'){{
-    if(sort.value==='score')sort.value='listed';
+    if(sort.value==='score'||sort.value==='pool')sort.value='listed';
     $('tpTitle').textContent='Newest listings';
     $('tpBox').classList.add('new-mode');
     $('hdrCount').textContent=PN.length+' new listings';
+  }}else if(m==='pool'){{
+    sort.value='pool';
+    $('tpTitle').textContent='Homes with pools';
+    $('tpBox').classList.add('pool-mode');
+    $('hdrCount').textContent=PP.length+' pool homes';
   }}else{{
-    if(sort.value==='listed')sort.value='score';
+    if(sort.value==='listed'||sort.value==='pool')sort.value='score';
     $('tpTitle').textContent='Top Picks';
-    $('tpBox').classList.remove('new-mode');
     $('hdrCount').textContent=PD.length+' properties';
   }}
   renderStats();
   go();
 }}
 function renderStats(){{
-  const P=mode==='new'?PN:PD;
-  const AS=mode==='new'?ASN:ASD;
+  const P=currentData();
+  const AS=currentAreaStats();
   const towns=enabledTowns();
   let h='';
   AS.filter(a=>towns.has(a.area)).forEach(a=>{{h+=`<tr><td>${{a.area}}</td><td>${{a.count}}</td><td>${{a.avgPrice}}</td><td>${{a.avgDom}} ${{mode==='new'?'days':'DOM'}}</td></tr>`}});
@@ -406,10 +467,10 @@ function renderStats(){{
   $('sT').innerHTML=h||'<tr><td colspan="2">—</td></tr>';
 }}
 function go(){{
-  const P=mode==='new'?PN:PD;
+  const P=currentData();
   let f=[...P];
   const towns=enabledTowns();
-  const t=$('fT').value,d=$('fD').value,v=$('fV').value,fr=$('fFresh').value,mp=parseFloat($('fP').value)||Infinity,ms=parseInt($('fS').value)||0,o=$('fO').value,q=$('fQ').value.toLowerCase().trim();
+  const t=$('fT').value,d=$('fD').value,v=$('fV').value,fr=$('fFresh').value,pt=$('fPool').value,mp=parseFloat($('fP').value)||Infinity,ms=parseInt($('fS').value)||0,o=$('fO').value,q=$('fQ').value.toLowerCase().trim();
   f=f.filter(p=>towns.has(p.nearest_target));
   if(t)f=f.filter(p=>p.property_type===t);
   if(mode==='distress'){{
@@ -420,8 +481,9 @@ function go(){{
     if(d)f=f.filter(p=>(p.distress_types||[]).some(x=>x.toLowerCase().includes(d)));
     if(ms)f=f.filter(p=>p.distress_score>=ms);
   }}
+  if(mode==='pool'&&pt)f=f.filter(p=>(p.pool_type||'').toLowerCase().includes(pt));
   if(mp<Infinity)f=f.filter(p=>p.list_price!=null&&p.list_price<=mp);
-  if(q)f=f.filter(p=>(p.address+' '+(p.notes||'')+' '+(p.distress_types||[]).join(' ')+' '+(p.city||'')).toLowerCase().includes(q));
+  if(q)f=f.filter(p=>(p.address+' '+(p.notes||'')+' '+(p.distress_types||[]).join(' ')+' '+(p.pool_evidence||[]).join(' ')+' '+(p.city||'')).toLowerCase().includes(q));
   f.sort((a,b)=>{{
     switch(o){{
       case'score':return(b.distress_score||0)-(a.distress_score||0)||(b.dom||0)-(a.dom||0);
@@ -432,15 +494,23 @@ function go(){{
       }}
       case'price-asc':return(a.list_price||1e9)-(b.list_price||1e9);
       case'price-desc':return(b.list_price||0)-(a.list_price||0);
+      case'ppsqft-asc':return(ppsqft(a)??1e9)-(ppsqft(b)??1e9);
+      case'ppsqft-desc':return(ppsqft(b)??0)-(ppsqft(a)??0);
       case'dom':return(ageDays(b)??0)-(ageDays(a)??0);
+      case'pool':{{
+        const rank={{'Private + Community':0,'Private':1,'Community':2}};
+        return(rank[a.pool_type]??9)-(rank[b.pool_type]??9)||(a.list_price||1e9)-(b.list_price||1e9);
+      }}
       default:return 0;
     }}
   }});
-  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:'properties';
+  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':'properties';
   const onCount=towns.size;
   $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · <strong>${{onCount}}</strong>/${{TOWNS.length}} locations on`;
   if(mode==='new'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-new">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}} · listed ${{e(listDate(p)||'?')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No new listings yet. Run the new-listings scan.</div></div>';
+  }}else if(mode==='pool'){{
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-pool">🏊</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}} · ${{e(p.pool_type)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No pool homes in the enabled locations.</div></div>';
   }}else{{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('');
   }}
@@ -450,6 +520,7 @@ function go(){{
       const det=[];if(p.beds!=null)det.push(p.beds+' bd');if(p.baths!=null)det.push(p.baths+' ba');
       if(listDate(p))det.push('Listed '+listDate(p));
       if(age!=null)det.push(age+'d on market');
+      const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
       const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🏠</div>'">`:'<div class="cd-ph">🏠</div>';
       return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-new">${{age??'N'}}</div>${{img}}<div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
@@ -464,10 +535,31 @@ function go(){{
         </div>${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
       </div></div>`;
     }}
+    if(mode==='pool'){{
+      const det=[];if(p.beds!=null)det.push(p.beds+' bd');if(p.baths!=null)det.push(p.baths+' ba');if(p.dom!=null)det.push(p.dom+' DOM');
+      const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
+      const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🏠</div>'">`:'<div class="cd-ph">🏠</div>';
+      const evidence=(p.pool_evidence||[]).map(x=>e(x)).join(' · ');
+      const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
+      return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-pool">🏊</div>${{img}}<div class="cd-b">
+        <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
+        <div class="cd-price">${{fmt(p.list_price)}}</div><div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
+        <div class="cd-tags"><span class="t t-pool">${{e(p.pool_type||'Pool')}}</span><span class="t t-d">${{e(p.property_type||'')}}</span></div>
+        <div class="cd-ft">${{linkButtons(p)}}</div>
+        <div class="cd-x"><div class="xg">
+          <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
+          <div class="xi"><span class="l">Verified:</span> <span class="v v-ok">Live inventory</span></div>
+          <div class="xi"><span class="l">Checked:</span> <span class="v">${{e(verifiedAt)}}</span></div>
+          <div class="xi"><span class="l">Pool:</span> <span class="v">${{e(p.pool_type||'Yes')}}</span></div>
+        </div>${{evidence?`<div style="font-size:.65rem;color:var(--muted);margin-top:4px">${{evidence}}</div>`:''}}
+        ${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+      </div></div>`;
+    }}
     const verified=(p.verification_source||'').includes('realtor.com');
     const rev=p.verification_source==='realtor.com-reverified';
     const tags=(p.distress_types||[]).slice(0,5).map(x=>`<span class="t ${{TC[x.toLowerCase()]||'t-d'}}">${{x}}</span>`).join('');
     const det=[];if(p.beds!=null)det.push(p.beds+' bd');if(p.baths!=null)det.push(p.baths+' ba');if(p.dom!=null)det.push(p.dom+' DOM');
+    const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
     if(p.is_stale)det.push('STALE');
     const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🏠</div>'">`:'<div class="cd-ph">🏠</div>';
     const vlabel=rev?'Re-verified':(verified?'Verified':'Legacy');
@@ -498,6 +590,7 @@ go();
     print(
         f"Wrote dashboard: {OUT} "
         f"({len(data)} distressed, {len(new_data)} new/{new_days}d, "
+        f"{len(pool_data)} pool homes, "
         f"{verified} verified, {reverified} re-checked)"
     )
 
