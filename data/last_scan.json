@@ -1,22 +1,22 @@
 {
-  "scan_date": "July 27, 2026",
-  "scan_time": "4:20 PM CDT",
-  "total_properties": 151,
+  "scan_date": "July 29, 2026",
+  "scan_time": "6:33 AM CDT",
+  "total_properties": 152,
   "stats": {
-    "live_normalized": 1457,
-    "negative_check_inventory": 616,
-    "accepted_pre_dedup": 151,
-    "rejected_no_distress": 204,
-    "rejected_renovated_flip": 57,
-    "rejected_out_of_zone": 1045,
+    "live_normalized": 1453,
+    "negative_check_inventory": 608,
+    "accepted_pre_dedup": 152,
+    "rejected_no_distress": 198,
+    "rejected_renovated_flip": 62,
+    "rejected_out_of_zone": 1041,
     "duplicates_merged": 0,
-    "final_count": 151,
-    "reverify_kept": 151,
+    "final_count": 152,
+    "reverify_kept": 152,
     "reverify_rejected": 0,
-    "pool_listings": 53,
-    "new_listings_7d": 99
+    "pool_listings": 55,
+    "new_listings_7d": 91
   },
-  "live_fetched": 2073,
+  "live_fetched": 2061,
   "parallel_groups": [
     [
       "Wheaton",
@@ -35,8 +35,8 @@
     ]
   ],
   "changes": {
-    "newly_active": 7,
-    "removed": 6,
-    "price_cuts": 2
+    "newly_active": 3,
+    "removed": 2,
+    "price_cuts": 3
   }
 }

@@ -1,6 +1,6 @@
 # Distressed Properties — Lake Holiday, IL
 
-**Scan Date:** July 27, 2026 at 4:20 PM CDT  
+**Scan Date:** July 29, 2026 at 6:33 AM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
 **Properties:** 13
 
@@ -15,7 +15,7 @@
 | 7 | 25 Cedar Ln | Lake Holiday | $79,000 | Manufactured | high-dom, price-reduced | 90 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/25-Cedar-Ln_Sandwich_IL_60548_M98127-78727) |
 | 8 | 127 Cardinal Ln | Lake Holiday | $79,000 | Manufactured | as-is | 7 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/127-Cardinal-Ln_Sandwich_IL_60548_M76639-47859) |
 | 9 | 1549 Lake Holiday Dr | Lake Holiday | $629,000 | SFH | high-dom | 121 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1549-Lake-Holiday-Dr_Sandwich_IL_60548_M71121-34692) |
-| 10 | 537 Erma Dr | Lake Holiday | $364,900 | SFH | high-dom | 109 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/537-Erma-Dr_Somonauk_IL_60552_M71072-15588) |
+| 10 | 537 Erma Dr | Lake Holiday | $364,900 | SFH | high-dom | 118 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/537-Erma-Dr_Somonauk_IL_60552_M71072-15588) |
 | 11 | 1317 Park Pl | Lake Holiday | $779,000 | SFH | price-reduced | 78 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1317-Park-Pl_Sandwich_IL_60548_M78254-69154) |
-| 12 | 703 Glenda Ct | Lake Holiday | $1,000,000 | SFH | price-reduced | 64 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/703-Glenda-Ct_Sandwich_IL_60548_M72397-70545) |
+| 12 | 703 Glenda Ct | Lake Holiday | $1,000,000 | SFH | price-reduced | 70 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/703-Glenda-Ct_Sandwich_IL_60548_M72397-70545) |
 | 13 | 287 Holiday Dr | Lake Holiday | $829,900 | SFH | price-reduced | 49 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/287-Holiday-Dr_Somonauk_IL_60552_M72355-96760) |
