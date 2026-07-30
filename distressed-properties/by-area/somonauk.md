@@ -1,6 +1,6 @@
 # Distressed Properties — Somonauk, IL
 
-**Scan Date:** July 29, 2026 at 6:33 AM CDT  
+**Scan Date:** July 30, 2026 at 7:54 AM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
 **Properties:** 2
 

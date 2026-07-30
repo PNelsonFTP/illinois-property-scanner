@@ -1,8 +1,8 @@
 # Distressed Properties — Price-Reduced Listings
 
-**Scan Date:** July 29, 2026 at 6:33 AM CDT  
+**Scan Date:** July 30, 2026 at 7:54 AM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
-**Properties:** 61
+**Properties:** 62
 
 | # | Address | City | Price | Type | Distress Tags | DOM | Score | Status | Link |
 |---|---------|------|-------|------|---------------|-----|-------|--------|------|
@@ -16,8 +16,8 @@
 | 8 | 15655 S Memory Ln | Sandwich | $45,000 | Land | high-dom, price-reduced | 2682 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/15655-S-Memory-Ln_Sandwich_IL_60548_M74377-33348) |
 | 9 | 94 Templeton Dr | Oswego | $295,000 | Land | high-dom, price-reduced | 918 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/94-Templeton-Dr_Oswego_IL_60543_M70987-55791) |
 | 10 | 1 Orchard Rd | Oswego | $264,844 | Land | high-dom, price-reduced | 910 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1-Orchard-Rd_Oswego_IL_60543_M72948-04241) |
-| 11 | 3 Orchard Rd | Oswego | $411,206 | Land | high-dom, price-reduced | 909 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/3-Orchard-Rd_Oswego_IL_60543_M98428-72458) |
-| 12 | 2 Orchard Rd | Oswego | $463,478 | Land | high-dom, price-reduced | 909 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2-Orchard-Ave_Oswego_IL_60543_M94778-13037) |
+| 11 | 2 Orchard Rd | Oswego | $463,478 | Land | high-dom, price-reduced | 909 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2-Orchard-Ave_Oswego_IL_60543_M94778-13037) |
+| 12 | 3 Orchard Rd | Oswego | $411,206 | Land | high-dom, price-reduced | 909 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/3-Orchard-Rd_Oswego_IL_60543_M98428-72458) |
 | 13 | 123 Orchard Rd | Oswego | $1,139,528 | Land | high-dom, price-reduced | 909 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/123-Orchard-Rd_Oswego_IL_60543_M99808-30139) |
 | 14 | 1 Holiday Dr | Lake Holiday | $399,000 | Land | high-dom, price-reduced | 575 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1-Holiday-Dr_Somonauk_IL_60552_M88032-61634) |
 | 15 | 26W181 Grand Ave | Wheaton | $179,995 | Land | high-dom, price-reduced | 473 | 4 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/26W181-Grand-Ave_Wheaton_IL_60187_M86186-10755) |
@@ -28,42 +28,43 @@
 | 20 | 608 Bender St | Sandwich | $445,000 | SFH | high-dom, price-reduced | 226 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/608-Bender-St_Sandwich_IL_60548_M73392-54686) |
 | 21 | 421 DE Kalb St | Sandwich | $329,000 | SFH | price-reduced, short-sale | 79 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/421-DE-Kalb-St_Sandwich_IL_60548_M81584-53527) |
 | 22 | 1977 S County Line Rd | Sandwich | $374,900 | SFH | as-is, price-reduced | 61 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1977-S-County-Line-Rd_Sandwich_IL_60548_M77127-15589) |
-| 23 | 917 Sunset Ave | Earlville | $329,000 | SFH | high-dom, price-reduced | 133 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/917-Sunset-Ave_Earlville_IL_60518_M71006-19516) |
-| 24 | 574 Sudbury Cir | Oswego | $384,000 | Townhome | high-dom, price-reduced | 112 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/574-Sudbury-Cir_Oswego_IL_60543_M70592-98405) |
-| 25 | 2530 Shauna Dr | Oswego | $339,000 | SFH | high-dom, price-reduced | 111 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2530-Shauna-Dr_Montgomery_IL_60538_M72992-18469) |
-| 26 | 520 S Wheaton Ave | Wheaton | $649,999 | SFH | high-dom, price-reduced | 100 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/520-S-Wheaton-Ave_Wheaton_IL_60187_M88943-16121) |
-| 27 | 504 Stilson St | Earlville | $250,000 | SFH | high-dom, price-reduced | 98 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/504-Stilson-St_Earlville_IL_60518_M72968-91654) |
-| 28 | 983 Council Rd | Somonauk | $645,000 | SFH | high-dom, price-reduced | 96 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/983-Council-Rd_Somonauk_IL_60552_M82564-97776) |
-| 29 | 1045 Linda Ln | Lake Holiday | $439,900 | SFH | high-dom, price-reduced | 95 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1045-Linda-Ln_Sandwich_IL_60548_M70032-06342) |
-| 30 | 123 Eisenhower Dr | Oswego | $419,900 | SFH | high-dom, price-reduced | 95 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/123-Eisenhower-Dr_Oswego_IL_60543_M77587-83661) |
-| 31 | 25 Cedar Ln | Lake Holiday | $79,000 | Manufactured | high-dom, price-reduced | 90 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/25-Cedar-Ln_Sandwich_IL_60548_M98127-78727) |
-| 32 | 1609 Lorraine Dr | Sandwich | $465,000 | SFH | motivated, price-reduced | 56 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1609-Lorraine-Dr_Sandwich_IL_60548_M78024-14712) |
-| 33 | 8086 Kane Rd | Waterman | $685,000 | SFH | price-reduced | 83 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/8086-Kane-Rd_Waterman_IL_60556_M96765-35728) |
-| 34 | 1317 Park Pl | Lake Holiday | $779,000 | SFH | price-reduced | 78 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1317-Park-Pl_Sandwich_IL_60548_M78254-69154) |
-| 35 | 421 E Church St | Sandwich | $385,000 | Multi-Family | price-reduced | 77 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/421-E-Church-St_Sandwich_IL_60548_M95140-58140) |
-| 36 |  | Wheaton | $565,000 | SFH | price-reduced | 71 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/Wheaton_IL_60187_M77499-71808) |
-| 37 | 703 Glenda Ct | Lake Holiday | $1,000,000 | SFH | price-reduced | 70 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/703-Glenda-Ct_Sandwich_IL_60548_M72397-70545) |
-| 38 | 1520 Stonebridge Trl Apt 2-1 | Wheaton | $314,900 | Condo | price-reduced | 70 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1520-Stonebridge-Trl-Apt-2-1_Wheaton_IL_60189_M92626-65731) |
-| 39 | 101 S Sheridan St | Sheridan | $150,000 | SFH | price-reduced | 66 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/101-S-Sheridan-St_Lostant_IL_61334_M79247-55835) |
-| 40 | 739 Bonaventure Dr | Oswego | $520,000 | SFH | price-reduced | 66 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/739-Bonaventure-Dr_Oswego_IL_60543_M86474-70522) |
-| 41 | 2151 E US Highway 34 | Leland | $699,900 | SFH | price-reduced | 58 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2151-US-Highway-34_Leland_IL_60531_M89911-32151) |
-| 42 | 99 W Merchants Dr | Oswego | $375,000 | Land | price-reduced | 58 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/99-Merchants-Plz_Oswego_IL_60543_M73790-74797) |
-| 43 | 661 Lincoln Station Dr | Oswego | $285,000 | Townhome | price-reduced | 55 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/661-Lincoln-Station-Dr_Oswego_IL_60543_M76906-82458) |
-| 44 | 287 Holiday Dr | Lake Holiday | $829,900 | SFH | price-reduced | 49 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/287-Holiday-Dr_Somonauk_IL_60552_M72355-96760) |
-| 45 | 116 W Union St | Earlville | $164,900 | SFH | price-reduced | 47 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/116-W-Union-St_Earlville_IL_60518_M85606-83980) |
-| 46 | 1935 Springhaven Ct | Oswego | $399,900 | SFH | price-reduced | 39 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1935-Springhaven-Ct_Montgomery_IL_60538_M84638-28819) |
-| 47 | 221 N Dorchester Ave | Wheaton | $359,999 | SFH | price-reduced | 37 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/221-N-Dorchester-Ave_Wheaton_IL_60187_M88537-08319) |
-| 48 | 14 Abbeyfeale Dr | Oswego | $1,099,000 | SFH | price-reduced | 35 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/14-Abbeyfeale-Dr_Oswego_IL_60543_M84285-69520) |
-| 49 | 217 E Sunset Ave | Sandwich | $349,900 | SFH | price-reduced | 34 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/217-E-Sunset-Ave_Sandwich_IL_60548_M82640-36869) |
-| 50 | 215 Grays Dr | Oswego | $315,000 | Townhome | price-reduced | 32 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/215-Grays-Dr_Oswego_IL_60543_M74878-60259) |
-| 51 | 901 S Wind Dr | Sandwich | $405,500 | SFH | price-reduced | 31 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/901-S-Wind-Dr_Sandwich_IL_60548_M76077-22876) |
-| 52 | 263 Lakeshore Dr | Oswego | $340,000 | Townhome | price-reduced | 30 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/263-Lakeshore-Dr_Oswego_IL_60543_M88653-03864) |
-| 53 | 2789 Avalon Ln | Oswego | $400,000 | SFH | price-reduced | 29 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2789-Avalon-Ln_Montgomery_IL_60538_M88120-95712) |
-| 54 | 815 Preston Ln | Oswego | $559,000 | SFH | price-reduced | 28 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/815-Preston-Ln_Oswego_IL_60543_M83829-53715) |
-| 55 | 504 Sequoia Ct | Oswego | $525,000 | SFH | price-reduced | 27 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/504-Sequoia-Ct_Oswego_IL_60543_M75285-09851) |
-| 56 | 605 Bluebird Cir | Sandwich | $112,000 | Manufactured | price-reduced | 26 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/605-Bluebird-Cir_Sandwich_IL_60548_M78074-79548) |
-| 57 | 345B Warren St | Somonauk | $259,000 | Townhome | price-reduced | 24 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/345B-Warren-St_Somonauk_IL_60552_M97046-98278) |
-| 58 | 1613 Groton Ct | Wheaton | $309,900 | Townhome | price-reduced | 24 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1613-Groton-Ct_Wheaton_IL_60189_M77342-77835) |
-| 59 | 392 Bluegrass Pkwy | Oswego | $290,000 | Condo | price-reduced | 20 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/392-Bluegrass-Pkwy_Oswego_IL_60543_M78319-48232) |
-| 60 | 117 E Elm St | Wheaton | $385,000 | Land | price-reduced | 8 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/117-E-Elm-St_Wheaton_IL_60189_M75609-29326) |
-| 61 | 528 Kipling Ct | Wheaton | $495,000 | SFH | price-reduced | 5 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/528-Kipling-Ct_Wheaton_IL_60187_M81847-19566) |
+| 23 | 117 E Elm St | Wheaton | $385,000 | SFH | as-is, price-reduced | 60 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/117-E-Elm-St_Wheaton_IL_60189_M75609-29326) |
+| 24 | 146 Piper Glen Ave | Oswego | $489,990 | SFH | below-market, price-reduced | 1 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/146-Piper-Glen-Ave_Oswego_IL_60543_M94004-08398) |
+| 25 | 917 Sunset Ave | Earlville | $329,000 | SFH | high-dom, price-reduced | 133 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/917-Sunset-Ave_Earlville_IL_60518_M71006-19516) |
+| 26 | 574 Sudbury Cir | Oswego | $384,000 | Townhome | high-dom, price-reduced | 113 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/574-Sudbury-Cir_Oswego_IL_60543_M70592-98405) |
+| 27 | 2530 Shauna Dr | Oswego | $339,000 | SFH | high-dom, price-reduced | 111 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2530-Shauna-Dr_Montgomery_IL_60538_M72992-18469) |
+| 28 | 520 S Wheaton Ave | Wheaton | $649,999 | SFH | high-dom, price-reduced | 100 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/520-S-Wheaton-Ave_Wheaton_IL_60187_M88943-16121) |
+| 29 | 504 Stilson St | Earlville | $250,000 | SFH | high-dom, price-reduced | 98 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/504-Stilson-St_Earlville_IL_60518_M72968-91654) |
+| 30 | 983 Council Rd | Somonauk | $645,000 | SFH | high-dom, price-reduced | 96 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/983-Council-Rd_Somonauk_IL_60552_M82564-97776) |
+| 31 | 1045 Linda Ln | Lake Holiday | $439,900 | SFH | high-dom, price-reduced | 95 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1045-Linda-Ln_Sandwich_IL_60548_M70032-06342) |
+| 32 | 123 Eisenhower Dr | Oswego | $419,900 | SFH | high-dom, price-reduced | 95 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/123-Eisenhower-Dr_Oswego_IL_60543_M77587-83661) |
+| 33 | 25 Cedar Ln | Lake Holiday | $79,000 | Manufactured | high-dom, price-reduced | 90 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/25-Cedar-Ln_Sandwich_IL_60548_M98127-78727) |
+| 34 | 1609 Lorraine Dr | Sandwich | $465,000 | SFH | motivated, price-reduced | 56 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1609-Lorraine-Dr_Sandwich_IL_60548_M78024-14712) |
+| 35 | 8086 Kane Rd | Waterman | $685,000 | SFH | price-reduced | 83 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/8086-Kane-Rd_Waterman_IL_60556_M96765-35728) |
+| 36 | 1317 Park Pl | Lake Holiday | $779,000 | SFH | price-reduced | 78 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1317-Park-Pl_Sandwich_IL_60548_M78254-69154) |
+| 37 | 421 E Church St | Sandwich | $385,000 | Multi-Family | price-reduced | 77 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/421-E-Church-St_Sandwich_IL_60548_M95140-58140) |
+| 38 | 398 Essex Dr | Oswego | $499,997 | SFH | price-reduced | 77 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/398-Essex-Dr_Oswego_IL_60543_M87148-63457) |
+| 39 |  | Wheaton | $565,000 | SFH | price-reduced | 71 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/Wheaton_IL_60187_M77499-71808) |
+| 40 | 703 Glenda Ct | Lake Holiday | $1,000,000 | SFH | price-reduced | 70 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/703-Glenda-Ct_Sandwich_IL_60548_M72397-70545) |
+| 41 | 1520 Stonebridge Trl Apt 2-1 | Wheaton | $314,900 | Condo | price-reduced | 70 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1520-Stonebridge-Trl-Apt-2-1_Wheaton_IL_60189_M92626-65731) |
+| 42 | 101 S Sheridan St | Sheridan | $150,000 | SFH | price-reduced | 66 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/101-S-Sheridan-St_Lostant_IL_61334_M79247-55835) |
+| 43 | 739 Bonaventure Dr | Oswego | $520,000 | SFH | price-reduced | 66 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/739-Bonaventure-Dr_Oswego_IL_60543_M86474-70522) |
+| 44 | 2151 E US Highway 34 | Leland | $699,900 | SFH | price-reduced | 58 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2151-US-Highway-34_Leland_IL_60531_M89911-32151) |
+| 45 | 99 W Merchants Dr | Oswego | $375,000 | Land | price-reduced | 58 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/99-Merchants-Plz_Oswego_IL_60543_M73790-74797) |
+| 46 | 661 Lincoln Station Dr | Oswego | $285,000 | Townhome | price-reduced | 55 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/661-Lincoln-Station-Dr_Oswego_IL_60543_M76906-82458) |
+| 47 | 287 Holiday Dr | Lake Holiday | $829,900 | SFH | price-reduced | 49 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/287-Holiday-Dr_Somonauk_IL_60552_M72355-96760) |
+| 48 | 116 W Union St | Earlville | $164,900 | SFH | price-reduced | 47 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/116-W-Union-St_Earlville_IL_60518_M85606-83980) |
+| 49 | 1935 Springhaven Ct | Oswego | $399,900 | SFH | price-reduced | 39 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1935-Springhaven-Ct_Montgomery_IL_60538_M84638-28819) |
+| 50 | 221 N Dorchester Ave | Wheaton | $359,999 | SFH | price-reduced | 37 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/221-N-Dorchester-Ave_Wheaton_IL_60187_M88537-08319) |
+| 51 | 14 Abbeyfeale Dr | Oswego | $1,099,000 | SFH | price-reduced | 35 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/14-Abbeyfeale-Dr_Oswego_IL_60543_M84285-69520) |
+| 52 | 217 E Sunset Ave | Sandwich | $349,900 | SFH | price-reduced | 34 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/217-E-Sunset-Ave_Sandwich_IL_60548_M82640-36869) |
+| 53 | 215 Grays Dr | Oswego | $315,000 | Townhome | price-reduced | 32 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/215-Grays-Dr_Oswego_IL_60543_M74878-60259) |
+| 54 | 901 S Wind Dr | Sandwich | $405,500 | SFH | price-reduced | 31 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/901-S-Wind-Dr_Sandwich_IL_60548_M76077-22876) |
+| 55 | 263 Lakeshore Dr | Oswego | $340,000 | Townhome | price-reduced | 30 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/263-Lakeshore-Dr_Oswego_IL_60543_M88653-03864) |
+| 56 | 2789 Avalon Ln | Oswego | $400,000 | SFH | price-reduced | 29 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2789-Avalon-Ln_Montgomery_IL_60538_M88120-95712) |
+| 57 | 815 Preston Ln | Oswego | $559,000 | SFH | price-reduced | 28 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/815-Preston-Ln_Oswego_IL_60543_M83829-53715) |
+| 58 | 504 Sequoia Ct | Oswego | $525,000 | SFH | price-reduced | 27 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/504-Sequoia-Ct_Oswego_IL_60543_M75285-09851) |
+| 59 | 605 Bluebird Cir | Sandwich | $112,000 | Manufactured | price-reduced | 26 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/605-Bluebird-Cir_Sandwich_IL_60548_M78074-79548) |
+| 60 | 345B Warren St | Somonauk | $259,000 | Townhome | price-reduced | 24 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/345B-Warren-St_Somonauk_IL_60552_M97046-98278) |
+| 61 | 1613 Groton Ct | Wheaton | $309,900 | Townhome | price-reduced | 24 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1613-Groton-Ct_Wheaton_IL_60189_M77342-77835) |
+| 62 | 392 Bluegrass Pkwy | Oswego | $290,000 | Condo | price-reduced | 20 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/392-Bluegrass-Pkwy_Oswego_IL_60543_M78319-48232) |
