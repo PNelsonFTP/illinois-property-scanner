@@ -37,11 +37,10 @@ POOL_NOTE = (
 )
 LAND_NOTE = (
     "Active land and farm tracts of <strong>20+ acres</strong> within "
-    "<strong>40 miles of Lake Holiday, IL</strong>. Sold/pending/contingent "
-    "listings are excluded via the same verification path as other modes. "
-    "Inventory is MLS/Realtor-sourced (county + hub sweeps); each card also "
-    "links to <strong>LandWatch</strong>, <strong>Lands of America</strong>, "
-    "Zillow, and Google for cross-checks on land-specialty sites."
+    "<strong>40 miles of Lake Holiday, IL</strong> — shown as one list "
+    "(no town toggles). Sold/pending/contingent listings are excluded. "
+    "MLS/Realtor-sourced; each card also links to LandWatch, Lands of America, "
+    "Zillow, and Google for cross-checks."
 )
 
 
@@ -127,11 +126,11 @@ def main():
     pool_area_stats = compute_area_stats(pool_data)
     land_area_stats = compute_area_stats(land_data)
 
+    # Land cities must NOT appear in location toggles — land mode is all-or-nothing.
     towns_present = sorted({
         *(p.get("nearest_target") for p in data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in new_data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in pool_data if p.get("nearest_target")),
-        *(p.get("nearest_target") for p in land_data if p.get("nearest_target")),
     })
     towns_json = json.dumps(towns_present, separators=(",", ":"))
     town_toggles = "".join(
@@ -190,6 +189,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .mode-btn:hover{{border-color:var(--accent);color:var(--text)}}
 .mode-btn.active{{background:var(--accent);border-color:var(--accent);color:#fff}}
 .loc-panel{{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}}
+body.mode-land .loc-panel{{display:none}}
 .loc-head{{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}}
 .loc-head h2{{font-size:.7rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}}
 .loc-actions{{display:flex;gap:6px;flex-wrap:wrap}}
@@ -340,7 +340,7 @@ body.mode-land .land-only-flex{{display:flex}}
   </div>
   <div class="rc" id="rc"></div>
   <div class="stats">
-    <div class="sc"><h3>By Town</h3><table class="st" id="sA"></table></div>
+    <div class="sc"><h3 id="sATitle">By Town</h3><table class="st" id="sA"></table></div>
     <div class="sc distress-only"><h3>Distress Types</h3><table class="st" id="sD"></table></div>
     <div class="sc"><h3>Property Types</h3><table class="st" id="sT"></table></div>
   </div>
@@ -528,13 +528,16 @@ function renderStats(){{
   const AS=currentAreaStats();
   const towns=enabledTowns();
   let h='';
-  AS.filter(a=>towns.has(a.area)).forEach(a=>{{h+=`<tr><td>${{a.area}}</td><td>${{a.count}}</td><td>${{a.avgPrice}}</td><td>${{a.avgDom}} ${{mode==='new'?'days':(mode==='land'?'mi/DOM':'DOM')}}</td></tr>`}});
+  const saTitle=$('sATitle');
+  if(saTitle)saTitle.textContent=mode==='land'?'By City':'By Town';
+  const areas=mode==='land'?AS:AS.filter(a=>towns.has(a.area));
+  areas.forEach(a=>{{h+=`<tr><td>${{a.area}}</td><td>${{a.count}}</td><td>${{a.avgPrice}}</td><td>${{a.avgDom}} ${{mode==='new'?'days':'DOM'}}</td></tr>`}});
   $('sA').innerHTML=h||'<tr><td colspan="4">No locations enabled</td></tr>';
   if(mode==='distress'){{
     h='';B.forEach(b=>{{h+=`<tr><td>${{b.tag}}</td><td>${{b.count}}</td></tr>`}});$('sD').innerHTML=h;
     $('hBdg').innerHTML=B.map(b=>`<span class="bdg">${{b.tag}}<span class="n">${{b.count}}</span></span>`).join('');
   }}
-  const filtered=P.filter(p=>towns.has(p.nearest_target));
+  const filtered=mode==='land'?P:P.filter(p=>towns.has(p.nearest_target));
   h='';const ty={{}};filtered.forEach(p=>{{ty[p.property_type]=(ty[p.property_type]||0)+1}});
   Object.entries(ty).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{{h+=`<tr><td>${{k}}</td><td>${{v}}</td></tr>`}});
   $('sT').innerHTML=h||'<tr><td colspan="2">—</td></tr>';
@@ -544,14 +547,8 @@ function go(){{
   let f=[...P];
   const towns=enabledTowns();
   const t=$('fT').value,d=$('fD').value,v=$('fV').value,fr=$('fFresh').value,pt=$('fPool').value,minAc=parseFloat(($('fAcres')||{{}}).value)||20,mp=parseFloat($('fP').value)||Infinity,ms=parseInt($('fS').value)||0,o=$('fO').value,q=$('fQ').value.toLowerCase().trim();
-  // Land cities are often new to the toggle list; if none are enabled, show all tracts.
-  if(mode==='land'){{
-    const landAreas=new Set(P.map(p=>p.nearest_target).filter(Boolean));
-    const enabledLand=[...towns].filter(x=>landAreas.has(x));
-    if(enabledLand.length)f=f.filter(p=>towns.has(p.nearest_target));
-  }}else{{
-    f=f.filter(p=>towns.has(p.nearest_target));
-  }}
+  // Land mode is all-or-nothing — never gated by the town toggles.
+  if(mode!=='land')f=f.filter(p=>towns.has(p.nearest_target));
   if(t)f=f.filter(p=>p.property_type===t);
   if(mode==='distress'){{
     if(v==='live')f=f.filter(p=>(p.verification_source||'').includes('realtor.com'));
@@ -588,14 +585,18 @@ function go(){{
     }}
   }});
   const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':mode==='land'?'large tracts':'properties';
-  const onCount=towns.size;
-  $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · <strong>${{onCount}}</strong>/${{TOWNS.length}} locations on`;
+  if(mode==='land'){{
+    $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · within 40 mi of Lake Holiday`;
+  }}else{{
+    const onCount=towns.size;
+    $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · <strong>${{onCount}}</strong>/${{TOWNS.length}} locations on`;
+  }}
   if(mode==='new'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-new">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}} · listed ${{e(listDate(p)||'?')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No new listings yet. Run the new-listings scan.</div></div>';
   }}else if(mode==='pool'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-pool">🏊</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}} · ${{e(p.pool_type)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No pool homes in the enabled locations.</div></div>';
   }}else if(mode==='land'){{
-    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-land">${{Math.round(p.acres||0)}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}} · ${{e(p.miles_from_lake_holiday)}} mi</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No large tracts in the enabled locations.</div></div>';
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-land">${{Math.round(p.acres||0)}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target)}} · ${{e(p.miles_from_lake_holiday)}} mi</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No large tracts within 40 mi of Lake Holiday.</div></div>';
   }}else{{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('');
   }}
