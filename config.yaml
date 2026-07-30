@@ -18,6 +18,32 @@ scan:
   include_new_listings: true
   new_listings_days: 7
   include_pool_listings: true
+  include_large_land: true
+
+# Large tracts (≥20 acres) within 40 miles of Lake Holiday, IL.
+# Primary inventory is Realtor/MLS via HomeHarvest (land + farm).
+# LandWatch / Lands of America / Zillow land links are attached for
+# cross-checking — those sites block automated scraping.
+large_land:
+  min_acres: 20
+  radius_miles: 40
+  center: "Lake Holiday, IL"
+  property_types: [land, farm]
+  counties:
+    - "LaSalle County, IL"
+    - "DeKalb County, IL"
+    - "Kendall County, IL"
+    - "Grundy County, IL"
+    - "Lee County, IL"
+  hubs:
+    - "Lake Holiday, IL"
+    - "Sandwich, IL"
+    - "Sheridan, IL"
+    - "Yorkville, IL"
+    - "Ottawa, IL"
+    - "DeKalb, IL"
+    - "Morris, IL"
+    - "Amboy, IL"
 
 verification:
   require_reverify: true

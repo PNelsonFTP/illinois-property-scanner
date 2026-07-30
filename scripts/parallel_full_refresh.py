@@ -36,6 +36,12 @@ from scanner.new_listings import (  # noqa: E402
     print_new_listings_summary,
     save_new_listings,
 )
+from scanner.large_land import (  # noqa: E402
+    compile_large_land,
+    fetch_large_land,
+    print_large_land_summary,
+    save_large_land,
+)
 from scanner.pool_listings import (  # noqa: E402
     compile_pool_listings,
     print_pool_listings_summary,
@@ -107,6 +113,7 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=3, help="Parallel town-group workers")
     parser.add_argument("--new-days", type=int, default=7)
     parser.add_argument("--skip-new-listings", action="store_true")
+    parser.add_argument("--skip-large-land", action="store_true")
     parser.add_argument("--no-markdown", action="store_true")
     parser.add_argument(
         "--enable-counties",
@@ -223,6 +230,32 @@ def main() -> int:
     meta["stats"]["pool_listings"] = len(pool_kept)
     with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
         json.dump(meta, f, indent=2)
+
+    # --- Large land (dedicated county/hub fetch; not from residential inventory) ---
+    if not args.skip_large_land and scan_cfg.get("include_large_land", True):
+        log.info("Fetching large-land inventory (≥20 acres, 40 mi Lake Holiday)...")
+        land_raw = fetch_large_land(config)
+        save_raw(land_raw, label="large-land-parallel")
+        land_records, land_stats = compile_large_land(land_raw, config=config)
+        land_kept, land_rejected = reverify_properties(
+            land_records,
+            raw_records=land_raw,
+            config=config,
+            check_urls=False,
+            do_reverify=False,
+            max_reverify=None,
+        )
+        write_rejection_audit(land_rejected, label="large-land-validation")
+        land_stats["validation_kept"] = len(land_kept)
+        land_stats["validation_rejected"] = len(land_rejected)
+        land_stats["final_count"] = len(land_kept)
+        for i, record in enumerate(land_kept):
+            record["id"] = i + 1
+        save_large_land(land_kept)
+        print_large_land_summary(land_kept, land_stats)
+        meta["stats"]["large_land"] = len(land_kept)
+        with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
+            json.dump(meta, f, indent=2)
 
     # --- Parallel new-listings (geo only) ---
     if not args.skip_new_listings:

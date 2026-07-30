@@ -61,6 +61,8 @@ def _property_type(record: dict[str, Any]) -> str:
         "land": "Land",
         "lot": "Land",
         "vacant land": "Land",
+        "farm": "Farm",
+        "farms": "Farm",
         "mobile": "Manufactured",
         "manufactured": "Manufactured",
         "mobile home": "Manufactured",

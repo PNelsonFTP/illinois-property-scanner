@@ -24,9 +24,10 @@ def fetch_town_listings(
     radius: float | None = 3,
     exclude_pending: bool = True,
     foreclosure: bool = False,
-    property_type: str | None = None,
+    property_type: str | list[str] | None = None,
     listing_type: str = "for_sale",
     past_days: int | None = None,
+    lot_sqft_min: int | None = None,
     pass_name: str = "for_sale",
 ) -> list[dict[str, Any]]:
     kwargs: dict[str, Any] = {
@@ -45,6 +46,8 @@ def fetch_town_listings(
         kwargs["property_type"] = property_type
     if past_days is not None:
         kwargs["past_days"] = past_days
+    if lot_sqft_min is not None:
+        kwargs["lot_sqft_min"] = lot_sqft_min
 
     log.info(
         "Fetching %s [%s] (type=%s, foreclosure=%s, radius=%s)...",

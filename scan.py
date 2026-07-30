@@ -11,6 +11,7 @@ Usage:
   python scan.py --towns Sheridan,Leland
   python scan.py --new-listings-only  # Only refresh last-7-days all-listings view
   python scan.py --pool-listings-only # Only refresh active homes-with-pools view
+  python scan.py --large-land-only    # Only refresh 20+ acre land near Lake Holiday
 """
 
 from __future__ import annotations
@@ -36,6 +37,12 @@ from scanner.compile import compile_records, print_summary, save_compiled
 from scanner.config import PROJECT_ROOT, ensure_dirs, load_config
 from scanner.fetch import fetch_all_towns, save_raw
 from scanner.geo import enabled_towns
+from scanner.large_land import (
+    compile_large_land,
+    fetch_large_land,
+    print_large_land_summary,
+    save_large_land,
+)
 from scanner.new_listings import (
     compile_new_listings,
     fetch_new_listings,
@@ -137,6 +144,37 @@ def _run_pool_listings(
     return kept, stats
 
 
+def _run_large_land(
+    config: dict,
+    *,
+    raw_records: list | None = None,
+) -> tuple[list, dict]:
+    """Fetch/compile large tracts and validate against sold/pending checks."""
+    if raw_records is None:
+        log.info("Fetching large-land inventory (≥20 acres, 40 mi Lake Holiday)...")
+        raw_records = fetch_large_land(config)
+        save_raw(raw_records, label="large-land")
+
+    records, stats = compile_large_land(raw_records, config=config)
+    kept, rejected = reverify_properties(
+        records,
+        raw_records=raw_records,
+        config=config,
+        check_urls=False,
+        do_reverify=False,
+        max_reverify=None,
+    )
+    write_rejection_audit(rejected, label="large-land-validation")
+    stats["validation_kept"] = len(kept)
+    stats["validation_rejected"] = len(rejected)
+    stats["final_count"] = len(kept)
+    for i, record in enumerate(kept):
+        record["id"] = i + 1
+    save_large_land(kept)
+    print_large_land_summary(kept, stats)
+    return kept, stats
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Distressed Property Scanner")
     parser.add_argument("--verify-only", action="store_true",
@@ -147,6 +185,8 @@ def main() -> int:
                         help="Only refresh last-N-days all-listings view (no distress scan)")
     parser.add_argument("--pool-listings-only", action="store_true",
                         help="Only refresh active homes-with-pools view")
+    parser.add_argument("--large-land-only", action="store_true",
+                        help="Only refresh 20+ acre land within 40 mi of Lake Holiday")
     parser.add_argument("--no-legacy", action="store_true", help="Exclude legacy v2-*.json")
     parser.add_argument("--no-markdown", action="store_true", help="Skip markdown/dashboard rebuild")
     parser.add_argument("--no-reverify", action="store_true", help="Skip post-compile reverify pass")
@@ -154,6 +194,8 @@ def main() -> int:
                         help="Skip the new-listings (7-day) pass")
     parser.add_argument("--no-pool-listings", action="store_true",
                         help="Skip the homes-with-pools pass")
+    parser.add_argument("--no-large-land", action="store_true",
+                        help="Skip the large-land (20+ acres) pass")
     parser.add_argument("--include-optional", action="store_true",
                         help="Include Leland, Earlville, Waterman, Sheridan")
     parser.add_argument("--no-optional", action="store_true", help="Force-exclude optional towns")
@@ -201,6 +243,13 @@ def main() -> int:
             include_optional=include_optional,
             towns_filter=towns_filter,
         )
+        if not args.no_markdown:
+            rebuild_outputs(scan_date, scan_time)
+        return 0
+
+    # --- Large land only ---
+    if args.large_land_only:
+        _run_large_land(config)
         if not args.no_markdown:
             rebuild_outputs(scan_date, scan_time)
         return 0
@@ -337,6 +386,16 @@ def main() -> int:
             raw_records=live_records,
         )
         stats["pool_listings"] = len(pool_records)
+
+    # --- Large land (≥20 acres within 40 mi of Lake Holiday) ---
+    do_land = (
+        scan_cfg.get("include_large_land", True)
+        and not args.no_large_land
+        and not args.verify_only
+    )
+    if do_land:
+        land_records, _land_stats = _run_large_land(config)
+        stats["large_land"] = len(land_records)
 
     if not args.no_markdown and final:
         rebuild_outputs(scan_date, scan_time)
