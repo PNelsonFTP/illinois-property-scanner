@@ -36,28 +36,95 @@ LARGE_LAND_PATH = PROJECT_ROOT / "data" / "large_land.json"
 LAND_TYPES = {"Land", "Farm"}
 SQFT_PER_ACRE = 43560.0
 
+# Structured MLS fields (highest trust).
 _ACRES_DETAIL = re.compile(
-    r"Lot Size Acres:\s*([\d,.]+)",
+    r"Lot Size Acres:\s*([.\d,]+)",
     re.IGNORECASE,
 )
+_LOT_SQFT_DETAIL = re.compile(
+    r"Lot Size Square Feet:\s*([\d,.]+)",
+    re.IGNORECASE,
+)
+# Dimensions sometimes store acreage directly: ".71 ACRE" / "3.46 ACRE".
+_DIM_ACRES = re.compile(
+    r"Lot Size Dimensions:\s*([.\d]+)\s*ACRES?\b",
+    re.IGNORECASE,
+)
+# Rectangular / polygon feet dimensions: "110 X 232.7 X 110 X 232.4".
+_DIM_FEET = re.compile(
+    r"Lot Size Dimensions:\s*([.\d]+(?:\s*[xX×]\s*[.\d]+)+)",
+    re.IGNORECASE,
+)
+# Marketing / free text. Capture leading-dot fractions (".58 Acre"), not "58".
 _ACRES_TEXT = re.compile(
-    r"(\d{1,3}(?:,\d{3})*(?:\.\d+)?)\s*(?:acres?|ac\b)",
+    r"(?<![\d.])(\d{1,4}(?:,\d{3})*(?:\.\d+)?|\.\d+)\s*(?:acres?|ac\b)",
+    re.IGNORECASE,
+)
+# Community amenity mentions that are NOT the subject lot size.
+_ACRES_AMENITY = re.compile(
+    r"\b\d{1,4}(?:\.\d+)?\s*-?\s*(?:acres?|ac)\s+"
+    r"(?:recreational\s+)?(?:lake|pond|park|golf|community|subdivision)\b",
+    re.IGNORECASE,
+)
+
+# Sources trusted enough to qualify a 20+ acre tract on their own.
+_TRUSTED_ACRE_SOURCES = frozenset({
+    "mls_lot_size_acres",
+    "description_lot_sqft",
+    "mls_lot_sqft",
+    "mls_dimensions_acres",
+    "mls_dimensions_feet",
+})
+_LOT_CONTEXT = re.compile(
+    r"\b(?:lot|parcel|tract|site|acreage|vacant\s+land)\b",
     re.IGNORECASE,
 )
 
 
-def extract_acres(raw: dict[str, Any], normalized: dict[str, Any] | None = None) -> float | None:
-    """Best-effort acreage from MLS details, lot_sqft, or description text."""
+def _parse_float(value: str) -> float | None:
+    try:
+        return float(value.replace(",", "").strip())
+    except (TypeError, ValueError, AttributeError):
+        return None
+
+
+def _detail_lines(raw: dict[str, Any]) -> list[str]:
+    lines: list[str] = []
     for detail in raw.get("details") or []:
         if not isinstance(detail, dict):
             continue
         for value in detail.get("text") or []:
-            match = _ACRES_DETAIL.match(str(value).strip())
-            if match:
-                try:
-                    return float(match.group(1).replace(",", ""))
-                except ValueError:
-                    pass
+            lines.append(str(value).strip())
+    return lines
+
+
+def _acres_from_dimensions_feet(dim_blob: str) -> float | None:
+    """Estimate acres from feet dimensions (first two sides as a rectangle)."""
+    parts = [p for p in re.split(r"\s*[xX×]\s*", dim_blob) if p]
+    nums: list[float] = []
+    for part in parts:
+        parsed = _parse_float(part)
+        if parsed is not None and parsed > 0:
+            nums.append(parsed)
+    if len(nums) < 2:
+        return None
+    # Typical MLS polygon lists opposing sides; use the first length×width pair.
+    sqft = nums[0] * nums[1]
+    if sqft < 100:
+        return None
+    return round(sqft / SQFT_PER_ACRE, 4)
+
+
+def _trusted_acres(raw: dict[str, Any]) -> tuple[float | None, str | None]:
+    """Acreage from structured MLS fields / dimensions (not marketing copy)."""
+    lines = _detail_lines(raw)
+
+    for line in lines:
+        match = _ACRES_DETAIL.match(line)
+        if match:
+            acres = _parse_float(match.group(1))
+            if acres is not None and acres > 0:
+                return acres, "mls_lot_size_acres"
 
     desc = raw.get("description") or {}
     lot_sqft = desc.get("lot_sqft")
@@ -65,32 +132,110 @@ def extract_acres(raw: dict[str, Any], normalized: dict[str, Any] | None = None)
         try:
             acres = float(lot_sqft) / SQFT_PER_ACRE
             if acres > 0:
-                return round(acres, 2)
+                return round(acres, 4), "description_lot_sqft"
         except (TypeError, ValueError):
             pass
 
+    for line in lines:
+        match = _LOT_SQFT_DETAIL.match(line)
+        if match:
+            sqft = _parse_float(match.group(1))
+            if sqft and sqft > 0:
+                return round(sqft / SQFT_PER_ACRE, 4), "mls_lot_sqft"
+
+    for line in lines:
+        match = _DIM_ACRES.match(line)
+        if match:
+            acres = _parse_float(match.group(1))
+            if acres is not None and acres > 0:
+                return acres, "mls_dimensions_acres"
+
+    for line in lines:
+        match = _DIM_FEET.match(line)
+        if match:
+            acres = _acres_from_dimensions_feet(match.group(1))
+            if acres is not None and acres > 0:
+                return acres, "mls_dimensions_feet"
+
+    return None, None
+
+
+def _text_acre_candidates(blob: str) -> list[tuple[float, str, bool]]:
+    """Return (acres, matched_text, looks_like_subject_lot) from free text."""
+    cleaned = _ACRES_AMENITY.sub(" ", blob)
+    out: list[tuple[float, str, bool]] = []
+    for match in _ACRES_TEXT.finditer(cleaned):
+        raw_num = match.group(1)
+        acres = _parse_float(raw_num)
+        if acres is None or acres <= 0 or acres > 5000:
+            continue
+        # Guard against residual leading-dot mishandling.
+        if raw_num.startswith(".") and acres >= 1:
+            continue
+        window_start = max(0, match.start() - 40)
+        window_end = min(len(cleaned), match.end() + 40)
+        window = cleaned[window_start:window_end]
+        lot_like = bool(_LOT_CONTEXT.search(window)) or raw_num.startswith(".")
+        out.append((acres, match.group(0), lot_like))
+    return out
+
+
+def extract_acres(
+    raw: dict[str, Any],
+    normalized: dict[str, Any] | None = None,
+) -> float | None:
+    """Best-effort acreage with structured MLS fields preferred over ad copy."""
+    acres, _source = extract_acres_with_source(raw, normalized)
+    return acres
+
+
+def extract_acres_with_source(
+    raw: dict[str, Any],
+    normalized: dict[str, Any] | None = None,
+) -> tuple[float | None, str | None]:
+    """Return (acres, source_tag). Rejects fractional-lot text misreads."""
+    trusted, source = _trusted_acres(raw)
+    if trusted is not None:
+        return round(trusted, 2), source
+
+    desc = raw.get("description") or {}
     text_bits = [
         str(desc.get("text") or ""),
         str((normalized or {}).get("lot_size") or ""),
         str((normalized or {}).get("notes") or ""),
+        str((normalized or {}).get("address") or ""),
+        str(
+            ((raw.get("location") or {}).get("address") or {}).get("line") or ""
+        ),
     ]
-    for detail in raw.get("details") or []:
-        if isinstance(detail, dict):
-            text_bits.extend(str(v) for v in (detail.get("text") or []))
-
+    text_bits.extend(_detail_lines(raw))
     blob = " ".join(text_bits)
-    candidates: list[float] = []
-    for match in _ACRES_TEXT.finditer(blob):
-        try:
-            value = float(match.group(1).replace(",", ""))
-        except ValueError:
-            continue
-        # Ignore tiny "0.25 acre" backyard mentions when looking for tracts.
-        if 5 <= value <= 5000:
-            candidates.append(value)
-    if candidates:
-        return max(candidates)
-    return None
+
+    candidates = _text_acre_candidates(blob)
+    if not candidates:
+        return None, None
+
+    # Prefer lot-context / leading-dot subject mentions over amenity leftovers.
+    lot_candidates = [c for c in candidates if c[2]]
+    pool = lot_candidates or candidates
+    # Prefer the smallest plausible subject-lot mention when values conflict
+    # (e.g. ".58 acre lot" vs leftover community copy). For true large tracts,
+    # structured fields usually exist; text-only large tracts still pass via
+    # a single dominant candidate.
+    acres = max(c[0] for c in pool)
+    if len(pool) > 1:
+        small = [c[0] for c in pool if c[0] < 5]
+        large = [c[0] for c in pool if c[0] >= 20]
+        if small and large:
+            # Conflicting signals without MLS acres/sqft — trust the small lot.
+            acres = min(small)
+            return round(acres, 2), "text_lot_conflict_prefer_small"
+        if small and not large:
+            acres = max(small)
+        elif large:
+            acres = max(large)
+
+    return round(acres, 2), "text_description"
 
 
 def _land_cfg(config: dict) -> dict[str, Any]:
@@ -247,13 +392,27 @@ def compile_large_land(
                 stats["rejected_non_land"] += 1
                 continue
 
-        acres = extract_acres(raw, rec)
+        acres, acres_source = extract_acres_with_source(raw, rec)
         if acres is None:
             stats["rejected_no_acres"] += 1
             continue
         if acres < min_acres:
             stats["rejected_under_acres"] += 1
             continue
+        # Large-tract claims from marketing copy alone are easy to misread
+        # (".58 Acre" → 58). Require MLS acres/sqft/dimensions, or a clear
+        # text lot-size statement with no conflicting small-lot signal.
+        if acres_source not in _TRUSTED_ACRE_SOURCES:
+            if acres_source == "text_lot_conflict_prefer_small":
+                stats["rejected_acre_conflict"] += 1
+                continue
+            if acres_source != "text_description":
+                stats["rejected_untrusted_acres"] += 1
+                continue
+            # Text-only large tracts: require an explicit lot/tract cue nearby
+            # (already preferred in candidate scoring) and block if dimensions
+            # imply a house lot — dimensions path should have won already.
+            stats["accepted_text_acres"] += 1
 
         miles = miles_from_lake_holiday(raw)
         if miles is None:
@@ -281,6 +440,7 @@ def compile_large_land(
 
         evidence = [
             f"{acres:g} acres",
+            f"acres via {acres_source}",
             f"{miles:.1f} mi from Lake Holiday",
         ]
         if rec.get("lot_size"):
@@ -304,11 +464,16 @@ def compile_large_land(
             "price_per_sqft": None,
             "price_per_acre": price_per_acre,
             "acres": round(acres, 2),
+            "acres_source": acres_source,
             "dom": rec.get("dom"),
             "beds": rec.get("beds"),
             "baths": rec.get("baths"),
             "sqft": rec.get("sqft"),
-            "lot_size": rec.get("lot_size") or f"{acres:g} acres",
+            "lot_size": (
+                f"{acres:g} acres"
+                if acres_source in _TRUSTED_ACRE_SOURCES
+                else (rec.get("lot_size") or f"{acres:g} acres")
+            ),
             "year_built": rec.get("year_built"),
             "list_date": rec.get("list_date"),
             "status": rec.get("mls_status") or rec.get("status") or "Active",
