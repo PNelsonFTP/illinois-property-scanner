@@ -16,6 +16,34 @@ from scanner.geo import enabled_towns
 
 log = logging.getLogger(__name__)
 
+# Module-level fetch health counters (reset at start of each discovery run).
+_FETCH_HEALTH: dict[str, int] = {
+    "calls": 0,
+    "failed": 0,
+    "empty": 0,
+    "ok": 0,
+}
+
+
+def reset_fetch_health() -> None:
+    for k in _FETCH_HEALTH:
+        _FETCH_HEALTH[k] = 0
+
+
+def get_fetch_health() -> dict[str, int]:
+    return dict(_FETCH_HEALTH)
+
+
+def is_fetch_catastrophic(records: list[dict[str, Any]] | None = None) -> bool:
+    """True when discovery produced no usable inventory after multiple failures."""
+    health = _FETCH_HEALTH
+    if health["failed"] < 3:
+        return False
+    if records is None:
+        return health["ok"] == 0
+    usable = [r for r in records if not r.get("_negative_check")]
+    return len(usable) == 0
+
 
 def fetch_town_listings(
     town_name: str,
@@ -53,12 +81,20 @@ def fetch_town_listings(
         "Fetching %s [%s] (type=%s, foreclosure=%s, radius=%s)...",
         search_location, pass_name, listing_type, foreclosure, radius,
     )
+    _FETCH_HEALTH["calls"] += 1
     try:
         results = scrape_property(**kwargs)
     except Exception as e:
+        _FETCH_HEALTH["failed"] += 1
         log.warning("Fetch failed for %s [%s]: %s", search_location, pass_name, e)
         return []
 
+    if not results:
+        _FETCH_HEALTH["empty"] += 1
+        log.info("  -> 0 listings (empty)")
+        return []
+
+    _FETCH_HEALTH["ok"] += 1
     for r in results:
         r["_fetch_town"] = town_name
         r["_fetch_location"] = search_location
@@ -111,6 +147,7 @@ def fetch_all_towns(
     include_distress = scan_cfg.get("include_distress_passes", True)
     include_sold_pending = scan_cfg.get("include_sold_pending_checks", True)
 
+    reset_fetch_health()
     towns = enabled_towns(config, include_optional=include_optional)
     if towns_filter:
         wanted = {t.lower() for t in towns_filter}
@@ -218,7 +255,17 @@ def fetch_all_towns(
             )
             time.sleep(0.3)
 
+    health = get_fetch_health()
+    log.info(
+        "Fetch health: calls=%d ok=%d empty=%d failed=%d",
+        health["calls"], health["ok"], health["empty"], health["failed"],
+    )
     log.info("Total unique raw records fetched: %d", len(all_records))
+    if is_fetch_catastrophic(all_records):
+        log.error(
+            "Catastrophic fetch: %d failures and no usable inventory — abort recommended",
+            health["failed"],
+        )
     return all_records
 
 

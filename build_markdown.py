@@ -9,6 +9,8 @@ import shutil
 from collections import Counter
 from pathlib import Path
 
+from scanner.links import attach_alt_links
+
 PROJECT_ROOT = Path(__file__).resolve().parent
 COMPILED = PROJECT_ROOT / "v2_compiled.json"
 BASE = PROJECT_ROOT / "distressed-properties"
@@ -18,13 +20,17 @@ SCAN_TIME = os.environ.get("SCAN_TIME", "")
 SCOPE = (
     "Distressed listings only — core towns ~3 mi / optional towns ~6 mi "
     "(Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. "
-    "New / pools / large-land views are dashboard-only (not this markdown tree)."
+    "New / pools / large-land views are dashboard-only (not this markdown tree). "
+    "City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday)."
 )
 
 
 def load_data() -> list:
     with open(COMPILED) as f:
-        return json.load(f)
+        data = json.load(f)
+    for rec in data:
+        attach_alt_links(rec)
+    return data
 
 
 def fmt_price(v):
@@ -44,6 +50,13 @@ def fmt_link(url, label="Source"):
     return f"[{label}]({url})" if url else "N/A"
 
 
+def fmt_city_area(d) -> tuple[str, str]:
+    """Return (MLS city, nearest_target area) for table columns."""
+    city = (d.get("city") or "").strip()
+    area = (d.get("nearest_target") or "").strip()
+    return city or area or "", area or city or ""
+
+
 def sort_props(props):
     return sorted(props, key=lambda d: (-(d.get("distress_score") or 0), -(d.get("dom") or 0)))
 
@@ -55,32 +68,37 @@ def header_block(title, count):
         f"**Scan Date:** {ts}  \n"
         f"**Scope:** {SCOPE}  \n"
         f"**Properties:** {count}\n\n"
+        f"*Links prefer Zillow/Google — Realtor.com deep-links often block after scanning.*\n\n"
     )
 
 
 def make_table(props, num_offset=1):
     rows = [
-        "| # | Address | City | Price | Type | Distress Tags | DOM | Score | Status | Link |",
-        "|---|---------|------|-------|------|---------------|-----|-------|--------|------|",
+        "| # | Address | City | Area | Price | Type | Distress Tags | DOM | Score | Status | Zillow | Google | Realtor |",
+        "|---|---------|------|------|-------|------|---------------|-----|-------|--------|--------|--------|---------|",
     ]
     for i, d in enumerate(props, num_offset):
+        city, area = fmt_city_area(d)
         rows.append(
-            f"| {i} | {d.get('address', 'Unknown')} | {d.get('nearest_target', d.get('city', ''))} "
+            f"| {i} | {d.get('address', 'Unknown')} | {city} | {area} "
             f"| {fmt_price(d.get('list_price'))} | {d.get('property_type', '')} "
             f"| {', '.join(d.get('distress_types', [])) or 'N/A'} "
             f"| {fmt_dom(d.get('dom'))} | {d.get('distress_score', 'N/A')} "
-            f"| {d.get('status', 'N/A')} | {fmt_link(d.get('listing_url'))} |"
+            f"| {d.get('status', 'N/A')} "
+            f"| {fmt_link(d.get('zillow_url'), 'Zillow')} "
+            f"| {fmt_link(d.get('google_url'), 'Google')} "
+            f"| {fmt_link(d.get('listing_url'), 'Realtor')} |"
         )
     return "\n".join(rows) + "\n"
 
 
 def make_full_table(props, num_offset=1):
     cols = [
-        "#", "Address", "City", "State", "ZIP", "County", "Type",
+        "#", "Address", "City", "Area", "State", "ZIP", "County", "Type",
         "Price", "Orig Price", "Reductions", "Total Reduced", "$/sqft",
         "Assessed", "DOM", "Beds", "Baths", "Sqft", "Lot Size",
         "Year Built", "Distress Tags", "Score", "Source", "Status",
-        "MLS Status", "Verified At", "Notes", "Link",
+        "MLS Status", "Verified At", "Notes", "Zillow", "Google", "Realtor",
     ]
     rows = ["| " + " | ".join(cols) + " |", "|" + "|".join(["---"] * len(cols)) + "|"]
     for i, d in enumerate(props, num_offset):
@@ -88,8 +106,9 @@ def make_full_table(props, num_offset=1):
             val = d.get(k)
             return str(val) if val is not None else default
 
+        city, area = fmt_city_area(d)
         row = [
-            str(i), v("address"), d.get("nearest_target", d.get("city", "")),
+            str(i), v("address"), city, area,
             v("state"), v("zip"), v("county"), v("property_type"),
             fmt_price(d.get("list_price")), fmt_price(d.get("original_list_price")),
             v("price_reductions", "0"),
@@ -101,7 +120,9 @@ def make_full_table(props, num_offset=1):
             v("distress_score"), v("listing_source"), v("status"),
             v("mls_status"), v("verified_at"),
             (d.get("notes") or "").replace("|", "\\|").replace("\n", " ")[:200],
-            fmt_link(d.get("listing_url")),
+            fmt_link(d.get("zillow_url"), "Zillow"),
+            fmt_link(d.get("google_url"), "Google"),
+            fmt_link(d.get("listing_url"), "Realtor"),
         ]
         rows.append("| " + " | ".join(row) + " |")
     return "\n".join(rows) + "\n"
@@ -202,7 +223,7 @@ def main():
     idx += f"**Live-Verified:** {verified}/{total}  \n"
     idx += f"**Re-verified:** {reverified}/{total}  \n"
     idx += f"**Stale:** {stale}\n\n"
-    idx += "## Summary Statistics\n\n### By Town\n\n| Town | Count |\n|------|-------|\n"
+    idx += "## Summary Statistics\n\n### By Town (nearest_target)\n\n| Town | Count |\n|------|-------|\n"
     for town, cnt in sorted(by_town.items(), key=lambda x: -x[1]):
         idx += f"| {town} | {cnt} |\n"
     idx += f"\n## Top 10 Properties by Distress Score\n\n{make_table(sort_props(data)[:10])}"

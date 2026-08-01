@@ -36,6 +36,27 @@ def _address_parts(record: dict[str, Any]) -> dict[str, str]:
     }
 
 
+def _coords(record: dict[str, Any]) -> tuple[float | None, float | None]:
+    """Extract lat/lon from raw location.address.coordinate when present."""
+    loc = record.get("location") or {}
+    addr = loc.get("address") if isinstance(loc, dict) else {}
+    if isinstance(addr, dict):
+        coord = addr.get("coordinate")
+        if isinstance(coord, dict):
+            lat, lon = coord.get("lat"), coord.get("lon")
+            if lat is not None and lon is not None:
+                try:
+                    return float(lat), float(lon)
+                except (TypeError, ValueError):
+                    pass
+    if record.get("lat") is not None and record.get("lon") is not None:
+        try:
+            return float(record["lat"]), float(record["lon"])
+        except (TypeError, ValueError):
+            pass
+    return None, None
+
+
 def _property_type(record: dict[str, Any]) -> str:
     desc = record.get("description") or {}
     raw = (
@@ -104,6 +125,7 @@ def normalize_realtor_record(record: dict[str, Any]) -> dict[str, Any]:
         total_reduced = orig - list_price
 
     href = record.get("href") or record.get("url") or record.get("listing_url") or ""
+    lat, lon = _coords(record)
 
     return {
         "address": addr["line"],
@@ -138,6 +160,8 @@ def normalize_realtor_record(record: dict[str, Any]) -> dict[str, Any]:
         "listing_id": record.get("listing_id"),
         "list_date": record.get("list_date"),
         "last_update_date": record.get("last_update_date"),
+        "lat": lat,
+        "lon": lon,
         "_fetch_town": record.get("_fetch_town"),
         "_raw_source": "realtor.com",
     }

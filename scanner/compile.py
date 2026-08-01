@@ -8,13 +8,22 @@ from collections import Counter
 from datetime import datetime, timezone
 from typing import Any
 
+from scanner.assessor import attach_assessor_links
 from scanner.audit import write_rejection_audit
 from scanner.config import COMPILED_PATH, LEGACY_RAW_GLOB, PROJECT_ROOT, load_config
 from scanner.dedup import deduplicate
-from scanner.distress import calculate_score, detect_distress_signals
-from scanner.geo import classify_town
+from scanner.distress import (
+    calculate_score,
+    detect_distress_signals,
+    estimate_acres,
+    is_land_type,
+)
+from scanner.geo import classify_town, within_town_radius
+from scanner.history import attach_history
+from scanner.lh_features import extract_lh_features
 from scanner.links import attach_alt_links
 from scanner.normalize import normalize_legacy_record, normalize_realtor_record
+from scanner.public_records import load_public_records
 from scanner.status import is_active_legacy, is_verified_active
 
 log = logging.getLogger(__name__)
@@ -41,7 +50,8 @@ def load_legacy_raw() -> list[dict[str, Any]]:
 def compile_records(
     live_records: list[dict[str, Any]],
     *,
-    include_legacy: bool = True,
+    include_legacy: bool = False,
+    include_public_records: bool = False,
     config: dict | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, int], list[dict[str, Any]]]:
     """
@@ -52,14 +62,20 @@ def compile_records(
     config = config or load_config()
     stats = Counter()
     rejections: list[dict[str, Any]] = []
+    distress_cfg = config.get("distress") or {}
+    min_land_acres = float(distress_cfg.get("min_land_acres_for_distress", 20))
 
     normalized: list[dict[str, Any]] = []
+    raw_by_pid: dict[str, dict] = {}
     for raw in live_records:
-        # Sold/pending inventory is for negative checks only — never publish as active
         if raw.get("_negative_check") or raw.get("_listing_type_query") in ("sold", "pending"):
             stats["negative_check_inventory"] += 1
             continue
-        normalized.append(normalize_realtor_record(raw))
+        rec = normalize_realtor_record(raw)
+        normalized.append(rec)
+        pid = str(rec.get("property_id") or "")
+        if pid:
+            raw_by_pid[pid] = raw
         stats["live_normalized"] += 1
 
     if include_legacy:
@@ -67,11 +83,24 @@ def compile_records(
             normalized.append(normalize_legacy_record(raw))
             stats["legacy_normalized"] += 1
 
+    if include_public_records:
+        for rec in load_public_records():
+            normalized.append(rec)
+            stats["public_records_loaded"] += 1
+
     accepted: list[dict[str, Any]] = []
     verified_at = datetime.now(timezone.utc).isoformat()
 
     for rec in normalized:
-        addr = rec.get("address", "")
+        addr = (rec.get("address") or "").strip()
+        if not addr:
+            stats["rejected_missing_address"] += 1
+            rejections.append({
+                "address": "", "city": rec.get("city"),
+                "reason": "missing_address", "detail": "empty street address",
+            })
+            continue
+
         town, county = classify_town(rec, config)
         if town is None:
             stats["rejected_out_of_zone"] += 1
@@ -85,8 +114,22 @@ def compile_records(
         if county and not rec.get("county"):
             rec["county"] = county
 
+        # True radius gate (haversine vs town center) when coords exist
+        if not within_town_radius(rec, town, config):
+            stats["rejected_outside_radius"] += 1
+            rejections.append({
+                "address": addr, "city": rec.get("city"),
+                "reason": "outside_radius",
+                "detail": f"beyond radius for {town}",
+            })
+            continue
+
         is_live = rec.get("_raw_source") == "realtor.com"
-        if is_live:
+        is_public = rec.get("_raw_source") == "public-record"
+        if is_public:
+            active, reason = True, "public-record import"
+            rec["verification_source"] = "public-record"
+        elif is_live:
             active, reason = is_verified_active(rec, config)
             rec["verification_source"] = "realtor.com-live"
         else:
@@ -118,28 +161,49 @@ def compile_records(
             })
             continue
 
-        ptype = (rec.get("property_type") or "").lower()
-        if ptype == "land":
-            land_tags = set(distress["tags"])
-            if not (land_tags & {"high-dom", "price-reduced", "below-market", "foreclosure", "auction", "motivated"}):
-                if not any("keyword" in k for k in distress["reasons"]):
-                    stats["rejected_land_no_signal"] += 1
-                    rejections.append({
-                        "address": addr, "city": rec.get("city"),
-                        "reason": "land_no_signal", "detail": "land without strong distress",
-                    })
-                    continue
+        ptype = rec.get("property_type") or ""
+        acres = distress.get("acres")
+        if acres is None:
+            acres = estimate_acres(rec)
+
+        # Vacant lots / farms under threshold → Large land mode only.
+        # Public-record CSV rows often omit acres; don't auto-reject those.
+        if is_land_type(ptype) and not is_public:
+            if acres is None or acres < min_land_acres:
+                stats["rejected_small_vacant_lot"] += 1
+                rejections.append({
+                    "address": addr, "city": rec.get("city"),
+                    "reason": "small_vacant_lot",
+                    "detail": f"land/farm under {min_land_acres:g} acres (use Large land mode)",
+                })
+                continue
+
+        if not distress.get("meets_publish_composite"):
+            stats["rejected_weak_composite"] += 1
+            rejections.append({
+                "address": addr, "city": rec.get("city"),
+                "reason": "weak_composite",
+                "detail": "DOM-only or price-cut-only (or below min publish score)",
+                "tags": distress.get("tags"),
+            })
+            continue
 
         rec["distress_types"] = distress["tags"]
         rec["dom"] = distress.get("dom") or rec.get("dom")
+        rec["acres"] = acres
         if distress.get("original_list_price"):
             rec["original_list_price"] = distress["original_list_price"]
 
         rec["distress_score"] = calculate_score(rec, distress["tags"])
-        rec["verified_at"] = verified_at if is_live else rec.get("verified_at")
-        rec["last_seen_active_at"] = verified_at if is_live else rec.get("last_seen_active_at")
+        rec["verified_at"] = verified_at if (is_live or is_public) else rec.get("verified_at")
+        rec["last_seen_active_at"] = verified_at if (is_live or is_public) else rec.get("last_seen_active_at")
         rec["status"] = rec.get("mls_status") or rec.get("status") or "Active"
         rec["verification_note"] = reason
+
+        raw = raw_by_pid.get(str(rec.get("property_id") or ""))
+        features = extract_lh_features(raw or rec)
+        rec.update(features)
+
         accepted.append(rec)
         stats["accepted_pre_dedup"] += 1
 
@@ -167,6 +231,7 @@ def compile_records(
             "baths": rec.get("baths"),
             "sqft": rec.get("sqft"),
             "lot_size": rec.get("lot_size", ""),
+            "acres": rec.get("acres"),
             "year_built": rec.get("year_built"),
             "distress_types": rec.get("distress_types", []),
             "distress_score": rec.get("distress_score", 1),
@@ -180,17 +245,34 @@ def compile_records(
             "verification_source": rec.get("verification_source", ""),
             "verification_note": rec.get("verification_note", ""),
             "is_stale": False,
-            "needs_review": False,
+            "needs_review": bool(rec.get("needs_review")),
             "notes": rec.get("notes", ""),
             "all_sources": rec.get("all_sources", []),
             "all_urls": rec.get("all_urls", []),
             "property_id": rec.get("property_id"),
             "listing_id": rec.get("listing_id"),
+            "lat": rec.get("lat"),
+            "lon": rec.get("lon"),
+            "waterfront": rec.get("waterfront"),
+            "hoa_fee": rec.get("hoa_fee"),
+            "manufactured": rec.get("manufactured"),
+            "lot_rent_monthly": rec.get("lot_rent_monthly"),
+            "subdivision": rec.get("subdivision"),
+            "list_date": rec.get("list_date"),
         }
         attach_alt_links(entry)
+        attach_assessor_links(entry)
         if entry["list_price"] and entry["sqft"] and entry["sqft"] > 0:
             entry["price_per_sqft"] = round(entry["list_price"] / entry["sqft"], 2)
+        if (
+            entry.get("original_list_price")
+            and entry.get("list_price")
+            and entry["original_list_price"] > entry["list_price"]
+        ):
+            entry["total_reduced"] = entry["original_list_price"] - entry["list_price"]
         final.append(entry)
+
+    attach_history(final)
 
     final.sort(key=lambda p: (p["distress_score"], p.get("dom") or 0), reverse=True)
     for i, prop in enumerate(final):

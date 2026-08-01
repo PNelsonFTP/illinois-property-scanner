@@ -38,6 +38,8 @@ scan:
 large_land:
   min_acres: 20
   radius_miles: 40
+  # When MLS omits lat/lon, city-center miles are approximate — tighter gate.
+  centroid_max_miles: 30
   center: "Lake Holiday, IL"
   property_types: [land, farm]
   counties:
@@ -145,6 +147,38 @@ distress:
   land_max_price_signal: 30000
   mobile_max_price_signal: 50000
   min_price_reduction_pct: 0.02
+  # Vacant lots under this size are excluded from distressed mode (use Large land mode).
+  min_land_acres_for_distress: 20
+  # Reject DOM-only / price-cut-only unless composite or score meets this with a second signal.
+  min_publish_score: 3
+
+# Named refresh profiles for `python scan.py refresh {quick,daily,full}`
+refresh_profiles:
+  quick:
+    description: Reverify distressed + refresh new listings
+    reverify_only: true
+    include_new_listings: true
+    include_pool_listings: false
+    include_large_land: false
+    include_legacy: false
+  daily:
+    description: Parallel full discovery without county sweeps
+    use_parallel: true
+    enable_counties: false
+    include_legacy: false
+    include_new_listings: true
+    include_pool_listings: true
+    include_large_land: true
+    include_public_records: false
+  full:
+    description: Parallel + counties + public-record CSV + all modes
+    use_parallel: true
+    enable_counties: true
+    include_legacy: false
+    include_new_listings: true
+    include_pool_listings: true
+    include_large_land: true
+    include_public_records: true
 
 inactive_statuses:
   - sold
@@ -152,12 +186,18 @@ inactive_statuses:
   - pending
   - contingent
   - under contract
+  - active under contract
+  - active contingent
   - off market
   - off-market
   - expired
   - withdrawn
   - cancelled
   - canceled
+  - backup
+  - take backup
+  - kick out
+  - kick-out
 
 not_distressed_phrases:
   - not a distressed sale

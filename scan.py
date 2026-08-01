@@ -7,7 +7,10 @@ For faster full refreshes prefer: scripts/parallel_full_refresh.py
 Publish viewing results to GitHub Pages (see docs/PUBLISHING.md).
 
 Usage:
-  python scan.py --no-legacy          # Full live scan + reverify + all modes + rebuild
+  python scan.py refresh quick        # Reverify + new listings
+  python scan.py refresh daily        # Parallel, no counties
+  python scan.py refresh full         # Parallel + counties + public records
+  python scan.py --no-legacy          # Full live scan (legacy off by default)
   python scan.py --include-optional   # Force-include Leland, Earlville, Waterman, Sheridan
   python scan.py --reverify-only      # Re-verify existing distressed list (no rediscovery)
   python scan.py --verify-only        # Re-compile from latest raw (no fetch)
@@ -39,7 +42,12 @@ from scanner.audit import (
 )
 from scanner.compile import compile_records, print_summary, save_compiled
 from scanner.config import PROJECT_ROOT, ensure_dirs, load_config
-from scanner.fetch import fetch_all_towns, save_raw
+from scanner.fetch import (
+    fetch_all_towns,
+    get_fetch_health,
+    is_fetch_catastrophic,
+    save_raw,
+)
 from scanner.geo import enabled_towns
 from scanner.large_land import (
     compile_large_land,
@@ -179,7 +187,66 @@ def _run_large_land(
     return kept, stats
 
 
-def main() -> int:
+def _run_refresh_profile(profile: str, argv_rest: list[str]) -> int:
+    """Dispatch named refresh profiles from config.yaml refresh_profiles."""
+    config = load_config()
+    profiles = config.get("refresh_profiles") or {}
+    if profile not in profiles:
+        log.error(
+            "Unknown refresh profile %r. Choose from: %s",
+            profile,
+            ", ".join(sorted(profiles)) or "(none configured)",
+        )
+        return 2
+    cfg = profiles[profile]
+    log.info("Refresh profile %s: %s", profile, cfg.get("description") or "")
+
+    if cfg.get("use_parallel"):
+        script = PROJECT_ROOT / "scripts" / "parallel_full_refresh.py"
+        cmd = [sys.executable, str(script)]
+        if cfg.get("enable_counties"):
+            cmd.append("--enable-counties")
+        if cfg.get("include_public_records"):
+            cmd.append("--include-public-records")
+        if not cfg.get("include_new_listings", True):
+            cmd.append("--skip-new-listings")
+        if not cfg.get("include_large_land", True):
+            cmd.append("--skip-large-land")
+        if not cfg.get("include_pool_listings", True):
+            cmd.append("--skip-pool-listings")
+        cmd.extend(argv_rest)
+        log.info("Delegating to parallel refresh: %s", " ".join(cmd))
+        return subprocess.call(cmd, cwd=PROJECT_ROOT)
+
+    # quick: reverify + optional new listings
+    rc = subprocess.call(
+        [sys.executable, str(PROJECT_ROOT / "scan.py"), "--reverify-only", *argv_rest],
+        cwd=PROJECT_ROOT,
+    )
+    if rc != 0:
+        return rc
+    if cfg.get("include_new_listings"):
+        return subprocess.call(
+            [
+                sys.executable,
+                str(PROJECT_ROOT / "scan.py"),
+                "--new-listings-only",
+                "--include-optional",
+                *argv_rest,
+            ],
+            cwd=PROJECT_ROOT,
+        )
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] == "refresh":
+        if len(argv) < 2:
+            log.error("Usage: python scan.py refresh {quick,daily,full}")
+            return 2
+        return _run_refresh_profile(argv[1].lower(), argv[2:])
+
     parser = argparse.ArgumentParser(description="Distressed Property Scanner")
     parser.add_argument("--verify-only", action="store_true",
                         help="Compile from latest raw data without fetching")
@@ -191,7 +258,16 @@ def main() -> int:
                         help="Only refresh active homes-with-pools view")
     parser.add_argument("--large-land-only", action="store_true",
                         help="Only refresh 20+ acre land within 40 mi of Lake Holiday")
-    parser.add_argument("--no-legacy", action="store_true", help="Exclude legacy v2-*.json")
+    parser.add_argument(
+        "--no-legacy",
+        action="store_true",
+        help="Exclude legacy v2-*.json (default behavior; kept for compatibility)",
+    )
+    parser.add_argument(
+        "--include-legacy",
+        action="store_true",
+        help="Include legacy v2-*.json curated files",
+    )
     parser.add_argument("--no-markdown", action="store_true", help="Skip markdown/dashboard rebuild")
     parser.add_argument("--no-reverify", action="store_true", help="Skip post-compile reverify pass")
     parser.add_argument("--no-new-listings", action="store_true",
@@ -203,6 +279,8 @@ def main() -> int:
     parser.add_argument("--include-optional", action="store_true",
                         help="Include Leland, Earlville, Waterman, Sheridan")
     parser.add_argument("--no-optional", action="store_true", help="Force-exclude optional towns")
+    parser.add_argument("--include-public-records", action="store_true",
+                        help="Merge data/public_records/*.csv into distress compile")
     parser.add_argument("--towns", type=str, default="",
                         help="Comma-separated town filter (e.g. Sheridan,Leland)")
     parser.add_argument("--raw-file", type=Path, help="Use specific raw JSON file")
@@ -210,7 +288,7 @@ def main() -> int:
                         help="Cap number of listings to deep-reverify")
     parser.add_argument("--new-days", type=int, default=None,
                         help="Window for new listings (default from config, usually 7)")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     ensure_dirs()
     config = load_config()
@@ -223,6 +301,9 @@ def main() -> int:
         include_optional = False
     config["_include_optional"] = include_optional
     scan_cfg["include_optional_towns"] = include_optional
+
+    # Legacy off by default; opt in with --include-legacy.
+    include_legacy = bool(args.include_legacy)
 
     towns_filter = [t.strip() for t in args.towns.split(",") if t.strip()] or None
     scan_date, scan_time = scan_timestamp()
@@ -315,12 +396,21 @@ def main() -> int:
             config, include_optional=include_optional, towns_filter=towns_filter,
         )
         save_raw(live_records)
+        health = get_fetch_health()
+        if is_fetch_catastrophic(live_records):
+            log.error(
+                "Aborting: catastrophic fetch (failed=%d empty=%d usable=0)",
+                health["failed"], health["empty"],
+            )
+            return 1
 
     previous = load_previous_compiled()
 
+    include_public = bool(args.include_public_records)
     final, stats, _compile_rejections = compile_records(
         live_records,
-        include_legacy=not args.no_legacy,
+        include_legacy=include_legacy,
+        include_public_records=include_public,
         config=config,
     )
 

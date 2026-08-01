@@ -37,7 +37,14 @@ from scanner.audit import (  # noqa: E402
 )
 from scanner.compile import compile_records, print_summary, save_compiled  # noqa: E402
 from scanner.config import PROJECT_ROOT, ensure_dirs, load_config  # noqa: E402
-from scanner.fetch import _merge_unique, _record_key, fetch_all_towns, save_raw  # noqa: E402
+from scanner.fetch import (  # noqa: E402
+    _merge_unique,
+    _record_key,
+    fetch_all_towns,
+    get_fetch_health,
+    is_fetch_catastrophic,
+    save_raw,
+)
 from scanner.new_listings import (  # noqa: E402
     compile_new_listings,
     fetch_new_listings,
@@ -122,11 +129,17 @@ def main() -> int:
     parser.add_argument("--new-days", type=int, default=7)
     parser.add_argument("--skip-new-listings", action="store_true")
     parser.add_argument("--skip-large-land", action="store_true")
+    parser.add_argument("--skip-pool-listings", action="store_true")
     parser.add_argument("--no-markdown", action="store_true")
     parser.add_argument(
         "--enable-counties",
         action="store_true",
         help="Also run county-wide for_sale sweeps (slower, more coverage)",
+    )
+    parser.add_argument(
+        "--include-public-records",
+        action="store_true",
+        help="Merge data/public_records/*.csv into distress compile",
     )
     args = parser.parse_args()
 
@@ -162,12 +175,25 @@ def main() -> int:
     live_records = _merge(distress_batches)
     raw_path = save_raw(live_records, label="realtor-live-parallel")
     log.info("Merged distress raw: %d unique → %s", len(live_records), raw_path)
+    health = get_fetch_health()
+    log.info(
+        "Fetch health (last worker): calls=%d ok=%d empty=%d failed=%d",
+        health["calls"], health["ok"], health["empty"], health["failed"],
+    )
+    usable = [r for r in live_records if not r.get("_negative_check")]
+    if not usable or is_fetch_catastrophic(live_records):
+        log.error(
+            "Aborting parallel refresh: catastrophic empty fetch (usable=%d)",
+            len(usable),
+        )
+        return 1
 
     # --- Single-process compile + full reverify (accuracy gate) ---
     previous = load_previous_compiled()
     final, stats, _ = compile_records(
         live_records,
         include_legacy=False,
+        include_public_records=bool(args.include_public_records),
         config=config,
     )
     kept, rejected = reverify_properties(
@@ -215,29 +241,30 @@ def main() -> int:
     )
 
     # --- Pool listings from the complete active inventory ---
-    pool_records, pool_stats = compile_pool_listings(live_records, config=config)
-    pool_kept, pool_rejected = reverify_properties(
-        pool_records,
-        raw_records=live_records,
-        config=config,
-        # Pool records came from this run's live for-sale inventory. Validate
-        # against sold/pending inventories without causing a second wave of
-        # immediately rate-limited Realtor requests.
-        check_urls=False,
-        do_reverify=False,
-        max_reverify=None,
-    )
-    write_rejection_audit(pool_rejected, label="pool-validation")
-    pool_stats["validation_kept"] = len(pool_kept)
-    pool_stats["validation_rejected"] = len(pool_rejected)
-    pool_stats["final_count"] = len(pool_kept)
-    for i, record in enumerate(pool_kept):
-        record["id"] = i + 1
-    save_pool_listings(pool_kept)
-    print_pool_listings_summary(pool_kept, pool_stats)
-    meta["stats"]["pool_listings"] = len(pool_kept)
-    with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
-        json.dump(meta, f, indent=2)
+    if not args.skip_pool_listings and scan_cfg.get("include_pool_listings", True):
+        pool_records, pool_stats = compile_pool_listings(live_records, config=config)
+        pool_kept, pool_rejected = reverify_properties(
+            pool_records,
+            raw_records=live_records,
+            config=config,
+            # Pool records came from this run's live for-sale inventory. Validate
+            # against sold/pending inventories without causing a second wave of
+            # immediately rate-limited Realtor requests.
+            check_urls=False,
+            do_reverify=False,
+            max_reverify=None,
+        )
+        write_rejection_audit(pool_rejected, label="pool-validation")
+        pool_stats["validation_kept"] = len(pool_kept)
+        pool_stats["validation_rejected"] = len(pool_rejected)
+        pool_stats["final_count"] = len(pool_kept)
+        for i, record in enumerate(pool_kept):
+            record["id"] = i + 1
+        save_pool_listings(pool_kept)
+        print_pool_listings_summary(pool_kept, pool_stats)
+        meta["stats"]["pool_listings"] = len(pool_kept)
+        with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
+            json.dump(meta, f, indent=2)
 
     # --- Large land (dedicated county/hub fetch; not from residential inventory) ---
     if not args.skip_large_land and scan_cfg.get("include_large_land", True):

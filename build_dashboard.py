@@ -13,6 +13,7 @@ COMPILED = PROJECT_ROOT / "v2_compiled.json"
 NEW_LISTINGS = PROJECT_ROOT / "data" / "new_listings_7d.json"
 POOL_LISTINGS = PROJECT_ROOT / "data" / "pool_listings.json"
 LARGE_LAND = PROJECT_ROOT / "data" / "large_land.json"
+CHANGES_LATEST = PROJECT_ROOT / "data" / "changes_latest.json"
 OUT = PROJECT_ROOT / "dashboard" / "distressed-property-dashboard.html"
 
 SCAN_DATE = os.environ.get("SCAN_DATE", "Unknown")
@@ -21,6 +22,9 @@ VERIFIED_NOTE = (
     "Live-verified + re-verified via Realtor.com MLS. "
     "Pending/contingent/sold/removed listings excluded. "
     "Optional towns: Leland, Earlville, Waterman, Sheridan. "
+    "Score <strong>1–10</strong>: higher = stronger distress "
+    "(foreclosure/as-is boost; DOM + price cuts stack; weak single signals stay low). "
+    "Vacant lots under 20 ac are filtered server-side — use Large land mode for tracts. "
     "Open via <strong>Zillow</strong> or <strong>Google</strong> first — "
     "Realtor.com often blocks direct listing links after scanning."
 )
@@ -108,6 +112,18 @@ def load_large_land():
     return payload.get("records", [])
 
 
+def load_changes_latest():
+    """Slim change digest committed as data/changes_latest.json (optional)."""
+    if not CHANGES_LATEST.exists():
+        return {}
+    try:
+        with open(CHANGES_LATEST) as f:
+            payload = json.load(f)
+        return payload if isinstance(payload, dict) else {}
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
 def main():
     with open(COMPILED) as f:
         data = json.load(f)
@@ -115,6 +131,7 @@ def main():
     new_data, new_days = load_new_listings()
     pool_data = load_pool_listings()
     land_data = load_large_land()
+    changes = load_changes_latest()
 
     verified = sum(1 for p in data if "realtor.com" in (p.get("verification_source") or ""))
     reverified = sum(1 for p in data if p.get("verification_source") == "realtor.com-reverified")
@@ -151,6 +168,7 @@ def main():
     new_area_json = json.dumps(new_area_stats, separators=(",", ":"))
     pool_area_json = json.dumps(pool_area_stats, separators=(",", ":"))
     land_area_json = json.dumps(land_area_stats, separators=(",", ":"))
+    changes_json = json.dumps(changes, separators=(",", ":"))
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -244,8 +262,16 @@ body.mode-land .loc-panel{{display:none}}
 .cd-ph,.cd-img{{width:100%;height:140px;object-fit:cover;background:var(--bg2)}}
 .cd-ph{{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1.8rem}}
 .cd-b{{padding:12px}}.cd-addr{{font-weight:700;font-size:.85rem}}.cd-city{{font-size:.7rem;color:var(--text2);margin:4px 0}}
-.cd-price{{font-size:1.1rem;font-weight:800;color:var(--green)}}.cd-orig{{font-size:.7rem;color:var(--muted);text-decoration:line-through}}
+.cd-price{{font-size:1.1rem;font-weight:800;color:var(--green)}}.cd-orig{{font-size:.7rem;color:var(--muted);text-decoration:line-through;margin-left:6px;font-weight:500}}
+.cd-cut{{font-size:.7rem;color:var(--orange);margin-left:6px;font-weight:700}}
 .cd-det{{display:flex;flex-wrap:wrap;gap:8px;font-size:.7rem;color:var(--text2);margin:6px 0}}
+.chg-strip{{display:none;font-size:.75rem;color:var(--text2);margin-bottom:12px;padding:10px 12px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:var(--r)}}
+.chg-strip strong{{color:var(--text)}}
+.chg-strip .chg-samples{{color:var(--muted)}}
+body.mode-land .no-land{{display:none}}
+body:not(.mode-pool) .sort-pool{{display:none}}
+body:not(.mode-land) .sort-land{{display:none}}
+body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-distress{{display:none}}
 .cd-tags{{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}}
 .t{{padding:1px 7px;border-radius:10px;font-size:.6rem;font-weight:600}}
 .t-fc{{background:rgba(239,68,68,.1);color:var(--red)}}.t-pr{{background:rgba(59,130,246,.1);color:var(--accent)}}
@@ -304,6 +330,7 @@ body.mode-land .land-only-flex{{display:flex}}
   <div class="src-note new-only">{NEW_NOTE}</div>
   <div class="src-note pool-only">{POOL_NOTE}</div>
   <div class="src-note land-only">{LAND_NOTE}</div>
+  <div class="chg-strip" id="chgStrip"></div>
   <div class="loc-panel">
     <div class="loc-head">
       <h2>Locations</h2>
@@ -316,20 +343,22 @@ body.mode-land .land-only-flex{{display:flex}}
     <div class="loc-grid" id="locGrid">{town_toggles}</div>
   </div>
   <div class="ctrls">
-    <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Condo">Condo</option><option value="Manufactured">Manufactured</option><option value="Land">Land</option><option value="Farm">Farm</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
+    <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Condo">Condo</option><option value="Manufactured">Manufactured</option><option value="Land">Large tracts only (rare in distress)</option><option value="Farm">Farm</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
     <div class="cg pool-only"><label>Pool</label><select id="fPool" onchange="go()"><option value="">Private + community</option><option value="private">Private pool</option><option value="community">Community pool</option></select></div>
     <div class="cg land-only"><label>Min acres</label><select id="fAcres" onchange="go()"><option value="20">20+</option><option value="40">40+</option><option value="80">80+</option><option value="160">160+</option></select></div>
     <div class="cg distress-only"><label>Distress</label><select id="fD" onchange="go()"><option value="">All</option><option value="foreclosure">Foreclosure</option><option value="as-is">As-Is/Fixer</option><option value="price-reduced">Price Reduced</option><option value="high-dom">High DOM</option><option value="below-market">Below Market</option></select></div>
     <div class="cg distress-only"><label>Verified</label><select id="fV" onchange="go()"><option value="">All</option><option value="live">Verified Only</option><option value="reverified">Re-verified Only</option></select></div>
     <div class="cg distress-only"><label>Freshness</label><select id="fFresh" onchange="go()"><option value="">All</option><option value="fresh">Fresh only</option><option value="stale">Stale only</option></select></div>
+    <div class="cg no-land"><label>Min beds</label><input type="number" id="fBeds" min="0" step="1" placeholder="Any" onchange="go()"></div>
+    <div class="cg no-land"><label>Max DOM</label><input type="number" id="fDom" min="0" step="1" placeholder="No max" onchange="go()"></div>
     <div class="cg"><label>Max Price</label><input type="number" id="fP" placeholder="No max" onchange="go()"></div>
     <div class="cg distress-only"><label>Min Score</label><select id="fS" onchange="go()"><option value="0">All</option><option value="3">3+</option><option value="4">4+</option><option value="5">5+</option></select></div>
     <div class="cg"><label>Sort</label><select id="fO" onchange="go()">
-      <option value="score">Score</option>
+      <option value="score" class="sort-distress">Score</option>
       <option value="listed">Newest listed</option>
-      <option value="pool">Pool type</option>
-      <option value="acres">Acres High</option>
-      <option value="ppa-asc">$/acre Low</option>
+      <option value="pool" class="sort-pool">Pool type</option>
+      <option value="acres" class="sort-land">Acres High</option>
+      <option value="ppa-asc" class="sort-land">$/acre Low</option>
       <option value="dom">DOM / Age</option>
       <option value="price-asc">Price Low</option>
       <option value="price-desc">Price High</option>
@@ -359,9 +388,11 @@ const ASP={pool_area_json};
 const ASL={land_area_json};
 const TOWNS={towns_json};
 const NEW_DAYS={new_days};
+const CHANGES={changes_json};
 const LOC_KEY='dps-enabled-towns';
 const TC={{'foreclosure':'t-fc','as-is':'t-ai','as is':'t-ai','fixer':'t-ai','price-reduced':'t-pr','high-dom':'t-hd','below-market':'t-d','investor':'t-ai','estate':'t-d'}};
 let mode='distress';
+let _hashQuiet=false;
 function $(id){{return document.getElementById(id)}}
 function fmt(n){{if(n==null)return'TBD';return'$'+n.toLocaleString('en-US',{{maximumFractionDigits:0}})}}
 function e(s){{if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}}
@@ -376,6 +407,22 @@ function ppsqft(p){{
   if(p.price_per_sqft!=null&&p.price_per_sqft>0)return p.price_per_sqft;
   if(p.list_price!=null&&p.sqft!=null&&p.sqft>0)return p.list_price/p.sqft;
   return null;
+}}
+function isLandFarm(p){{
+  const t=(p.property_type||'').toLowerCase();
+  return t==='land'||t==='farm';
+}}
+function priceCutAmount(p){{
+  if(p.total_reduced!=null&&p.total_reduced>0)return p.total_reduced;
+  if(p.original_list_price!=null&&p.list_price!=null&&p.original_list_price>p.list_price){{
+    return p.original_list_price-p.list_price;
+  }}
+  return null;
+}}
+function priceBlock(p){{
+  const cut=priceCutAmount(p);
+  const showOrig=p.original_list_price!=null&&p.list_price!=null&&p.original_list_price>p.list_price;
+  return `<div class="cd-price">${{fmt(p.list_price)}}${{showOrig?` <span class="cd-orig">${{fmt(p.original_list_price)}}</span>`:''}}${{cut?` <span class="cd-cut">−${{fmt(cut)}}</span>`:''}}</div>`;
 }}
 function fullAddr(p){{
   return [p.address,p.city||p.nearest_target,p.state||'IL',p.zip].filter(Boolean).join(' ');
@@ -489,7 +536,62 @@ function currentAreaStats(){{
   if(mode==='land')return ASL;
   return ASD;
 }}
-function setMode(m){{
+function renderChanges(){{
+  const box=$('chgStrip');
+  if(!box)return;
+  const neu=CHANGES.newly_active||[];
+  const rem=CHANGES.removed||CHANGES.removed_or_inactive||[];
+  const cuts=CHANGES.price_cuts||[];
+  if(!neu.length&&!rem.length&&!cuts.length){{box.style.display='none';return;}}
+  const samples=[...neu,...cuts].map(p=>p&&p.address).filter(Boolean).slice(0,5).map(e);
+  box.style.display='block';
+  box.innerHTML=`<strong>Since last scan</strong> · +${{neu.length}} new · ${{rem.length}} removed · ${{cuts.length}} price cuts`+
+    (samples.length?` <span class="chg-samples">· e.g. ${{samples.join(', ')}}</span>`:'');
+}}
+function writeHash(){{
+  if(_hashQuiet)return;
+  const p=new URLSearchParams();
+  p.set('mode', mode);
+  const towns=[...enabledTowns()];
+  if(towns.length&&towns.length<TOWNS.length)p.set('towns', towns.join(','));
+  const map=[['type','fT'],['distress','fD'],['verified','fV'],['fresh','fFresh'],['pool','fPool'],['acres','fAcres'],['price','fP'],['score','fS'],['beds','fBeds'],['dom','fDom'],['sort','fO'],['q','fQ']];
+  map.forEach(([k,id])=>{{
+    const el=$(id); if(!el)return;
+    const v=(el.value||'').trim();
+    if(!v||(k==='score'&&v==='0')||(k==='acres'&&v==='20'&&mode!=='land'))return;
+    if(k==='acres'&&mode!=='land')return;
+    if(k==='pool'&&mode!=='pool')return;
+    if((k==='distress'||k==='verified'||k==='fresh'||k==='score')&&mode!=='distress')return;
+    p.set(k,v);
+  }});
+  const next='#'+p.toString();
+  if(location.hash!==next)history.replaceState(null,'',next);
+}}
+function applyHash(){{
+  const raw=location.hash.replace(/^#/,'');
+  if(!raw)return false;
+  const p=new URLSearchParams(raw);
+  _hashQuiet=true;
+  try{{
+    const m=p.get('mode');
+    if(m&&['distress','new','pool','land'].includes(m)){{
+      // setMode below; stash filters first
+    }}
+    const towns=p.get('towns');
+    if(towns){{
+      const want=new Set(towns.split(',').map(s=>s.trim()).filter(Boolean));
+      document.querySelectorAll('.loc-cb').forEach(cb=>{{cb.checked=want.has(cb.value)}});
+      syncTownVisuals();
+    }}
+    const setIf=(id,key)=>{{const el=$(id); if(el&&p.has(key))el.value=p.get(key);}};
+    setIf('fT','type'); setIf('fD','distress'); setIf('fV','verified'); setIf('fFresh','fresh');
+    setIf('fPool','pool'); setIf('fAcres','acres'); setIf('fP','price'); setIf('fS','score');
+    setIf('fBeds','beds'); setIf('fDom','dom'); setIf('fO','sort'); setIf('fQ','q');
+    if(m&&['distress','new','pool','land'].includes(m))setMode(m,true);
+  }}finally{{_hashQuiet=false;}}
+  return true;
+}}
+function setMode(m, fromHash){{
   mode=m;
   document.body.classList.toggle('mode-new', m==='new');
   document.body.classList.toggle('mode-pool', m==='pool');
@@ -501,22 +603,22 @@ function setMode(m){{
   const sort=$('fO');
   $('tpBox').classList.remove('new-mode','pool-mode','land-mode');
   if(m==='new'){{
-    if(sort.value==='score'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc')sort.value='listed';
+    if(!fromHash&&(sort.value==='score'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'))sort.value='listed';
     $('tpTitle').textContent='Newest listings';
     $('tpBox').classList.add('new-mode');
     $('hdrCount').textContent=PN.length+' new listings';
   }}else if(m==='pool'){{
-    sort.value='pool';
+    if(!fromHash)sort.value='pool';
     $('tpTitle').textContent='Homes with pools';
     $('tpBox').classList.add('pool-mode');
     $('hdrCount').textContent=PP.length+' pool homes';
   }}else if(m==='land'){{
-    sort.value='acres';
+    if(!fromHash)sort.value='acres';
     $('tpTitle').textContent='Largest tracts';
     $('tpBox').classList.add('land-mode');
     $('hdrCount').textContent=PL.length+' large tracts';
   }}else{{
-    if(sort.value==='listed'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc')sort.value='score';
+    if(!fromHash&&(sort.value==='listed'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'))sort.value='score';
     $('tpTitle').textContent='Top Picks';
     $('hdrCount').textContent=PD.length+' properties';
   }}
@@ -547,6 +649,8 @@ function go(){{
   let f=[...P];
   const towns=enabledTowns();
   const t=$('fT').value,d=$('fD').value,v=$('fV').value,fr=$('fFresh').value,pt=$('fPool').value,minAc=parseFloat(($('fAcres')||{{}}).value)||20,mp=parseFloat($('fP').value)||Infinity,ms=parseInt($('fS').value)||0,o=$('fO').value,q=$('fQ').value.toLowerCase().trim();
+  const minBeds=parseFloat(($('fBeds')||{{}}).value);
+  const maxDom=parseFloat(($('fDom')||{{}}).value);
   // Land mode is all-or-nothing — never gated by the town toggles.
   if(mode!=='land')f=f.filter(p=>towns.has(p.nearest_target));
   if(t)f=f.filter(p=>p.property_type===t);
@@ -560,11 +664,17 @@ function go(){{
   }}
   if(mode==='pool'&&pt)f=f.filter(p=>(p.pool_type||'').toLowerCase().includes(pt));
   if(mode==='land')f=f.filter(p=>(p.acres||0)>=minAc);
+  if(mode!=='land'&&!Number.isNaN(minBeds))f=f.filter(p=>p.beds!=null&&p.beds>=minBeds);
+  if(mode!=='land'&&!Number.isNaN(maxDom))f=f.filter(p=>{{const a=ageDays(p);return a!=null&&a<=maxDom}});
   if(mp<Infinity)f=f.filter(p=>p.list_price!=null&&p.list_price<=mp);
   if(q)f=f.filter(p=>(p.address+' '+(p.notes||'')+' '+(p.distress_types||[]).join(' ')+' '+(p.pool_evidence||[]).join(' ')+' '+(p.land_evidence||[]).join(' ')+' '+(p.city||'')).toLowerCase().includes(q));
   f.sort((a,b)=>{{
     switch(o){{
-      case'score':return(b.distress_score||0)-(a.distress_score||0)||(b.dom||0)-(a.dom||0);
+      case'score':{{
+        const ha=isLandFarm(a)?1:0, hb=isLandFarm(b)?1:0;
+        if(ha!==hb)return ha-hb;
+        return(b.distress_score||0)-(a.distress_score||0)||(b.dom||0)-(a.dom||0);
+      }}
       case'listed':{{
         const da=listDate(a),db=listDate(b);
         if(db!==da)return db.localeCompare(da);
@@ -598,7 +708,8 @@ function go(){{
   }}else if(mode==='land'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-land">${{Math.round(p.acres||0)}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target)}} · ${{e(p.miles_from_lake_holiday)}} mi</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No large tracts within 40 mi of Lake Holiday.</div></div>';
   }}else{{
-    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('');
+    const homes=f.filter(p=>!isLandFarm(p));
+    $('tpL').innerHTML=homes.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No home Top Picks in the current filters (land/farm excluded from this list).</div></div>';
   }}
   $('grd').innerHTML=f.map(p=>{{
     if(mode==='new'){{
@@ -610,7 +721,7 @@ function go(){{
       const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🏠</div>'">`:'<div class="cd-ph">🏠</div>';
       return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-new">${{age??'N'}}</div>${{img}}<div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
-        <div class="cd-price">${{fmt(p.list_price)}}</div><div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
+        ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
         <div class="cd-tags"><span class="t t-new">new listing</span><span class="t t-d">${{e(p.property_type||'')}}</span></div>
         <div class="cd-ft">${{linkButtons(p)}}</div>
         <div class="cd-x"><div class="xg">
@@ -629,7 +740,7 @@ function go(){{
       const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
       return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-pool">🏊</div>${{img}}<div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
-        <div class="cd-price">${{fmt(p.list_price)}}</div><div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
+        ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
         <div class="cd-tags"><span class="t t-pool">${{e(p.pool_type||'Pool')}}</span><span class="t t-d">${{e(p.property_type||'')}}</span></div>
         <div class="cd-ft">${{linkButtons(p)}}</div>
         <div class="cd-x"><div class="xg">
@@ -652,7 +763,7 @@ function go(){{
       const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
       return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-land">${{Math.round(p.acres||0)}}</div>${{img}}<div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
-        <div class="cd-price">${{fmt(p.list_price)}}</div><div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
+        ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
         <div class="cd-tags"><span class="t t-land">${{e(p.acres)}} acres</span><span class="t t-d">${{e(p.property_type||'Land')}}</span></div>
         <div class="cd-ft">${{linkButtons(p)}}</div>
         <div class="cd-x"><div class="xg">
@@ -675,7 +786,7 @@ function go(){{
     const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
     return`<div class="cd" data-stale="${{p.is_stale?1:0}}" onclick="this.classList.toggle('open')"><div class="cd-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div>${{img}}<div class="cd-b">
       <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
-      <div class="cd-price">${{fmt(p.list_price)}}</div><div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div><div class="cd-tags">${{tags}}</div>
+      ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div><div class="cd-tags">${{tags}}</div>
       <div class="cd-ft">${{linkButtons(p)}}</div>
       <div class="cd-x"><div class="xg">
         <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
@@ -686,11 +797,16 @@ function go(){{
       ${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
     </div></div>`;
   }}).join('');
+  writeHash();
 }}
 loadTownPrefs();
 syncTownVisuals();
-renderStats();
-go();
+renderChanges();
+if(!applyHash()){{
+  renderStats();
+  go();
+}}
+window.addEventListener('hashchange',()=>{{if(!_hashQuiet)applyHash();}});
 </script>
 </body></html>"""
 

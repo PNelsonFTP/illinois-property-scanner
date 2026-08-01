@@ -7,7 +7,7 @@ from typing import Any
 
 DISTRESS_KEYWORDS = [
     "foreclosure", "bank owned", "bank-owned", "reo", "pre-foreclosure",
-    "short sale", "as-is", "as is", "fixer", "fixer-upper", "investor",
+    "short sale", "as-is", "as is", "fixer", "fixer-upper",
     "investor special", "estate sale", "probate", "motivated", "must sell",
     "cash only", "cash-only", "needs work", "handyman", "below market",
     "distress", "incomplete remodel", "good bones", "vacant", "abandoned",
@@ -20,6 +20,19 @@ STRONG_DISTRESS_KEYWORDS = [
     "needs work", "handyman", "incomplete remodel", "cash only",
     "probate", "estate sale", "tax lien", "vacant", "abandoned",
 ]
+
+STRONG_TAGS = {
+    "foreclosure", "reo", "bank-owned", "bank owned", "pre-foreclosure",
+    "short sale", "short-sale", "tax-lien", "tax lien", "tax-deed",
+    "auction", "as-is", "as is", "fixer", "fixer-upper", "needs work",
+    "handyman", "probate", "estate", "estate-sale", "vacant", "abandoned",
+    "public-record", "tax-sale", "sheriff-sale", "sheriff sale", "tax sale",
+}
+
+AS_IS_TAGS = {
+    "as-is", "as is", "fixer", "fixer-upper", "needs work", "handyman",
+    "incomplete remodel", "good bones", "cash only", "cash-only",
+}
 
 
 def _safe_float(v: Any) -> float | None:
@@ -73,6 +86,35 @@ def extract_county(details: list[dict] | None) -> str | None:
     return None
 
 
+def estimate_acres(record: dict[str, Any]) -> float | None:
+    """Best-effort acres for land gating (distress path)."""
+    if record.get("acres") is not None:
+        try:
+            return float(record["acres"])
+        except (TypeError, ValueError):
+            pass
+    lot = str(record.get("lot_size") or "")
+    m = re.search(r"([\d,.]+)\s*acres?\b", lot, re.I)
+    if m:
+        try:
+            return float(m.group(1).replace(",", ""))
+        except ValueError:
+            pass
+    m = re.search(r"([\d,]+)\s*sq\s*ft", lot, re.I)
+    if m:
+        try:
+            return float(m.group(1).replace(",", "")) / 43560.0
+        except ValueError:
+            pass
+    desc = record.get("description") or {}
+    if isinstance(desc, dict) and desc.get("lot_sqft"):
+        try:
+            return float(desc["lot_sqft"]) / 43560.0
+        except (TypeError, ValueError):
+            pass
+    return None
+
+
 def build_text_blob(record: dict[str, Any]) -> str:
     parts = [
         record.get("notes") or "",
@@ -108,12 +150,57 @@ def is_not_distressed_flip(text: str, config: dict | None = None) -> bool:
     return any(p in text for p in phrases)
 
 
+def is_land_type(ptype: str) -> bool:
+    p = (ptype or "").lower()
+    return p in {
+        "land", "farm", "lot", "vacant land", "acreage", "lots/land", "vacant lot",
+    } or "land" in p or p == "farm"
+
+
+def has_as_is_signal(tags: set[str], text: str) -> bool:
+    if tags & AS_IS_TAGS:
+        return True
+    return any(t in text for t in ("as-is", "as is", "fixer", "needs work", "handyman"))
+
+
+def meets_publish_composite(
+    tags: list[str] | set[str],
+    *,
+    score: int,
+    text: str = "",
+    config: dict | None = None,
+) -> bool:
+    """Require stronger evidence than DOM-only or price-cut-only."""
+    cfg = (config or {}).get("distress", {})
+    min_score = int(cfg.get("min_publish_score", 3))
+    tagset = {t.lower() for t in tags}
+    text = text or ""
+
+    if tagset & STRONG_TAGS or any(k in text for k in STRONG_DISTRESS_KEYWORDS):
+        return True
+    if "high-dom" in tagset and (
+        "price-reduced" in tagset or has_as_is_signal(tagset, text)
+    ):
+        return True
+    if score >= min_score and (
+        "price-reduced" in tagset or has_as_is_signal(tagset, text) or "high-dom" in tagset
+    ):
+        # Score alone with only weak tags still needs a second signal beyond
+        # a single DOM or single cut — require combination or strong score+as-is.
+        if "high-dom" in tagset and "price-reduced" in tagset:
+            return True
+        if score >= max(min_score, 5) and has_as_is_signal(tagset, text):
+            return True
+    return False
+
+
 def detect_distress_signals(record: dict[str, Any], config: dict | None = None) -> dict[str, Any]:
     """Return distress metadata: tags, reasons, has_signal."""
     cfg = (config or {}).get("distress", {})
     high_dom = cfg.get("high_dom_days", 90)
     land_max = cfg.get("land_max_price_signal", 30000)
     mobile_max = cfg.get("mobile_max_price_signal", 50000)
+    min_land_acres = float(cfg.get("min_land_acres_for_distress", 20))
 
     tags: set[str] = set()
     reasons: list[str] = []
@@ -123,6 +210,7 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
     list_price = _safe_float(record.get("list_price"))
     dom = _safe_int(record.get("dom")) or extract_dom_from_details(record.get("details"))
     orig = _safe_float(record.get("original_list_price")) or extract_original_price(record.get("details"))
+    acres = estimate_acres(record)
 
     # Explicit keywords from source
     for kw in record.get("distress_keywords") or []:
@@ -132,11 +220,16 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
         if dt:
             tags.add(str(dt).lower().strip())
 
-    # Text keyword scan
+    # Text keyword scan (no bare "investor")
     for kw in DISTRESS_KEYWORDS:
-        if kw in text:
-            tags.add(kw.replace(" ", "-") if " " in kw else kw)
-            reasons.append(f"keyword: {kw}")
+        if kw not in text:
+            continue
+        # "below market" on sub-threshold vacant lots is noise — Large land mode owns tracts.
+        if kw == "below market" and is_land_type(ptype):
+            if acres is None or acres < min_land_acres:
+                continue
+        tags.add(kw.replace(" ", "-") if " " in kw else kw)
+        reasons.append(f"keyword: {kw}")
 
     # Foreclosure flag / source
     flags = record.get("flags") or {}
@@ -167,12 +260,13 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
         tags.add("auction")
         reasons.append("auction source")
 
-    # Low price signals (non-renovated)
-    is_land = ptype in ("land", "lot", "vacant land", "acreage", "lots/land", "vacant lot")
+    # Low price signals — land only when acreage meets large-tract threshold
+    is_land = is_land_type(ptype)
     is_mobile = "mobile" in ptype or "manufactured" in ptype
     if is_land and list_price and list_price <= land_max:
-        tags.add("below-market")
-        reasons.append(f"land under ${land_max:,}")
+        if acres is not None and acres >= min_land_acres:
+            tags.add("below-market")
+            reasons.append(f"large land under ${land_max:,} ({acres:g} ac)")
     elif is_mobile and list_price and list_price <= mobile_max and dom and dom >= 30:
         tags.add("below-market")
         reasons.append(f"mobile under ${mobile_max:,} with DOM")
@@ -184,7 +278,23 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
     # Weak-only signals on renovated flips get excluded
     weak_only_tags = {"price-reduced", "investor", "below-market", "cheap", "very low price", "affordable"}
     if is_flip and not has_strong and tags.issubset(weak_only_tags | {"price-reduced"}):
-        return {"tags": [], "reasons": [], "has_signal": False, "dom": dom, "excluded_as_flip": True}
+        return {
+            "tags": [],
+            "reasons": [],
+            "has_signal": False,
+            "dom": dom,
+            "acres": acres,
+            "excluded_as_flip": True,
+            "meets_publish_composite": False,
+        }
+
+    score_preview = calculate_score(
+        {**record, "dom": dom, "price_reductions": cuts},
+        sorted(tags),
+    )
+    publish_ok = meets_publish_composite(
+        tags, score=score_preview, text=text, config=config,
+    )
 
     has_signal = bool(tags) or bool(reasons)
     return {
@@ -192,8 +302,11 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
         "reasons": reasons,
         "has_signal": has_signal,
         "dom": dom,
+        "acres": acres,
         "original_list_price": orig,
         "excluded_as_flip": False,
+        "meets_publish_composite": publish_ok,
+        "score_preview": score_preview,
     }
 
 
@@ -232,7 +345,10 @@ def calculate_score(record: dict[str, Any], tags: list[str] | None = None) -> in
     if any(t in tagset for t in ["below-market", "below market"]):
         score += 2
 
-    as_is = ["as-is", "as is", "fixer", "fixer-upper", "investor", "cash only", "needs work", "good bones", "incomplete remodel"]
+    as_is = [
+        "as-is", "as is", "fixer", "fixer-upper", "cash only", "needs work",
+        "good bones", "incomplete remodel",
+    ]
     if any(t in tagset for t in as_is) or any(t in text for t in as_is):
         score += 2
 

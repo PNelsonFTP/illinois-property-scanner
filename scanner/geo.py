@@ -193,11 +193,22 @@ def haversine_miles(
     return 2 * radius * math.asin(math.sqrt(a))
 
 
-def extract_coords(record: dict[str, Any]) -> tuple[float, float] | None:
-    """Pull lat/lon from a raw Realtor record or a normalized record."""
+def extract_coords_with_source(
+    record: dict[str, Any],
+) -> tuple[float, float, str] | None:
+    """
+    Pull lat/lon plus source tag.
+
+    Source is ``listing`` when coordinates come from the record / MLS
+    coordinate block, or ``city_center`` when falling back to CITY_CENTER_COORDS.
+    """
     if record.get("lat") is not None and record.get("lon") is not None:
         try:
-            return float(record["lat"]), float(record["lon"])
+            lat, lon = float(record["lat"]), float(record["lon"])
+            source = record.get("coords_source")
+            if source not in ("listing", "city_center"):
+                source = "listing"
+            return lat, lon, source
         except (TypeError, ValueError):
             pass
 
@@ -208,14 +219,77 @@ def extract_coords(record: dict[str, Any]) -> tuple[float, float] | None:
         lat, lon = coord.get("lat"), coord.get("lon")
         if lat is not None and lon is not None:
             try:
-                return float(lat), float(lon)
+                return float(lat), float(lon), "listing"
             except (TypeError, ValueError):
                 pass
 
     city = (record.get("city") or "").strip().lower()
     if city in CITY_CENTER_COORDS:
-        return CITY_CENTER_COORDS[city]
+        lat, lon = CITY_CENTER_COORDS[city]
+        return lat, lon, "city_center"
     return None
+
+
+def extract_coords(record: dict[str, Any]) -> tuple[float, float] | None:
+    """Pull lat/lon from a raw Realtor record or a normalized record."""
+    result = extract_coords_with_source(record)
+    if result is None:
+        return None
+    return result[0], result[1]
+
+
+def within_town_radius(
+    record: dict[str, Any],
+    town_name: str,
+    config: dict | None = None,
+) -> bool:
+    """
+    True if record coordinates fall within the town's configured radius_miles.
+
+    Uses CITY_CENTER_COORDS for the town's cities. Defaults: 3 mi core /
+    6 mi optional (from scan.radius_miles / scan.rural_radius_miles).
+    """
+    config = config or {}
+    towns = enabled_towns(config, include_optional=True)
+    zone = towns.get(town_name)
+    resolved_name = town_name
+    if not zone:
+        for name, candidate in towns.items():
+            if name.lower() == town_name.lower():
+                zone = candidate
+                resolved_name = name
+                break
+    if not zone:
+        return False
+
+    scan = config.get("scan") or {}
+    optional_names = {(n or "").lower() for n in (config.get("optional_towns") or {})}
+    is_optional = resolved_name.lower() in optional_names
+    default_r = float(
+        scan.get("rural_radius_miles", 6) if is_optional else scan.get("radius_miles", 3)
+    )
+    radius = float(zone.get("radius_miles") or default_r)
+
+    # Only enforce when MLS/listing coords exist. City-center fallbacks use the
+    # listing's MLS city (e.g. Sandwich for Wildwood), which is often the wrong
+    # center for a classified town like Lake Holiday — don't false-reject those.
+    coord_info = extract_coords_with_source(record)
+    if not coord_info or coord_info[2] != "listing":
+        return True
+
+    centers: list[tuple[float, float]] = []
+    for city in zone.get("cities") or [resolved_name.lower()]:
+        center = CITY_CENTER_COORDS.get(str(city).lower().strip())
+        if center and center not in centers:
+            centers.append(center)
+    town_center = CITY_CENTER_COORDS.get(resolved_name.lower())
+    if town_center and town_center not in centers:
+        centers.append(town_center)
+    if not centers:
+        return True
+
+    lat, lon = coord_info[0], coord_info[1]
+    return any(haversine_miles(lat, lon, c[0], c[1]) <= radius for c in centers)
 
 
 def miles_from_lake_holiday(record: dict[str, Any]) -> float | None:

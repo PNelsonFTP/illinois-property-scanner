@@ -22,8 +22,8 @@ from scanner.dedup import deduplicate
 from scanner.fetch import _merge_unique, fetch_town_listings, save_raw
 from scanner.geo import (
     LAKE_HOLIDAY_CENTER,
-    extract_coords,
-    miles_from_lake_holiday,
+    extract_coords_with_source,
+    haversine_miles,
     nearest_configured_town,
 )
 from scanner.links import attach_land_alt_links
@@ -242,6 +242,7 @@ def _land_cfg(config: dict) -> dict[str, Any]:
     cfg = dict(config.get("large_land") or {})
     cfg.setdefault("min_acres", 20)
     cfg.setdefault("radius_miles", 40)
+    cfg.setdefault("centroid_max_miles", 30)
     cfg.setdefault(
         "property_types",
         ["land", "farm"],
@@ -369,6 +370,7 @@ def compile_large_land(
     land_cfg = _land_cfg(config)
     min_acres = float(land_cfg["min_acres"])
     max_miles = float(land_cfg["radius_miles"])
+    centroid_max = float(land_cfg.get("centroid_max_miles") or 30)
     stats: Counter = Counter()
     accepted: list[dict[str, Any]] = []
     now = datetime.now(timezone.utc).isoformat()
@@ -414,14 +416,23 @@ def compile_large_land(
             # imply a house lot — dimensions path should have won already.
             stats["accepted_text_acres"] += 1
 
-        miles = miles_from_lake_holiday(raw)
-        if miles is None:
-            # Retry with normalized city for centroid lookup.
-            miles = miles_from_lake_holiday(rec)
-        if miles is None:
+        # Prefer listing coords; fall back to city-center (flagged for review).
+        coords_info = extract_coords_with_source(raw) or extract_coords_with_source(rec)
+        if coords_info is None:
             stats["rejected_no_location"] += 1
             continue
-        if miles > max_miles:
+        lat, lon, coords_source = coords_info
+        miles = haversine_miles(
+            LAKE_HOLIDAY_CENTER[0],
+            LAKE_HOLIDAY_CENTER[1],
+            lat,
+            lon,
+        )
+        if coords_source == "city_center":
+            if miles > centroid_max:
+                stats["rejected_centroid_too_far"] += 1
+                continue
+        elif miles > max_miles:
             stats["rejected_out_of_radius"] += 1
             continue
 
@@ -434,14 +445,15 @@ def compile_large_land(
         # Bucket by city for dashboard location toggles; fall back to nearest town.
         area_label = city.title() if city else (nearest or "Lake Holiday region")
 
-        coords = extract_coords(raw) or extract_coords(rec)
         price = rec.get("list_price")
         price_per_acre = round(price / acres, 2) if price and acres else None
+        needs_review = coords_source == "city_center"
 
         evidence = [
             f"{acres:g} acres",
             f"acres via {acres_source}",
             f"{miles:.1f} mi from Lake Holiday",
+            f"coords: {coords_source}",
         ]
         if rec.get("lot_size"):
             evidence.append(str(rec["lot_size"]))
@@ -489,8 +501,10 @@ def compile_large_land(
             "verification_source": "realtor.com-large-land",
             "verification_note": reason,
             "miles_from_lake_holiday": round(miles, 1),
-            "lat": coords[0] if coords else None,
-            "lon": coords[1] if coords else None,
+            "lat": lat,
+            "lon": lon,
+            "coords_source": coords_source,
+            "needs_review": needs_review,
             "land_evidence": evidence[:6],
             "is_large_land": True,
             "alt_sources_note": (
@@ -520,6 +534,7 @@ def compile_large_land(
     out_stats["center_lon"] = LAKE_HOLIDAY_CENTER[1]
     out_stats["min_acres"] = min_acres
     out_stats["radius_miles"] = max_miles
+    out_stats["centroid_max_miles"] = centroid_max
     return deduped, out_stats
 
 

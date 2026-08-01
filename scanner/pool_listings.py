@@ -16,7 +16,7 @@ from typing import Any
 
 from scanner.config import PROJECT_ROOT
 from scanner.dedup import deduplicate
-from scanner.geo import classify_town
+from scanner.geo import classify_town, within_town_radius
 from scanner.links import attach_alt_links
 from scanner.normalize import normalize_realtor_record
 from scanner.status import is_verified_active
@@ -106,6 +106,10 @@ def compile_pool_listings(
             stats["rejected_out_of_zone"] += 1
             continue
 
+        if not within_town_radius(rec, town, config):
+            stats["rejected_outside_radius"] += 1
+            continue
+
         active, reason = is_verified_active(rec, config)
         if not active:
             stats["rejected_inactive"] += 1
@@ -120,7 +124,7 @@ def compile_pool_listings(
             stats["rejected_no_pool"] += 1
             continue
 
-        if not rec.get("address"):
+        if not (rec.get("address") or "").strip():
             stats["rejected_missing_address"] += 1
             continue
 
@@ -162,6 +166,8 @@ def compile_pool_listings(
             "pool_type": pool_type,
             "pool_evidence": evidence,
             "is_pool_listing": True,
+            "lat": rec.get("lat"),
+            "lon": rec.get("lon"),
         }
         attach_alt_links(entry)
         if entry["list_price"] and entry["sqft"] and entry["sqft"] > 0:

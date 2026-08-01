@@ -16,7 +16,7 @@ from typing import Any
 from scanner.config import PROJECT_ROOT, RAW_DIR
 from scanner.dedup import deduplicate
 from scanner.fetch import fetch_town_listings, _merge_unique, _record_key
-from scanner.geo import classify_town, enabled_towns
+from scanner.geo import classify_town, within_town_radius, enabled_towns
 from scanner.links import attach_alt_links
 from scanner.normalize import normalize_realtor_record
 from scanner.status import is_verified_active
@@ -55,11 +55,17 @@ def fetch_new_listings(
     include_optional: bool | None = None,
     towns_filter: list[str] | None = None,
 ) -> list[dict[str, Any]]:
-    """Fetch all for_sale listings listed in the last `days` days per town (geo radius only)."""
+    """Fetch all for_sale listings listed in the last `days` days per town (geo radius only).
+
+    Also queries each town's configured ZIP codes with the same ``past_days`` window
+    (mirrors the distress ZIP pass in ``fetch.py``). County-wide sweeps run when
+    ``scan.include_county_searches`` is true.
+    """
     scan_cfg = config.get("scan", {})
     default_radius = scan_cfg.get("radius_miles", 3)
     rural_radius = scan_cfg.get("rural_radius_miles", 6)
     exclude_pending = scan_cfg.get("exclude_pending", True)
+    include_counties = scan_cfg.get("include_county_searches", False)
 
     towns = enabled_towns(config, include_optional=include_optional)
     if towns_filter:
@@ -85,7 +91,38 @@ def fetch_new_listings(
         )
         added = _merge_unique(all_records, seen, batch)
         log.info("  %s new-%dd unique added: %d", town_name, days, added)
+
+        # ZIP passes — same past_days window as the city search
+        for zip_code in town_cfg.get("zips") or []:
+            zip_batch = fetch_town_listings(
+                town_name,
+                str(zip_code),
+                radius=radius,
+                exclude_pending=exclude_pending,
+                listing_type="for_sale",
+                past_days=days,
+                pass_name=f"new-{days}d-zip-{zip_code}",
+            )
+            zip_added = _merge_unique(all_records, seen, zip_batch)
+            log.info("  %s new-%dd zip %s unique added: %d", town_name, days, zip_code, zip_added)
+
         time.sleep(0.25)
+
+    # Optional county-wide sweeps (geo filter applied later in compile)
+    if include_counties:
+        for county in config.get("counties") or []:
+            county_batch = fetch_town_listings(
+                "_county",
+                county,
+                radius=None,
+                exclude_pending=exclude_pending,
+                listing_type="for_sale",
+                past_days=days,
+                pass_name=f"new-{days}d-county-{county}",
+            )
+            county_added = _merge_unique(all_records, seen, county_batch)
+            log.info("  county %s new-%dd unique added: %d", county, days, county_added)
+            time.sleep(0.25)
 
     log.info("New listings raw fetch: %d unique", len(all_records))
     return all_records
@@ -119,6 +156,14 @@ def compile_new_listings(
         town, county = classify_town(rec, config)
         if town is None:
             stats["rejected_out_of_zone"] += 1
+            continue
+
+        if not within_town_radius(rec, town, config):
+            stats["rejected_outside_radius"] += 1
+            continue
+
+        if not (rec.get("address") or "").strip():
+            stats["rejected_missing_address"] += 1
             continue
 
         active, reason = is_verified_active(rec, config)
@@ -187,6 +232,8 @@ def compile_new_listings(
             "verification_note": reason,
             "is_new_listing": True,
             "new_listing_window_days": days,
+            "lat": rec.get("lat"),
+            "lon": rec.get("lon"),
         }
         attach_alt_links(entry)
         if entry["list_price"] and entry["sqft"] and entry["sqft"] > 0:

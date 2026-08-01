@@ -38,18 +38,24 @@ def _addr_key(address: str, city: str = "", zip_code: str = "") -> str:
 
 
 def build_negative_index(raw_records: list[dict[str, Any]]) -> dict[str, str]:
-    """Map normalized address → sold|pending from negative-check fetch passes."""
+    """Map property_id (preferred) and address → sold|pending from negative checks."""
     index: dict[str, str] = {}
     for r in raw_records:
         neg = r.get("_negative_check")
         if not neg:
             continue
+        keys: list[str] = []
+        pid = str(r.get("property_id") or "")
+        if pid:
+            keys.append(pid)
         loc = (r.get("location") or {}).get("address") or {}
         line = loc.get("line") or r.get("address") or ""
         city = loc.get("city") or r.get("city") or ""
         zip_code = loc.get("postal_code") or r.get("zip") or ""
-        key = _addr_key(line, city, zip_code)
-        if key and len(key) > 5:
+        addr_key = _addr_key(line, city, zip_code)
+        if addr_key and len(addr_key) > 5:
+            keys.append(addr_key)
+        for key in keys:
             if key in index and index[key] == "sold":
                 continue
             index[key] = neg
@@ -60,6 +66,9 @@ def check_against_negatives(
     record: dict[str, Any],
     negative_index: dict[str, str],
 ) -> tuple[bool, str]:
+    pid = str(record.get("property_id") or "")
+    if pid and pid in negative_index:
+        return False, f"found in recent {negative_index[pid]} inventory"
     key = _addr_key(
         record.get("address", ""),
         record.get("city", ""),

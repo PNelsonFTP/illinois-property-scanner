@@ -48,6 +48,10 @@ def write_rejection_audit(
 
 
 def _prop_key(p: dict[str, Any]) -> str:
+    """Prefer property_id; else normalized address (same as dedup)."""
+    pid = p.get("property_id")
+    if pid:
+        return f"pid:{pid}"
     return normalize_addr(p.get("address", ""), p.get("city", ""), p.get("zip", ""))
 
 
@@ -117,7 +121,49 @@ def _summary(p: dict[str, Any]) -> dict[str, Any]:
         "status": p.get("status") or p.get("mls_status"),
         "listing_url": p.get("listing_url"),
         "distress_score": p.get("distress_score"),
+        "property_id": p.get("property_id"),
     }
+
+
+def _slim_change_item(p: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "address": p.get("address"),
+        "city": p.get("city"),
+        "nearest_target": p.get("nearest_target"),
+        "list_price": p.get("list_price"),
+        "distress_score": p.get("distress_score"),
+        "property_id": p.get("property_id"),
+    }
+
+
+def save_changes_latest_public(changes: dict[str, Any]) -> Path:
+    """Write slim change digest to data/changes_latest.json (not under history/)."""
+    data_dir = PROJECT_ROOT / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    path = data_dir / "changes_latest.json"
+    payload = {
+        "generated_at": changes.get("compared_at")
+        or datetime.now(timezone.utc).isoformat(),
+        "newly_active": [
+            _slim_change_item(p) for p in (changes.get("newly_active") or [])
+        ],
+        "removed": [
+            _slim_change_item(p) for p in (changes.get("removed_or_inactive") or [])
+        ],
+        "price_cuts": [
+            _slim_change_item(p) for p in (changes.get("price_cuts") or [])
+        ],
+    }
+    with open(path, "w") as f:
+        json.dump(payload, f, indent=2, default=str)
+    log.info(
+        "Public changes digest: +%d new, %d removed, %d price cuts → %s",
+        len(payload["newly_active"]),
+        len(payload["removed"]),
+        len(payload["price_cuts"]),
+        path,
+    )
+    return path
 
 
 def save_change_report(changes: dict[str, Any]) -> Path:
@@ -129,6 +175,7 @@ def save_change_report(changes: dict[str, Any]) -> Path:
     latest = HISTORY_DIR / "changes-latest.json"
     with open(latest, "w") as f:
         json.dump(changes, f, indent=2, default=str)
+    save_changes_latest_public(changes)
     log.info(
         "Change report: +%d new, %d removed, %d price cuts → %s",
         len(changes.get("newly_active") or []),

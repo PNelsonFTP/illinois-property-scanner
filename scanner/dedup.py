@@ -81,12 +81,22 @@ def merge_duplicates(records: list[dict[str, Any]]) -> dict[str, Any]:
     return merged
 
 
+def _dedup_key(rec: dict[str, Any]) -> str:
+    """Prefer property_id; else normalized address. Empty addresses stay unique."""
+    pid = rec.get("property_id")
+    if pid:
+        return f"pid:{pid}"
+    address = (rec.get("address") or "").strip()
+    if not address:
+        return f"_id_{id(rec)}"
+    key = normalize_addr(address, rec.get("city", ""), rec.get("zip", ""))
+    if key and len(key) > 5:
+        return key
+    return f"_id_{id(rec)}"
+
+
 def deduplicate(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for rec in records:
-        key = normalize_addr(rec.get("address", ""), rec.get("city", ""), rec.get("zip", ""))
-        if key and len(key) > 5:
-            groups[key].append(rec)
-        else:
-            groups[f"_id_{id(rec)}"].append(rec)
+        groups[_dedup_key(rec)].append(rec)
     return [merge_duplicates(group) for group in groups.values()]
