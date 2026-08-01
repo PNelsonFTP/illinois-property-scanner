@@ -1,114 +1,164 @@
-# Distressed Property Scanner — Illinois
+# Illinois Property Scanner
 
-Automated scanner for distressed properties within ~3 miles of Wheaton, Oswego, Sandwich, Somonauk, and Lake Holiday (Sheridan), IL.
+Live-verified property scanner for northern Illinois markets around **Wheaton, Oswego, Sandwich, Somonauk, Lake Holiday**, plus optional towns (**Leland, Earlville, Waterman, Sheridan**).
 
-**Every listing is live-verified** against Realtor.com MLS status. Pending, contingent, and sold listings are excluded automatically.
+**Primary viewing surface (GitHub Pages):**  
+https://pnelsonftp.github.io/illinois-property-scanner/
 
-## Quick Start
+**Dashboard:**  
+https://pnelsonftp.github.io/illinois-property-scanner/dashboard/distressed-property-dashboard.html
+
+Listings are discovered via Realtor.com MLS (HomeHarvest), then filtered for active status. Pending, contingent, and sold inventory is used as a negative check so those deals do not publish as available.
+
+> **Lake Holiday is not Sheridan.** Sheridan is its own optional town. Lake Holiday includes the Wildwood community even when the mailing city is Sandwich.
+
+---
+
+## Dashboard modes
+
+| Mode | What it shows | Data file |
+|------|----------------|-----------|
+| **Distressed** | Scored fixer / foreclosure / high-DOM / price-cut opportunities in configured towns | `v2_compiled.json` |
+| **New to market (7 days)** | All active for-sale listings listed in the last N days (geo only, no distress filter) | `data/new_listings_7d.json` |
+| **Homes with pools** | Active residential homes with MLS private or community pool evidence | `data/pool_listings.json` |
+| **Large land (20+ ac)** | Land/farm tracts ≥20 acres within 40 miles of Lake Holiday (all-or-nothing; no town toggles) | `data/large_land.json` |
+
+Location toggles apply to Distressed, New, and Pools. Large land is a separate 40-mile ring search and hides town filters on purpose.
+
+---
+
+## Quick start
 
 ```bash
-# One-time setup (requires Python 3.10+)
+# One-time setup (Python 3.10+; 3.12 recommended)
 python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# Run a full live scan
-python scan.py
+# Recommended full refresh (parallel fetch + reverify + all modes)
+.venv/bin/python scripts/parallel_full_refresh.py --workers 3 --enable-counties
 
-# Open the dashboard
-open dashboard/distressed-property-dashboard.html
+# Or sequential full scan
+.venv/bin/python scan.py --include-optional --no-legacy
 ```
 
-## What Changed (v3)
+After a refresh you asked to publish, commit outputs and push **both** remotes (`public` + `origin`) so Pages updates. See [docs/PUBLISHING.md](docs/PUBLISHING.md).
 
-The original project was a **one-time manual snapshot** (April 2026) with stale data — many listings were already sold or contingent when reported. Key improvements:
+---
 
-| Before | After |
-|--------|-------|
-| Manual JSON curation | Automated live scan via Realtor.com (HomeHarvest) |
-| No status verification | MLS status + pending/contingent flags checked at fetch time |
-| 44 properties, many stale | 112+ live-verified distressed properties |
-| Hardcoded `/home/user/workspace` paths | Portable project-relative paths |
-| Status forced to `"active"` | Real MLS status preserved |
-| Zillow bot-blocked, empty Oswego | Full coverage all 5 towns via Realtor.com |
-| Renovated flips included | Flips with only weak signals excluded |
-
-## How It Works
+## How it works
 
 ```
-scan.py
-  ├── fetch_all_towns()     → Realtor.com via HomeHarvest (all for_sale, exclude_pending)
-  ├── compile_records()     → filter distress signals, verify status, deduplicate, score
-  ├── build_markdown.py     → regenerate distressed-properties/ tree
-  └── build_dashboard.py    → regenerate interactive HTML dashboard
+parallel_full_refresh.py  (or scan.py)
+  ├── fetch towns / ZIPs / optional counties     → raw MLS snapshots
+  ├── compile distressed + reverify             → v2_compiled.json
+  ├── compile pools from active inventory       → data/pool_listings.json
+  ├── fetch/compile large land (counties+hubs)  → data/large_land.json
+  ├── fetch/compile new listings (7d)           → data/new_listings_7d.json
+  ├── build_markdown.py                         → distressed-properties/
+  └── build_dashboard.py                        → dashboard HTML
 ```
 
-### Verification
+Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/VERIFICATION.md](docs/VERIFICATION.md) · [docs/ACREAGE.md](docs/ACREAGE.md)
 
-Each property must pass:
-1. `exclude_pending=True` at fetch time (Realtor.com API)
-2. No `is_pending` or `is_contingent` flags
-3. MLS status must be Active (not Pending, Contingent, Sold, etc.)
+---
 
-### Distress Detection
-
-Properties must have at least one signal: foreclosure, as-is/fixer language, high DOM (90+ days), meaningful price reduction, below-market land pricing, estate sale, investor special, etc.
-
-Renovated flips with only a minor price cut are excluded.
-
-## Project Layout
-
-```
-├── scan.py                    # Main entry point — run this
-├── config.yaml                # Towns, radius, distress thresholds
-├── scanner/                   # Core library
-│   ├── fetch.py               # Live Realtor.com fetching
-│   ├── compile.py             # Filter, dedup, score pipeline
-│   ├── distress.py            # Distress signal detection
-│   ├── status.py              # Active listing verification
-│   └── normalize.py           # Schema normalization
-├── v2_compiled.json           # Latest compiled results
-├── data/raw/                  # Raw fetch snapshots (timestamped)
-├── dashboard/                 # Interactive HTML dashboard
-├── distressed-properties/     # Markdown views (by area, type, score)
-└── v2-*.json                  # Legacy manual data (optional, unverified)
-```
-
-## Commands
+## Common commands
 
 ```bash
-python scan.py                 # Full live scan + rebuild everything
-python scan.py --no-legacy     # Live data only (recommended)
-python scan.py --verify-only   # Re-compile from last raw fetch
-python scan.py --no-markdown   # Skip markdown/dashboard rebuild
+# Full sequential scan (all modes by default)
+python scan.py --no-legacy
+
+# Mode-only refreshes
+python scan.py --new-listings-only --include-optional
+python scan.py --pool-listings-only --include-optional
+python scan.py --large-land-only
+
+# Status-only pass on existing distressed list
+python scan.py --reverify-only
+
+# Re-compile from latest raw without fetching
+python scan.py --verify-only --no-legacy
+
+# Parallel daily/full refresh
+python scripts/parallel_full_refresh.py --workers 3
+python scripts/parallel_full_refresh.py --workers 3 --enable-counties
 ```
+
+More CLI detail: [docs/OPERATIONS.md](docs/OPERATIONS.md)
+
+---
 
 ## Configuration
 
-Edit `config.yaml` to adjust:
-- `scan.radius_miles` — search radius per town (default: 3)
-- `distress.high_dom_days` — DOM threshold (default: 90)
-- `towns` — target towns and nearby city name mappings
+Edit [`config.yaml`](config.yaml):
 
-## Results
+- Town radii (`scan.radius_miles`, optional rural radius)
+- Optional towns, ZIP/county passes, sold/pending checks
+- Distress thresholds (`high_dom_days`, land/mobile price signals)
+- Large-land ring (`large_land.min_acres`, `radius_miles`, counties, hubs)
 
-After scanning, browse:
-- **Dashboard**: `dashboard/distressed-property-dashboard.html`
-- **Index**: `distressed-properties/_index.md`
-- **Raw data**: `distressed-properties/raw/all-properties.md`
+Walkthrough: [docs/CONFIGURATION.md](docs/CONFIGURATION.md)
 
-Use the dashboard **"Live-Verified Only"** filter to hide any legacy unverified entries.
+---
 
-## Scoring
+## Project layout
 
-Distress score 1–10 based on weighted signals (foreclosure +3, high DOM tiers, price cuts, as-is/fixer +2, etc.). See `scanner/distress.py` for rules.
+```
+├── scan.py                      # Sequential entry point
+├── scripts/parallel_full_refresh.py
+├── config.yaml
+├── scanner/                     # fetch, compile, verify, modes, geo, links
+├── build_dashboard.py           # Multi-mode HTML dashboard
+├── build_markdown.py            # Distressed-only markdown export
+├── v2_compiled.json             # Distressed results
+├── data/
+│   ├── new_listings_7d.json
+│   ├── pool_listings.json
+│   ├── large_land.json
+│   ├── last_scan.json
+│   └── raw/                     # gitignored fetch snapshots
+├── dashboard/                   # Generated HTML
+├── distressed-properties/       # Generated distressed markdown
+├── docs/                        # Project documentation
+└── index.html                   # Pages redirect → dashboard
+```
 
-## Legacy Data
+---
 
-The original `v2-*.json` files (Redfin, Zillow, Auction.com, LandWatch) are kept for reference. Include them with `python scan.py` (default), but they are marked `legacy-unverified`. Prefer `--no-legacy` for a clean verified-only dataset.
+## Documentation
+
+| Doc | Topic |
+|-----|--------|
+| [docs/MODES.md](docs/MODES.md) | Four dashboard modes |
+| [docs/PUBLISHING.md](docs/PUBLISHING.md) | GitHub Pages + dual remotes |
+| [docs/VERIFICATION.md](docs/VERIFICATION.md) | Active-status pipeline |
+| [docs/ACREAGE.md](docs/ACREAGE.md) | Large-land acreage rules |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Pipeline & data files |
+| [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | `config.yaml` keys |
+| [docs/OPERATIONS.md](docs/OPERATIONS.md) | Refresh workflows & CLI |
+| [docs/IMPROVEMENT_BACKLOG.md](docs/IMPROVEMENT_BACKLOG.md) | Ranked improvement ideas |
+| [CHANGELOG.md](CHANGELOG.md) | Notable changes |
+
+---
+
+## Scoring (distressed mode)
+
+Distress score 1–10 from weighted signals (foreclosure, as-is/fixer, high DOM, price cuts, etc.). See `scanner/distress.py`. Renovated/turnkey flips with only weak signals are filtered out when possible.
+
+---
 
 ## Requirements
 
 - Python 3.10+ (3.12 recommended)
-- Internet access for live scans
-- Dependencies: `homeharvest`, `httpx`, `pyyaml`
+- Network access for live MLS scans
+- Dependencies in `requirements.txt`: `homeharvest`, `httpx`, `beautifulsoup4`, `lxml`, `pyyaml`
+
+---
+
+## Remotes
+
+| Remote | Repo | Role |
+|--------|------|------|
+| `public` | [illinois-property-scanner](https://github.com/PNelsonFTP/illinois-property-scanner) | GitHub Pages site |
+| `origin` | [distressed-property-scanner](https://github.com/PNelsonFTP/distressed-property-scanner) | Private mirror |

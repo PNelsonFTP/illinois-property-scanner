@@ -7,9 +7,15 @@ alwaysApply: true
 
 GitHub Pages is the primary place the user views results. Do **not** start or restart a local `http.server` for this project unless the user explicitly asks.
 
+User-facing docs: `README.md` and `docs/` (MODES, PUBLISHING, OPERATIONS, VERIFICATION, ACREAGE).
+
+Preferred refresh: `scripts/parallel_full_refresh.py --workers 3 --enable-counties` (distressed + pools + large land + new 7d).
+
 After any scan, dashboard rebuild, or other update that changes viewing results:
 
-1. Commit the refreshed outputs (dashboard HTML, compiled JSON, markdown, scan meta) when the user asked for a refresh/update, or when they asked to push.
+1. Commit the refreshed outputs when the user asked for a refresh/update, or when they asked to push:
+   - `v2_compiled.json`, `data/new_listings_7d.json`, `data/pool_listings.json`, `data/large_land.json`, `data/last_scan.json`
+   - `dashboard/distressed-property-dashboard.html`, `distressed-properties/**`
 2. Push to **both** remotes so the live site updates:
    - `public` → https://github.com/PNelsonFTP/illinois-property-scanner (GitHub Pages)
    - `origin` → https://github.com/PNelsonFTP/distressed-property-scanner (private mirror)
@@ -17,5 +23,6 @@ After any scan, dashboard rebuild, or other update that changes viewing results:
    - Live site: https://pnelsonftp.github.io/illinois-property-scanner/
    - Dashboard: https://pnelsonftp.github.io/illinois-property-scanner/dashboard/distressed-property-dashboard.html
 4. Tell the user the **GitHub Pages** URL is updated — not a local `127.0.0.1:8000` link.
+5. When summarizing results, mention all four modes (distressed / new / pools / large land), not distressed only.
 
 Do not add auto-start logic to `scan.py` or other application code for a local web server.

@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
-"""Parallel town-group fetch, then single-process compile + reverify + new listings.
+"""Parallel town-group fetch, then single-process compile for all dashboard modes.
 
-Speed comes from concurrent discovery. Accuracy comes from one merged compile,
-full reverify, and URL checks before the dashboard is rebuilt.
+Pipeline:
+  1) Parallel distress discovery (optional towns on; optional --enable-counties)
+  2) Single-process distressed compile + full reverify + URL checks
+  3) Homes-with-pools compile from that inventory
+  4) Dedicated large-land fetch/compile (20+ ac / 40 mi Lake Holiday)
+  5) Parallel new-listings (7d) fetch/compile
+  6) Rebuild markdown + multi-mode dashboard
+
+Speed comes from concurrent discovery. Accuracy comes from one merged compile
+and reverify before publish. See docs/OPERATIONS.md and docs/PUBLISHING.md.
 """
 
 from __future__ import annotations

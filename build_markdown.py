@@ -15,7 +15,11 @@ BASE = PROJECT_ROOT / "distressed-properties"
 
 SCAN_DATE = os.environ.get("SCAN_DATE", "Unknown")
 SCAN_TIME = os.environ.get("SCAN_TIME", "")
-SCOPE = "Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data"
+SCOPE = (
+    "Distressed listings only — core towns ~3 mi / optional towns ~6 mi "
+    "(Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. "
+    "New / pools / large-land views are dashboard-only (not this markdown tree)."
+)
 
 
 def load_data() -> list:

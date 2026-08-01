@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 """
-Distressed Property Scanner — main entry point.
+Illinois Property Scanner — sequential entry point.
+
+Modes: distressed, new listings (7d), homes with pools, large land (20+ ac / 40 mi LH).
+For faster full refreshes prefer: scripts/parallel_full_refresh.py
+Publish viewing results to GitHub Pages (see docs/PUBLISHING.md).
 
 Usage:
-  python scan.py                      # Full live scan + reverify + rebuild
-  python scan.py --include-optional   # Include Leland, Earlville, Waterman, Sheridan
-  python scan.py --reverify-only      # Re-verify existing compiled list (no rediscovery)
+  python scan.py --no-legacy          # Full live scan + reverify + all modes + rebuild
+  python scan.py --include-optional   # Force-include Leland, Earlville, Waterman, Sheridan
+  python scan.py --reverify-only      # Re-verify existing distressed list (no rediscovery)
   python scan.py --verify-only        # Re-compile from latest raw (no fetch)
-  python scan.py --no-legacy          # Skip legacy v2-*.json files
   python scan.py --towns Sheridan,Leland
-  python scan.py --new-listings-only  # Only refresh last-7-days all-listings view
-  python scan.py --pool-listings-only # Only refresh active homes-with-pools view
+  python scan.py --new-listings-only  # Only refresh last-N-days all-listings view
+  python scan.py --pool-listings-only # Only refresh homes-with-pools view
   python scan.py --large-land-only    # Only refresh 20+ acre land near Lake Holiday
+  python scan.py --no-new-listings|--no-pool-listings|--no-large-land|--no-reverify
 """
 
 from __future__ import annotations

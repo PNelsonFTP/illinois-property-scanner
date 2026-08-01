@@ -1,4 +1,15 @@
-# Distressed Property Scanner configuration
+# Illinois Property Scanner configuration
+#
+# Product modes (see docs/MODES.md):
+#   - Distressed          → v2_compiled.json
+#   - New listings (7d)   → data/new_listings_7d.json   (include_new_listings)
+#   - Homes with pools    → data/pool_listings.json     (include_pool_listings)
+#   - Large land 20+ ac   → data/large_land.json        (include_large_land)
+#
+# Optional towns default ON below (Leland, Earlville, Waterman, Sheridan).
+# CLI can force with --include-optional / --no-optional.
+# County sweeps default OFF; parallel refresh can enable with --enable-counties.
+# Large-land acreage trust rules: docs/ACREAGE.md
 
 scan:
   radius_miles: 3
