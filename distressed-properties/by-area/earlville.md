@@ -1,6 +1,6 @@
 # Distressed Properties — Earlville, IL
 
-**Scan Date:** July 30, 2026 at 7:54 AM CDT  
+**Scan Date:** August 01, 2026 at 6:16 AM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
 **Properties:** 24
 
@@ -13,13 +13,13 @@
 | 5 | 629/631 Effie Dr Lot 4 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/629631-Effie-Dr-Lot-4_Earlville_IL_60518_M96001-25064) |
 | 6 | 503 Loraine St Lot 27 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/503-Loraine-St-27_Earlville_IL_60518_M95894-63915) |
 | 7 | 630 Betty St Lot 18 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/630-Betty-St-18_Earlville_IL_60518_M91218-13725) |
-| 8 | 617 Betty St Lot 13 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/617-Betty-St-13_Earlville_IL_60518_M90627-02271) |
-| 9 | 621 Betty St Lot 12 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/621-Betty-St-12_Earlville_IL_60518_M98412-02955) |
+| 8 | 622 Betty St Lot 20 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/622-Betty-St-20_Earlville_IL_60518_M92451-97918) |
+| 9 | 617 Betty St Lot 13 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/617-Betty-St-13_Earlville_IL_60518_M90627-02271) |
 | 10 | 637/639 Effie Dr Lot 2 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/637639-Effie-Dr-Lot-2_Earlville_IL_60518_M95604-27553) |
-| 11 | 633/635 Effie Dr Lot 3 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/633635-Effie-Dr-Lot-3_Earlville_IL_60518_M90934-42555) |
-| 12 | 641/643 Effie Dr Lot 1 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/641643-Effie-Dr-Lot-1_Earlville_IL_60518_M94818-79584) |
+| 11 | 641/643 Effie Dr Lot 1 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/641643-Effie-Dr-Lot-1_Earlville_IL_60518_M94818-79584) |
+| 12 | 633/635 Effie Dr Lot 3 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/633635-Effie-Dr-Lot-3_Earlville_IL_60518_M90934-42555) |
 | 13 | 601/603 Effie Dr Lot 36 | Earlville | $25,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/601603-Effie-Dr-Lot-36_Earlville_IL_60518_M90849-10124) |
-| 14 | 622 Betty St Lot 20 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/622-Betty-St-20_Earlville_IL_60518_M92451-97918) |
+| 14 | 621 Betty St Lot 12 | Earlville | $19,900 | Land | below-market, high-dom, investor | 3659 | 7 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/621-Betty-St-12_Earlville_IL_60518_M98412-02955) |
 | 15 | 511 Loraine St Lot 40 | Earlville | $19,900 | Land | below-market, high-dom | 3738 | 5 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/511-Loraine-St-40_Earlville_IL_60518_M90204-60541) |
 | 16 | 1386 N 4535th Rd | Earlville | $30,000 | Land | below-market, high-dom | 711 | 5 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1386-N-4535th-Rd_Earlville_IL_60518_M73722-30917) |
 | 17 | 4541 E 14th Rd | Earlville | $25,000 | Land | below-market, high-dom | 711 | 5 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/4541-E-14th-Rd_Earlville_IL_60518_M99922-72340) |

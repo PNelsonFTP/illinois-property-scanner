@@ -1,8 +1,8 @@
 # Distressed Properties — Wheaton, IL
 
-**Scan Date:** July 30, 2026 at 7:54 AM CDT  
+**Scan Date:** August 01, 2026 at 6:16 AM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
-**Properties:** 18
+**Properties:** 17
 
 | # | Address | City | Price | Type | Distress Tags | DOM | Score | Status | Link |
 |---|---------|------|-------|------|---------------|-----|-------|--------|------|
@@ -15,12 +15,11 @@
 | 7 | 1601 W Wiesbrook Rd | Wheaton | $599,000 | Land | high-dom | 250 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1601-W-Wiesbrook-Rd_Wheaton_IL_60189_M87697-91714) |
 | 8 | 1S728 Shaffner Rd | Wheaton | $450,000 | Land | high-dom | 209 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1S728-Shaffner-Rd_Wheaton_IL_60189_M97500-98089) |
 | 9 | 1021 Greenwood Dr | Wheaton | $1,685,000 | SFH | high-dom | 208 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1021-Greenwood-Dr_Wheaton_IL_60189_M87934-70351) |
-| 10 | 219 W Oak Ave | Wheaton | $524,900 | SFH | high-dom, motivated | 106 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/219-W-Oak-Ave_Wheaton_IL_60187_M80261-27087) |
-| 11 | 520 S Wheaton Ave | Wheaton | $649,999 | SFH | high-dom, price-reduced | 100 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/520-S-Wheaton-Ave_Wheaton_IL_60187_M88943-16121) |
-| 12 | 116 E Farnham Ln | Wheaton | $1,400,000 | SFH | as-is | 7 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/116-E-Farnham-Ln_Wheaton_IL_60189_M83476-72161) |
-| 13 | 2009 Mackenzie Pl Unit 2009 | Wheaton | $1,350,000 | Townhome | high-dom | 130 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2009-Mackenzie-Pl_Wheaton_IL_60187_M91888-08889) |
-| 14 | 517 Renn Ct | Wheaton | $495,000 | Townhome | high-dom | 96 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/517-Renn-Ct_Wheaton_IL_60187_M70692-42481) |
-| 15 |  | Wheaton | $565,000 | SFH | price-reduced | 71 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/Wheaton_IL_60187_M77499-71808) |
-| 16 | 1520 Stonebridge Trl Apt 2-1 | Wheaton | $314,900 | Condo | price-reduced | 70 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1520-Stonebridge-Trl-Apt-2-1_Wheaton_IL_60189_M92626-65731) |
-| 17 | 221 N Dorchester Ave | Wheaton | $359,999 | SFH | price-reduced | 37 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/221-N-Dorchester-Ave_Wheaton_IL_60187_M88537-08319) |
-| 18 | 1613 Groton Ct | Wheaton | $309,900 | Townhome | price-reduced | 24 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1613-Groton-Ct_Wheaton_IL_60189_M77342-77835) |
+| 10 | 520 S Wheaton Ave | Wheaton | $649,999 | SFH | high-dom, price-reduced | 100 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/520-S-Wheaton-Ave_Wheaton_IL_60187_M88943-16121) |
+| 11 | 116 E Farnham Ln | Wheaton | $1,400,000 | SFH | as-is | 7 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/116-E-Farnham-Ln_Wheaton_IL_60189_M83476-72161) |
+| 12 | 2009 Mackenzie Pl Unit 2009 | Wheaton | $1,350,000 | Townhome | high-dom | 130 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/2009-Mackenzie-Pl_Wheaton_IL_60187_M91888-08889) |
+| 13 | 517 Renn Ct | Wheaton | $495,000 | Townhome | high-dom | 99 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/517-Renn-Ct_Wheaton_IL_60187_M70692-42481) |
+| 14 |  | Wheaton | $565,000 | SFH | price-reduced | 71 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/Wheaton_IL_60187_M77499-71808) |
+| 15 | 1520 Stonebridge Trl Apt 2-1 | Wheaton | $314,900 | Condo | price-reduced | 70 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1520-Stonebridge-Trl-Apt-2-1_Wheaton_IL_60189_M92626-65731) |
+| 16 | 221 N Dorchester Ave | Wheaton | $359,999 | SFH | price-reduced | 37 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/221-N-Dorchester-Ave_Wheaton_IL_60187_M88537-08319) |
+| 17 | 1613 Groton Ct | Wheaton | $309,900 | Townhome | price-reduced | 24 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1613-Groton-Ct_Wheaton_IL_60189_M77342-77835) |

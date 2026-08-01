@@ -1,6 +1,6 @@
 # Distressed Properties — Sandwich, IL
 
-**Scan Date:** July 30, 2026 at 7:54 AM CDT  
+**Scan Date:** August 01, 2026 at 6:16 AM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
 **Properties:** 16
 
@@ -14,11 +14,11 @@
 | 6 | 1977 S County Line Rd | Sandwich | $374,900 | SFH | as-is, price-reduced | 61 | 3 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1977-S-County-Line-Rd_Sandwich_IL_60548_M77127-15589) |
 | 7 | 1609 Lorraine Dr | Sandwich | $465,000 | SFH | motivated, price-reduced | 56 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1609-Lorraine-Dr_Sandwich_IL_60548_M78024-14712) |
 | 8 | 1620 Suydam Rd | Sandwich | $599,700 | Multi-Family | below-market | 9 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1620-Suydam-Rd_Sandwich_IL_60548_M78669-29763) |
-| 9 | 221 Castle St | Sandwich | $270,000 | Multi-Family | investor | 7 | 2 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/221-Castle-St_Sandwich_IL_60548_M83036-41639) |
-| 10 | Commonly Known As Vacant Land on Lafayette St | Sandwich | $69,900 | Land | high-dom | 129 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/N-Lafayette-St_Sandwich_IL_60548_M74838-31319) |
+| 9 | Commonly Known As Vacant Land on Lafayette St | Sandwich | $69,900 | Land | high-dom | 129 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/N-Lafayette-St_Sandwich_IL_60548_M74838-31319) |
+| 10 | 309 E 3rd St | Sandwich | $300,000 | SFH | high-dom | 116 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/309-E-3rd-St_Sandwich_IL_60548_M83702-73848) |
 | 11 | 1400 Wright Dr | Sandwich | $48,000 | Land | high-dom | 111 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/1400-Wright-Dr_Sandwich_IL_60548_M86169-00864) |
-| 12 | 309 E 3rd St | Sandwich | $315,000 | SFH | high-dom | 106 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/309-E-3rd-St_Sandwich_IL_60548_M83702-73848) |
-| 13 | 421 E Church St | Sandwich | $385,000 | Multi-Family | price-reduced | 77 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/421-E-Church-St_Sandwich_IL_60548_M95140-58140) |
-| 14 | 217 E Sunset Ave | Sandwich | $349,900 | SFH | price-reduced | 34 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/217-E-Sunset-Ave_Sandwich_IL_60548_M82640-36869) |
-| 15 | 901 S Wind Dr | Sandwich | $405,500 | SFH | price-reduced | 31 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/901-S-Wind-Dr_Sandwich_IL_60548_M76077-22876) |
-| 16 | 605 Bluebird Cir | Sandwich | $112,000 | Manufactured | price-reduced | 26 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/605-Bluebird-Cir_Sandwich_IL_60548_M78074-79548) |
+| 12 | 421 E Church St | Sandwich | $385,000 | Multi-Family | price-reduced | 77 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/421-E-Church-St_Sandwich_IL_60548_M95140-58140) |
+| 13 | 217 E Sunset Ave | Sandwich | $349,900 | SFH | price-reduced | 34 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/217-E-Sunset-Ave_Sandwich_IL_60548_M82640-36869) |
+| 14 | 901 S Wind Dr | Sandwich | $405,500 | SFH | price-reduced | 31 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/901-S-Wind-Dr_Sandwich_IL_60548_M76077-22876) |
+| 15 | 605 Bluebird Cir | Sandwich | $112,000 | Manufactured | price-reduced | 26 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/605-Bluebird-Cir_Sandwich_IL_60548_M78074-79548) |
+| 16 | 4040 River Ridge Ln | Sandwich | $590,000 | SFH | price-reduced | 22 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/4040-River-Ridge-Ln_Sandwich_IL_60548_M74471-98897) |

@@ -1,9 +1,10 @@
 # Distressed Properties — Waterman, IL
 
-**Scan Date:** July 30, 2026 at 7:54 AM CDT  
+**Scan Date:** August 01, 2026 at 6:16 AM CDT  
 **Scope:** Within ~3 mile radius of each named town — live-verified via Realtor.com MLS data  
-**Properties:** 1
+**Properties:** 2
 
 | # | Address | City | Price | Type | Distress Tags | DOM | Score | Status | Link |
 |---|---------|------|-------|------|---------------|-----|-------|--------|------|
-| 1 | 8086 Kane Rd | Waterman | $685,000 | SFH | price-reduced | 83 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/8086-Kane-Rd_Waterman_IL_60556_M96765-35728) |
+| 1 | 205 Buckeye St | Waterman | $329,999 | SFH | high-dom | 125 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/205-Buckeye-St_Waterman_IL_60556_M99279-76690) |
+| 2 | 8086 Kane Rd | Waterman | $685,000 | SFH | price-reduced | 83 | 1 | Active | [Source](https://www.realtor.com/realestateandhomes-detail/8086-Kane-Rd_Waterman_IL_60556_M96765-35728) |
