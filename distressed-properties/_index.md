@@ -1,10 +1,10 @@
 # Distressed Properties Index — Illinois
 
-**Scan Date:** August 01, 2026 at 7:09 AM CDT  
+**Scan Date:** August 03, 2026 at 5:12 PM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Total Properties:** 26  
-**Live-Verified:** 26/26  
-**Re-verified:** 26/26  
+**Total Properties:** 25  
+**Live-Verified:** 25/25  
+**Re-verified:** 25/25  
 **Stale:** 0
 
 ## Summary Statistics
@@ -16,8 +16,8 @@
 | Oswego | 6 |
 | Lake Holiday | 5 |
 | Sandwich | 4 |
-| Wheaton | 4 |
 | Earlville | 3 |
+| Wheaton | 3 |
 | Sheridan | 2 |
 | Somonauk | 1 |
 | Leland | 1 |
@@ -32,14 +32,14 @@
 | 4 | 4141 E 2603rd Rd | Sheridan | Sheridan | $1,408,950 | Farm | as-is, high-dom | 359 | 4 | Active | [Zillow](https://www.zillow.com/homes/4141+E+2603rd+Rd+Sheridan+IL+60551_rb/) | [Google](https://www.google.com/search?q=4141+E+2603rd+Rd+Sheridan+IL+60551+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/4141-E-2603rd-Rd_Sheridan_IL_60551_M72031-24886) |
 | 5 | 20 Cedar Ln | Sandwich | Lake Holiday | $36,700 | Manufactured | below-market, high-dom, price-reduced | 104 | 4 | Active | [Zillow](https://www.zillow.com/homes/20+Cedar+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=20+Cedar+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/20-Cedar-Ln_Sandwich_IL_60548_M91337-22845) |
 | 6 | 8 Hawthorne Dr | Oswego | Oswego | $449,900 | SFH | as-is, motivated, price-reduced | 73 | 4 | Active | [Zillow](https://www.zillow.com/homes/8+Hawthorne+Dr+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=8+Hawthorne+Dr+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/8-Hawthorne-Dr_Oswego_IL_60543_M80193-74401) |
-| 7 | 1720 Lakecliffe Dr Unit 4305C | Wheaton | Wheaton | $215,000 | Condo | as-is, price-reduced, probate | 21 | 4 | Active | [Zillow](https://www.zillow.com/homes/1720+Lakecliffe+Dr+Unit+4305C+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1720+Lakecliffe+Dr+Unit+4305C+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1720-Lakecliffe-Dr-4305_Wheaton_IL_60189_M85119-85924) |
-| 8 | 407 S Ottawa St | Earlville | Earlville | $164,900 | SFH | high-dom, price-reduced | 300 | 3 | Active | [Zillow](https://www.zillow.com/homes/407+S+Ottawa+St+Earlville+IL+60518_rb/) | [Google](https://www.google.com/search?q=407+S+Ottawa+St+Earlville+IL+60518+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/407-S-Ottawa-St_Earlville_IL_60518_M94522-65503) |
-| 9 | 608 Bender St | Sandwich | Sandwich | $445,000 | SFH | high-dom, price-reduced | 226 | 3 | Active | [Zillow](https://www.zillow.com/homes/608+Bender+St+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=608+Bender+St+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/608-Bender-St_Sandwich_IL_60548_M73392-54686) |
-| 10 | 421 DE Kalb St | Sandwich | Sandwich | $329,000 | SFH | price-reduced, short-sale | 79 | 3 | Active | [Zillow](https://www.zillow.com/homes/421+DE+Kalb+St+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=421+DE+Kalb+St+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/421-DE-Kalb-St_Sandwich_IL_60548_M81584-53527) |
+| 7 | 407 S Ottawa St | Earlville | Earlville | $164,900 | SFH | high-dom, price-reduced | 305 | 3 | Active | [Zillow](https://www.zillow.com/homes/407+S+Ottawa+St+Earlville+IL+60518_rb/) | [Google](https://www.google.com/search?q=407+S+Ottawa+St+Earlville+IL+60518+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/407-S-Ottawa-St_Earlville_IL_60518_M94522-65503) |
+| 8 | 608 Bender St | Sandwich | Sandwich | $445,000 | SFH | high-dom, price-reduced | 226 | 3 | Active | [Zillow](https://www.zillow.com/homes/608+Bender+St+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=608+Bender+St+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/608-Bender-St_Sandwich_IL_60548_M73392-54686) |
+| 9 | 421 DE Kalb St | Sandwich | Sandwich | $329,000 | SFH | price-reduced, short-sale | 79 | 3 | Active | [Zillow](https://www.zillow.com/homes/421+DE+Kalb+St+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=421+DE+Kalb+St+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/421-DE-Kalb-St_Sandwich_IL_60548_M81584-53527) |
+| 10 | 117 E Elm St | Wheaton | Wheaton | $385,000 | SFH | as-is, price-reduced | 64 | 3 | Active | [Zillow](https://www.zillow.com/homes/117+E+Elm+St+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=117+E+Elm+St+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/117-E-Elm-St_Wheaton_IL_60189_M75609-29326) |
 
 ## Quick Links
 
-- [by-area/wheaton.md](by-area/wheaton.md) — Wheaton (4 properties)
+- [by-area/wheaton.md](by-area/wheaton.md) — Wheaton (3 properties)
 - [by-area/oswego.md](by-area/oswego.md) — Oswego (6 properties)
 - [by-area/sandwich.md](by-area/sandwich.md) — Sandwich (4 properties)
 - [by-area/somonauk.md](by-area/somonauk.md) — Somonauk (1 properties)

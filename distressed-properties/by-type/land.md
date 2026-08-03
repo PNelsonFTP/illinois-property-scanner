@@ -1,6 +1,6 @@
 # Distressed Properties — Land / Vacant Lots
 
-**Scan Date:** August 01, 2026 at 7:09 AM CDT  
+**Scan Date:** August 03, 2026 at 5:12 PM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
 **Properties:** 0
 

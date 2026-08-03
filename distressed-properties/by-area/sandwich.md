@@ -1,6 +1,6 @@
 # Distressed Properties — Sandwich, IL
 
-**Scan Date:** August 01, 2026 at 7:09 AM CDT  
+**Scan Date:** August 03, 2026 at 5:12 PM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
 **Properties:** 4
 
@@ -11,4 +11,4 @@
 | 1 | 1239 Sandhurst Dr | Sandwich | Sandwich | $440,000 | SFH | as-is, foreclosure | 7 | 5 | Active | [Zillow](https://www.zillow.com/homes/1239+Sandhurst+Dr+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=1239+Sandhurst+Dr+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1239-Sandhurst-Dr_Sandwich_IL_60548_M80817-60218) |
 | 2 | 608 Bender St | Sandwich | Sandwich | $445,000 | SFH | high-dom, price-reduced | 226 | 3 | Active | [Zillow](https://www.zillow.com/homes/608+Bender+St+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=608+Bender+St+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/608-Bender-St_Sandwich_IL_60548_M73392-54686) |
 | 3 | 421 DE Kalb St | Sandwich | Sandwich | $329,000 | SFH | price-reduced, short-sale | 79 | 3 | Active | [Zillow](https://www.zillow.com/homes/421+DE+Kalb+St+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=421+DE+Kalb+St+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/421-DE-Kalb-St_Sandwich_IL_60548_M81584-53527) |
-| 4 | 1977 S County Line Rd | Sandwich | Sandwich | $374,900 | SFH | as-is, price-reduced | 61 | 3 | Active | [Zillow](https://www.zillow.com/homes/1977+S+County+Line+Rd+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=1977+S+County+Line+Rd+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1977-S-County-Line-Rd_Sandwich_IL_60548_M77127-15589) |
+| 4 | 1426 Anthony Ln | Sandwich | Sandwich | $214,900 | Townhome | reo | 1 | 3 | Active | [Zillow](https://www.zillow.com/homes/1426+Anthony+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=1426+Anthony+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1426-Anthony-Ln_Sandwich_IL_60548_M74731-35993) |
