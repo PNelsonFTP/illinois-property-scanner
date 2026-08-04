@@ -1,6 +1,15 @@
 {
-  "generated_at": "2026-08-03T22:13:14.729060+00:00",
-  "newly_active": [
+  "generated_at": "2026-08-04T21:09:19.695241+00:00",
+  "newly_active": [],
+  "removed": [
+    {
+      "address": "4141 E 2603rd Rd",
+      "city": "Sheridan",
+      "nearest_target": "Sheridan",
+      "list_price": 1408950,
+      "distress_score": 4,
+      "property_id": "7203124886"
+    },
     {
       "address": "1426 Anthony Ln",
       "city": "Sandwich",
@@ -8,24 +17,14 @@
       "list_price": 214900,
       "distress_score": 3,
       "property_id": "7473135993"
-    }
-  ],
-  "removed": [
-    {
-      "address": "1720 Lakecliffe Dr Unit 4305C",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 215000,
-      "distress_score": 4,
-      "property_id": "8511985924"
     },
     {
-      "address": "1977 S County Line Rd",
-      "city": "Sandwich",
-      "nearest_target": "Sandwich",
-      "list_price": 374900,
-      "distress_score": 3,
-      "property_id": "7712715589"
+      "address": "520 S Wheaton Ave",
+      "city": "Wheaton",
+      "nearest_target": "Wheaton",
+      "list_price": 649999,
+      "distress_score": 2,
+      "property_id": "8894316121"
     }
   ],
   "price_cuts": []
