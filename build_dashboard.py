@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate dashboard HTML from distressed, new, pool, and large-land datasets."""
+"""Regenerate dashboard HTML from distressed, new, pool, land, and caves datasets."""
 
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ COMPILED = PROJECT_ROOT / "v2_compiled.json"
 NEW_LISTINGS = PROJECT_ROOT / "data" / "new_listings_7d.json"
 POOL_LISTINGS = PROJECT_ROOT / "data" / "pool_listings.json"
 LARGE_LAND = PROJECT_ROOT / "data" / "large_land.json"
+CAVES_LISTINGS = PROJECT_ROOT / "data" / "caves_listings.json"
 CHANGES_LATEST = PROJECT_ROOT / "data" / "changes_latest.json"
 OUT = PROJECT_ROOT / "dashboard" / "distressed-property-dashboard.html"
 
@@ -45,6 +46,15 @@ LAND_NOTE = (
     "(no town toggles). Sold/pending/contingent listings are excluded. "
     "MLS/Realtor-sourced; each card also links to LandWatch, Lands of America, "
     "Zillow, and Google for cross-checks."
+)
+CAVES_NOTE = (
+    "Active listings with MLS evidence of a <strong>cave</strong>, "
+    "<strong>underground bunker</strong>, storm shelter, earth-sheltered home, "
+    "or similar underground structure. Centered on ZIP <strong>60189</strong> "
+    "(Wheaton); prefer ≤4 drive hours, accept ≤8 hours "
+    "(strong finds may appear out to ~12 hours). "
+    "IL / MO / AR / KY / IN / TN / MI. Shown as one list (no town toggles). "
+    "Refresh with <code>python scan.py --caves-only</code>."
 )
 
 
@@ -112,6 +122,16 @@ def load_large_land():
     return payload.get("records", [])
 
 
+def load_caves_listings():
+    if not CAVES_LISTINGS.exists():
+        return []
+    with open(CAVES_LISTINGS) as f:
+        payload = json.load(f)
+    if isinstance(payload, list):
+        return payload
+    return payload.get("records", [])
+
+
 def load_changes_latest():
     """Slim change digest committed as data/changes_latest.json (optional)."""
     if not CHANGES_LATEST.exists():
@@ -131,6 +151,7 @@ def main():
     new_data, new_days = load_new_listings()
     pool_data = load_pool_listings()
     land_data = load_large_land()
+    caves_data = load_caves_listings()
     changes = load_changes_latest()
 
     verified = sum(1 for p in data if "realtor.com" in (p.get("verification_source") or ""))
@@ -142,8 +163,9 @@ def main():
     new_area_stats = compute_area_stats(new_data)
     pool_area_stats = compute_area_stats(pool_data)
     land_area_stats = compute_area_stats(land_data)
+    caves_area_stats = compute_area_stats(caves_data)
 
-    # Land cities must NOT appear in location toggles — land mode is all-or-nothing.
+    # Land / caves cities must NOT appear in location toggles — all-or-nothing modes.
     towns_present = sorted({
         *(p.get("nearest_target") for p in data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in new_data if p.get("nearest_target")),
@@ -163,11 +185,13 @@ def main():
     new_json = json.dumps(new_data, separators=(",", ":"))
     pool_json = json.dumps(pool_data, separators=(",", ":"))
     land_json = json.dumps(land_data, separators=(",", ":"))
+    caves_json = json.dumps(caves_data, separators=(",", ":"))
     badges_json = json.dumps(badges, separators=(",", ":"))
     area_json = json.dumps(area_stats, separators=(",", ":"))
     new_area_json = json.dumps(new_area_stats, separators=(",", ":"))
     pool_area_json = json.dumps(pool_area_stats, separators=(",", ":"))
     land_area_json = json.dumps(land_area_stats, separators=(",", ":"))
+    caves_area_json = json.dumps(caves_area_stats, separators=(",", ":"))
     changes_json = json.dumps(changes, separators=(",", ":"))
 
     html = f"""<!DOCTYPE html>
@@ -199,6 +223,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .new-badge{{background:rgba(168,85,247,.15);color:var(--purple);padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .pool-badge{{background:rgba(6,182,212,.14);color:#22d3ee;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .land-badge{{background:rgba(132,204,22,.14);color:#a3e635;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
+.caves-badge{{background:rgba(168,85,247,.14);color:#c084fc;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .v-stale{{color:var(--orange)}}
 .cd[data-stale="1"]{{opacity:.85;border-style:dashed}}
 .wrap{{max-width:1200px;margin:0 auto;padding:14px 20px}}
@@ -207,7 +232,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .mode-btn:hover{{border-color:var(--accent);color:var(--text)}}
 .mode-btn.active{{background:var(--accent);border-color:var(--accent);color:#fff}}
 .loc-panel{{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}}
-body.mode-land .loc-panel{{display:none}}
+body.mode-land .loc-panel,body.mode-caves .loc-panel{{display:none}}
 .loc-head{{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}}
 .loc-head h2{{font-size:.7rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}}
 .loc-actions{{display:flex;gap:6px;flex-wrap:wrap}}
@@ -237,20 +262,24 @@ body.mode-land .loc-panel{{display:none}}
 .tp.new-mode{{background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(59,130,246,.04));border-color:rgba(168,85,247,.2)}}
 .tp.pool-mode{{background:linear-gradient(135deg,rgba(6,182,212,.09),rgba(59,130,246,.04));border-color:rgba(6,182,212,.24)}}
 .tp.land-mode{{background:linear-gradient(135deg,rgba(132,204,22,.1),rgba(34,197,94,.04));border-color:rgba(132,204,22,.28)}}
+.tp.caves-mode{{background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(99,102,241,.04));border-color:rgba(168,85,247,.28)}}
 .tp h3{{font-size:.8rem;font-weight:700;color:var(--red);margin-bottom:8px}}
 .tp.new-mode h3{{color:var(--purple)}}
 .tp.pool-mode h3{{color:#22d3ee}}
 .tp.land-mode h3{{color:#a3e635}}
+.tp.caves-mode h3{{color:#c084fc}}
 .tpi{{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(239,68,68,.08);gap:10px}}
 .tp.new-mode .tpi{{border-bottom-color:rgba(168,85,247,.1)}}
 .tp.pool-mode .tpi{{border-bottom-color:rgba(6,182,212,.12)}}
 .tp.land-mode .tpi{{border-bottom-color:rgba(132,204,22,.14)}}
+.tp.caves-mode .tpi{{border-bottom-color:rgba(168,85,247,.14)}}
 .tpi-a{{font-weight:600;font-size:.8rem;flex:1}}.tpi-p{{color:var(--green);font-weight:700;font-size:.8rem}}
 .tpi-s{{min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;font-size:.7rem;color:#fff}}
 .s-h{{background:var(--orange)}}.s-m{{background:var(--yellow);color:#000}}.s-l{{background:var(--green)}}
 .s-new{{background:var(--purple)}}
 .s-pool{{background:#0891b2}}
 .s-land{{background:#65a30d}}
+.s-caves{{background:#7c3aed}}
 .vb{{display:inline-flex;padding:5px 12px;background:var(--accent);color:#fff;border-radius:var(--rs);font-size:.7rem;font-weight:600}}
 .vb-sm{{padding:4px 8px;font-size:.65rem;background:var(--card);color:var(--text2);border:1px solid var(--border)}}
 .vb-sm:hover{{border-color:var(--accent);color:var(--text);text-decoration:none}}
@@ -268,10 +297,11 @@ body.mode-land .loc-panel{{display:none}}
 .chg-strip{{display:none;font-size:.75rem;color:var(--text2);margin-bottom:12px;padding:10px 12px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:var(--r)}}
 .chg-strip strong{{color:var(--text)}}
 .chg-strip .chg-samples{{color:var(--muted)}}
-body.mode-land .no-land{{display:none}}
+body.mode-land .no-land,body.mode-caves .no-land{{display:none}}
 body:not(.mode-pool) .sort-pool{{display:none}}
 body:not(.mode-land) .sort-land{{display:none}}
-body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-distress{{display:none}}
+body:not(.mode-caves) .sort-caves{{display:none}}
+body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-distress,body.mode-caves .sort-distress{{display:none}}
 .cd-tags{{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}}
 .t{{padding:1px 7px;border-radius:10px;font-size:.6rem;font-weight:600}}
 .t-fc{{background:rgba(239,68,68,.1);color:var(--red)}}.t-pr{{background:rgba(59,130,246,.1);color:var(--accent)}}
@@ -280,6 +310,7 @@ body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-
 .t-new{{background:rgba(168,85,247,.15);color:var(--purple)}}
 .t-pool{{background:rgba(6,182,212,.15);color:#22d3ee}}
 .t-land{{background:rgba(132,204,22,.16);color:#a3e635}}
+.t-caves{{background:rgba(168,85,247,.18);color:#c084fc}}
 .cd-ft{{display:flex;justify-content:space-between;align-items:center}}.cd-src{{font-size:.65rem;color:var(--muted)}}
 .cd-x{{display:none;padding:0 12px 12px;border-top:1px solid var(--border);margin-top:8px}}.cd.open .cd-x{{display:block}}
 .xg{{display:grid;grid-template-columns:1fr 1fr;gap:4px}}.xi{{font-size:.7rem}}.xi .l{{color:var(--muted)}}
@@ -288,8 +319,8 @@ body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-
 .badges{{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}}
 .bdg{{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:14px;font-size:.65rem;font-weight:600;background:var(--card);border:1px solid var(--border)}}
 .bdg .n{{background:var(--accent);color:#fff;padding:0 5px;border-radius:8px;font-size:.6rem}}
-.distress-only{{}}.new-only,.pool-only,.land-only{{display:none}}
-body.mode-new .distress-only,body.mode-pool .distress-only,body.mode-land .distress-only{{display:none}}
+.distress-only{{}}.new-only,.pool-only,.land-only,.caves-only{{display:none}}
+body.mode-new .distress-only,body.mode-pool .distress-only,body.mode-land .distress-only,body.mode-caves .distress-only{{display:none}}
 body.mode-new .new-only{{display:block}}
 body.mode-new .new-only-inline{{display:inline}}
 body.mode-new .new-only-flex{{display:flex}}
@@ -299,7 +330,10 @@ body.mode-pool .pool-only-flex{{display:flex}}
 body.mode-land .land-only{{display:block}}
 body.mode-land .land-only-inline{{display:inline}}
 body.mode-land .land-only-flex{{display:flex}}
-.new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex,.land-only-inline,.land-only-flex{{display:none}}
+body.mode-caves .caves-only{{display:block}}
+body.mode-caves .caves-only-inline{{display:inline}}
+body.mode-caves .caves-only-flex{{display:flex}}
+.new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex,.land-only-inline,.land-only-flex,.caves-only-inline,.caves-only-flex{{display:none}}
 </style>
 </head>
 <body>
@@ -315,6 +349,7 @@ body.mode-land .land-only-flex{{display:flex}}
       <span class="new-badge new-only-inline">{len(new_data)} new (last {new_days}d)</span>
       <span class="pool-badge pool-only-inline">{len(pool_data)} pool homes</span>
       <span class="land-badge land-only-inline">{len(land_data)} large tracts</span>
+      <span class="caves-badge caves-only-inline">{len(caves_data)} caves/bunkers</span>
     </div>
   </div>
   <div class="badges distress-only" id="hBdg"></div>
@@ -325,11 +360,13 @@ body.mode-land .land-only-flex{{display:flex}}
     <button type="button" class="mode-btn" id="modeNew" onclick="setMode('new')">New to market ({new_days} days)</button>
     <button type="button" class="mode-btn" id="modePool" onclick="setMode('pool')">Homes with pools</button>
     <button type="button" class="mode-btn" id="modeLand" onclick="setMode('land')">Large land (20+ ac)</button>
+    <button type="button" class="mode-btn" id="modeCaves" onclick="setMode('caves')">Caves &amp; bunkers</button>
   </div>
   <div class="src-note distress-only">{VERIFIED_NOTE} Run <code>python scan.py --include-optional</code> to refresh. Use <code>--reverify-only</code> for a status-only pass.</div>
   <div class="src-note new-only">{NEW_NOTE}</div>
   <div class="src-note pool-only">{POOL_NOTE}</div>
   <div class="src-note land-only">{LAND_NOTE}</div>
+  <div class="src-note caves-only">{CAVES_NOTE}</div>
   <div class="chg-strip" id="chgStrip"></div>
   <div class="loc-panel">
     <div class="loc-head">
@@ -346,6 +383,8 @@ body.mode-land .land-only-flex{{display:flex}}
     <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Condo">Condo</option><option value="Manufactured">Manufactured</option><option value="Land">Large tracts only (rare in distress)</option><option value="Farm">Farm</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
     <div class="cg pool-only"><label>Pool</label><select id="fPool" onchange="go()"><option value="">Private + community</option><option value="private">Private pool</option><option value="community">Community pool</option></select></div>
     <div class="cg land-only"><label>Min acres</label><select id="fAcres" onchange="go()"><option value="20">20+</option><option value="40">40+</option><option value="80">80+</option><option value="160">160+</option></select></div>
+    <div class="cg caves-only"><label>Max drive hr</label><select id="fHours" onchange="go()"><option value="4">≤ 4 hr (preferred)</option><option value="8" selected>≤ 8 hr</option><option value="12">≤ 12 hr (exceptional)</option></select></div>
+    <div class="cg caves-only"><label>Feature</label><select id="fFeat" onchange="go()"><option value="">All</option><option value="Cave">Cave</option><option value="Bunker">Bunker</option><option value="Underground home">Underground home</option><option value="Storm shelter">Storm shelter</option><option value="Cellar">Cellar</option></select></div>
     <div class="cg distress-only"><label>Distress</label><select id="fD" onchange="go()"><option value="">All</option><option value="foreclosure">Foreclosure</option><option value="as-is">As-Is/Fixer</option><option value="price-reduced">Price Reduced</option><option value="high-dom">High DOM</option><option value="below-market">Below Market</option></select></div>
     <div class="cg distress-only"><label>Verified</label><select id="fV" onchange="go()"><option value="">All</option><option value="live">Verified Only</option><option value="reverified">Re-verified Only</option></select></div>
     <div class="cg distress-only"><label>Freshness</label><select id="fFresh" onchange="go()"><option value="">All</option><option value="fresh">Fresh only</option><option value="stale">Stale only</option></select></div>
@@ -359,6 +398,7 @@ body.mode-land .land-only-flex{{display:flex}}
       <option value="pool" class="sort-pool">Pool type</option>
       <option value="acres" class="sort-land">Acres High</option>
       <option value="ppa-asc" class="sort-land">$/acre Low</option>
+      <option value="hours" class="sort-caves">Drive hours</option>
       <option value="dom">DOM / Age</option>
       <option value="price-asc">Price Low</option>
       <option value="price-desc">Price High</option>
@@ -381,11 +421,13 @@ const PD={props_json};
 const PN={new_json};
 const PP={pool_json};
 const PL={land_json};
+const PC={caves_json};
 const B={badges_json};
 const ASD={area_json};
 const ASN={new_area_json};
 const ASP={pool_area_json};
 const ASL={land_area_json};
+const ASC={caves_area_json};
 const TOWNS={towns_json};
 const NEW_DAYS={new_days};
 const CHANGES={changes_json};
@@ -528,12 +570,14 @@ function currentData(){{
   if(mode==='new')return PN;
   if(mode==='pool')return PP;
   if(mode==='land')return PL;
+  if(mode==='caves')return PC;
   return PD;
 }}
 function currentAreaStats(){{
   if(mode==='new')return ASN;
   if(mode==='pool')return ASP;
   if(mode==='land')return ASL;
+  if(mode==='caves')return ASC;
   return ASD;
 }}
 function renderChanges(){{
@@ -554,13 +598,15 @@ function writeHash(){{
   p.set('mode', mode);
   const towns=[...enabledTowns()];
   if(towns.length&&towns.length<TOWNS.length)p.set('towns', towns.join(','));
-  const map=[['type','fT'],['distress','fD'],['verified','fV'],['fresh','fFresh'],['pool','fPool'],['acres','fAcres'],['price','fP'],['score','fS'],['beds','fBeds'],['dom','fDom'],['sort','fO'],['q','fQ']];
+  const map=[['type','fT'],['distress','fD'],['verified','fV'],['fresh','fFresh'],['pool','fPool'],['acres','fAcres'],['hours','fHours'],['feat','fFeat'],['price','fP'],['score','fS'],['beds','fBeds'],['dom','fDom'],['sort','fO'],['q','fQ']];
   map.forEach(([k,id])=>{{
     const el=$(id); if(!el)return;
     const v=(el.value||'').trim();
     if(!v||(k==='score'&&v==='0')||(k==='acres'&&v==='20'&&mode!=='land'))return;
     if(k==='acres'&&mode!=='land')return;
     if(k==='pool'&&mode!=='pool')return;
+    if((k==='hours'||k==='feat')&&mode!=='caves')return;
+    if(k==='hours'&&v==='8')return;
     if((k==='distress'||k==='verified'||k==='fresh'||k==='score')&&mode!=='distress')return;
     p.set(k,v);
   }});
@@ -585,9 +631,10 @@ function applyHash(){{
     }}
     const setIf=(id,key)=>{{const el=$(id); if(el&&p.has(key))el.value=p.get(key);}};
     setIf('fT','type'); setIf('fD','distress'); setIf('fV','verified'); setIf('fFresh','fresh');
-    setIf('fPool','pool'); setIf('fAcres','acres'); setIf('fP','price'); setIf('fS','score');
+    setIf('fPool','pool'); setIf('fAcres','acres'); setIf('fHours','hours'); setIf('fFeat','feat');
+    setIf('fP','price'); setIf('fS','score');
     setIf('fBeds','beds'); setIf('fDom','dom'); setIf('fO','sort'); setIf('fQ','q');
-    if(m&&['distress','new','pool','land'].includes(m))setMode(m,true);
+    if(m&&['distress','new','pool','land','caves'].includes(m))setMode(m,true);
   }}finally{{_hashQuiet=false;}}
   return true;
 }}
@@ -596,14 +643,16 @@ function setMode(m, fromHash){{
   document.body.classList.toggle('mode-new', m==='new');
   document.body.classList.toggle('mode-pool', m==='pool');
   document.body.classList.toggle('mode-land', m==='land');
+  document.body.classList.toggle('mode-caves', m==='caves');
   $('modeDistress').classList.toggle('active', m==='distress');
   $('modeNew').classList.toggle('active', m==='new');
   $('modePool').classList.toggle('active', m==='pool');
   $('modeLand').classList.toggle('active', m==='land');
+  $('modeCaves').classList.toggle('active', m==='caves');
   const sort=$('fO');
-  $('tpBox').classList.remove('new-mode','pool-mode','land-mode');
+  $('tpBox').classList.remove('new-mode','pool-mode','land-mode','caves-mode');
   if(m==='new'){{
-    if(!fromHash&&(sort.value==='score'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'))sort.value='listed';
+    if(!fromHash&&(sort.value==='score'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'||sort.value==='hours'))sort.value='listed';
     $('tpTitle').textContent='Newest listings';
     $('tpBox').classList.add('new-mode');
     $('hdrCount').textContent=PN.length+' new listings';
@@ -617,8 +666,13 @@ function setMode(m, fromHash){{
     $('tpTitle').textContent='Largest tracts';
     $('tpBox').classList.add('land-mode');
     $('hdrCount').textContent=PL.length+' large tracts';
+  }}else if(m==='caves'){{
+    if(!fromHash)sort.value='hours';
+    $('tpTitle').textContent='Closest caves & bunkers';
+    $('tpBox').classList.add('caves-mode');
+    $('hdrCount').textContent=PC.length+' caves/bunkers';
   }}else{{
-    if(!fromHash&&(sort.value==='listed'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'))sort.value='score';
+    if(!fromHash&&(sort.value==='listed'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'||sort.value==='hours'))sort.value='score';
     $('tpTitle').textContent='Top Picks';
     $('hdrCount').textContent=PD.length+' properties';
   }}
@@ -631,15 +685,15 @@ function renderStats(){{
   const towns=enabledTowns();
   let h='';
   const saTitle=$('sATitle');
-  if(saTitle)saTitle.textContent=mode==='land'?'By City':'By Town';
-  const areas=mode==='land'?AS:AS.filter(a=>towns.has(a.area));
+  if(saTitle)saTitle.textContent=(mode==='land'||mode==='caves')?'By City':'By Town';
+  const areas=(mode==='land'||mode==='caves')?AS:AS.filter(a=>towns.has(a.area));
   areas.forEach(a=>{{h+=`<tr><td>${{a.area}}</td><td>${{a.count}}</td><td>${{a.avgPrice}}</td><td>${{a.avgDom}} ${{mode==='new'?'days':'DOM'}}</td></tr>`}});
   $('sA').innerHTML=h||'<tr><td colspan="4">No locations enabled</td></tr>';
   if(mode==='distress'){{
     h='';B.forEach(b=>{{h+=`<tr><td>${{b.tag}}</td><td>${{b.count}}</td></tr>`}});$('sD').innerHTML=h;
     $('hBdg').innerHTML=B.map(b=>`<span class="bdg">${{b.tag}}<span class="n">${{b.count}}</span></span>`).join('');
   }}
-  const filtered=mode==='land'?P:P.filter(p=>towns.has(p.nearest_target));
+  const filtered=(mode==='land'||mode==='caves')?P:P.filter(p=>towns.has(p.nearest_target));
   h='';const ty={{}};filtered.forEach(p=>{{ty[p.property_type]=(ty[p.property_type]||0)+1}});
   Object.entries(ty).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{{h+=`<tr><td>${{k}}</td><td>${{v}}</td></tr>`}});
   $('sT').innerHTML=h||'<tr><td colspan="2">—</td></tr>';
@@ -651,8 +705,10 @@ function go(){{
   const t=$('fT').value,d=$('fD').value,v=$('fV').value,fr=$('fFresh').value,pt=$('fPool').value,minAc=parseFloat(($('fAcres')||{{}}).value)||20,mp=parseFloat($('fP').value)||Infinity,ms=parseInt($('fS').value)||0,o=$('fO').value,q=$('fQ').value.toLowerCase().trim();
   const minBeds=parseFloat(($('fBeds')||{{}}).value);
   const maxDom=parseFloat(($('fDom')||{{}}).value);
-  // Land mode is all-or-nothing — never gated by the town toggles.
-  if(mode!=='land')f=f.filter(p=>towns.has(p.nearest_target));
+  const maxHours=parseFloat(($('fHours')||{{}}).value)||8;
+  const feat=($('fFeat')||{{}}).value||'';
+  // Land / caves modes are all-or-nothing — never gated by town toggles.
+  if(mode!=='land'&&mode!=='caves')f=f.filter(p=>towns.has(p.nearest_target));
   if(t)f=f.filter(p=>p.property_type===t);
   if(mode==='distress'){{
     if(v==='live')f=f.filter(p=>(p.verification_source||'').includes('realtor.com'));
@@ -664,10 +720,14 @@ function go(){{
   }}
   if(mode==='pool'&&pt)f=f.filter(p=>(p.pool_type||'').toLowerCase().includes(pt));
   if(mode==='land')f=f.filter(p=>(p.acres||0)>=minAc);
-  if(mode!=='land'&&!Number.isNaN(minBeds))f=f.filter(p=>p.beds!=null&&p.beds>=minBeds);
-  if(mode!=='land'&&!Number.isNaN(maxDom))f=f.filter(p=>{{const a=ageDays(p);return a!=null&&a<=maxDom}});
+  if(mode==='caves'){{
+    f=f.filter(p=>(p.drive_hours_from_60189??99)<=maxHours);
+    if(feat)f=f.filter(p=>(p.feature_type||'')===feat);
+  }}
+  if(mode!=='land'&&mode!=='caves'&&!Number.isNaN(minBeds))f=f.filter(p=>p.beds!=null&&p.beds>=minBeds);
+  if(mode!=='land'&&mode!=='caves'&&!Number.isNaN(maxDom))f=f.filter(p=>{{const a=ageDays(p);return a!=null&&a<=maxDom}});
   if(mp<Infinity)f=f.filter(p=>p.list_price!=null&&p.list_price<=mp);
-  if(q)f=f.filter(p=>(p.address+' '+(p.notes||'')+' '+(p.distress_types||[]).join(' ')+' '+(p.pool_evidence||[]).join(' ')+' '+(p.land_evidence||[]).join(' ')+' '+(p.city||'')).toLowerCase().includes(q));
+  if(q)f=f.filter(p=>(p.address+' '+(p.notes||'')+' '+(p.distress_types||[]).join(' ')+' '+(p.pool_evidence||[]).join(' ')+' '+(p.land_evidence||[]).join(' ')+' '+(p.cave_evidence||[]).join(' ')+' '+(p.feature_type||'')+' '+(p.city||'')).toLowerCase().includes(q));
   f.sort((a,b)=>{{
     switch(o){{
       case'score':{{
@@ -687,6 +747,7 @@ function go(){{
       case'dom':return(ageDays(b)??0)-(ageDays(a)??0);
       case'acres':return(b.acres||0)-(a.acres||0)||(a.list_price||1e9)-(b.list_price||1e9);
       case'ppa-asc':return(ppa(a)??1e9)-(ppa(b)??1e9);
+      case'hours':return(a.drive_hours_from_60189??99)-(b.drive_hours_from_60189??99)||(a.list_price||1e9)-(b.list_price||1e9);
       case'pool':{{
         const rank={{'Private + Community':0,'Private':1,'Community':2}};
         return(rank[a.pool_type]??9)-(rank[b.pool_type]??9)||(a.list_price||1e9)-(b.list_price||1e9);
@@ -694,9 +755,11 @@ function go(){{
       default:return 0;
     }}
   }});
-  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':mode==='land'?'large tracts':'properties';
+  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':mode==='land'?'large tracts':mode==='caves'?'caves/bunkers':'properties';
   if(mode==='land'){{
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · within 40 mi of Lake Holiday`;
+  }}else if(mode==='caves'){{
+    $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · drive hours from ZIP 60189 (approx)`;
   }}else{{
     const onCount=towns.size;
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · <strong>${{onCount}}</strong>/${{TOWNS.length}} locations on`;
@@ -707,6 +770,8 @@ function go(){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-pool">🏊</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}} · ${{e(p.pool_type)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No pool homes in the enabled locations.</div></div>';
   }}else if(mode==='land'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-land">${{Math.round(p.acres||0)}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target)}} · ${{e(p.miles_from_lake_holiday)}} mi</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No large tracts within 40 mi of Lake Holiday.</div></div>';
+  }}else if(mode==='caves'){{
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-caves">${{p.drive_hours_from_60189!=null?p.drive_hours_from_60189:'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city)}} ${{e(p.state)}} · ${{e(p.feature_type)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No cave/bunker listings in the current drive-hour filter. Run <code>python scan.py --caves-only</code>.</div></div>';
   }}else{{
     const homes=f.filter(p=>!isLandFarm(p));
     $('tpL').innerHTML=homes.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No home Top Picks in the current filters (land/farm excluded from this list).</div></div>';
@@ -771,6 +836,30 @@ function go(){{
           <div class="xi"><span class="l">Verified:</span> <span class="v v-ok">Live inventory</span></div>
           <div class="xi"><span class="l">Checked:</span> <span class="v">${{e(verifiedAt)}}</span></div>
           <div class="xi"><span class="l">From LH:</span> <span class="v">${{p.miles_from_lake_holiday!=null?p.miles_from_lake_holiday+' mi':'N/A'}}</span></div>
+        </div>        ${{evidence?`<div style="font-size:.65rem;color:var(--muted);margin-top:4px">${{evidence}}</div>`:''}}
+        ${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+      </div></div>`;
+    }}
+    if(mode==='caves'){{
+      const det=[];
+      if(p.drive_hours_from_60189!=null)det.push('~'+p.drive_hours_from_60189+' hr from 60189');
+      if(p.miles_from_60189!=null)det.push(p.miles_from_60189+' mi');
+      if(p.beds!=null)det.push(p.beds+' bd');
+      if(p.baths!=null)det.push(p.baths+' ba');
+      const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>⛰</div>'">`:'<div class="cd-ph">⛰</div>';
+      const evidence=(p.cave_evidence||[]).map(x=>e(x)).join(' · ');
+      const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
+      const band=p.preferred_band?'preferred ≤4h':(p.evidence_strength==='strong'?'strong evidence':'');
+      return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-caves">${{p.drive_hours_from_60189!=null?p.drive_hours_from_60189:'—'}}</div>${{img}}<div class="cd-b">
+        <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city)}}, ${{e(p.state||'')}} · ${{e(p.feature_type||'Underground')}}</div>
+        ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
+        <div class="cd-tags"><span class="t t-caves">${{e(p.feature_type||'Cave')}}</span>${{band?`<span class="t t-d">${{e(band)}}</span>`:''}}<span class="t t-d">${{e(p.property_type||'')}}</span></div>
+        <div class="cd-ft">${{linkButtons(p)}}</div>
+        <div class="cd-x"><div class="xg">
+          <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
+          <div class="xi"><span class="l">Drive:</span> <span class="v">${{p.drive_hours_from_60189!=null?'~'+p.drive_hours_from_60189+' hr':'N/A'}}</span></div>
+          <div class="xi"><span class="l">Checked:</span> <span class="v">${{e(verifiedAt)}}</span></div>
+          <div class="xi"><span class="l">Strength:</span> <span class="v">${{e(p.evidence_strength||'N/A')}}</span></div>
         </div>${{evidence?`<div style="font-size:.65rem;color:var(--muted);margin-top:4px">${{evidence}}</div>`:''}}
         ${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
       </div></div>`;
@@ -816,6 +905,7 @@ window.addEventListener('hashchange',()=>{{if(!_hashQuiet)applyHash();}});
         f"Wrote dashboard: {OUT} "
         f"({len(data)} distressed, {len(new_data)} new/{new_days}d, "
         f"{len(pool_data)} pool homes, {len(land_data)} large tracts, "
+        f"{len(caves_data)} caves/bunkers, "
         f"{verified} verified, {reverified} re-checked)"
     )
 

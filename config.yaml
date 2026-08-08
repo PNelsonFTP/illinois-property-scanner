@@ -5,6 +5,7 @@
 #   - New listings (7d)   → data/new_listings_7d.json   (include_new_listings)
 #   - Homes with pools    → data/pool_listings.json     (include_pool_listings)
 #   - Large land 20+ ac   → data/large_land.json        (include_large_land)
+#   - Caves & bunkers     → data/caves_listings.json    (include_caves_listings)
 #
 # Optional towns default ON below (Leland, Earlville, Waterman, Sheridan).
 # CLI can force with --include-optional / --no-optional.
@@ -30,6 +31,7 @@ scan:
   new_listings_days: 7
   include_pool_listings: true
   include_large_land: true
+  include_caves_listings: true
 
 # Large tracts (≥20 acres) within 40 miles of Lake Holiday, IL.
 # Primary inventory is Realtor/MLS via HomeHarvest (land + farm).
@@ -57,6 +59,51 @@ large_land:
     - "DeKalb, IL"
     - "Morris, IL"
     - "Amboy, IL"
+
+# Caves / underground bunkers / underground structures near ZIP 60189.
+# Hub fetches + MLS text evidence (HomeHarvest has no keyword search).
+# Drive hours ≈ haversine miles / highway_mph. Prefer ≤4h; accept ≤8h;
+# strong evidence may extend to exceptional_max_hours.
+caves_bunkers:
+  origin_zip: "60189"
+  origin_label: "Wheaton, IL (60189)"
+  highway_mph: 55
+  preferred_hours: 4
+  max_hours: 8
+  exceptional_max_hours: 12
+  hub_radius_miles: 60
+  states: [IL, MO, AR, KY, IN, TN, MI]
+  hubs:
+    - "Wheaton, IL"
+    - "Chicago, IL"
+    - "Rockford, IL"
+    - "Peoria, IL"
+    - "Springfield, IL"
+    - "Champaign, IL"
+    - "Carbondale, IL"
+    - "St. Louis, MO"
+    - "Springfield, MO"
+    - "Branson, MO"
+    - "Columbia, MO"
+    - "Kansas City, MO"
+    - "Louisville, KY"
+    - "Lexington, KY"
+    - "Cave City, KY"
+    - "Bowling Green, KY"
+    - "Indianapolis, IN"
+    - "Evansville, IN"
+    - "Bloomington, IN"
+    - "Fort Wayne, IN"
+    - "Nashville, TN"
+    - "Memphis, TN"
+    - "Knoxville, TN"
+    - "Chattanooga, TN"
+    - "Little Rock, AR"
+    - "Fayetteville, AR"
+    - "Detroit, MI"
+    - "Grand Rapids, MI"
+    - "Ann Arbor, MI"
+    - "Lansing, MI"
 
 verification:
   require_reverify: true
@@ -160,6 +207,7 @@ refresh_profiles:
     include_new_listings: true
     include_pool_listings: false
     include_large_land: false
+    include_caves_listings: false
     include_legacy: false
   daily:
     description: Parallel full discovery without county sweeps
@@ -169,6 +217,7 @@ refresh_profiles:
     include_new_listings: true
     include_pool_listings: true
     include_large_land: true
+    include_caves_listings: true
     include_public_records: false
   full:
     description: Parallel + counties + public-record CSV + all modes
@@ -178,6 +227,7 @@ refresh_profiles:
     include_new_listings: true
     include_pool_listings: true
     include_large_land: true
+    include_caves_listings: true
     include_public_records: true
 
 inactive_statuses:

@@ -1,6 +1,6 @@
 # Dashboard modes
 
-The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has four modes. Prefer opening it on GitHub Pages (see [PUBLISHING.md](PUBLISHING.md)).
+The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has five modes. Prefer opening it on GitHub Pages (see [PUBLISHING.md](PUBLISHING.md)).
 
 ## Distressed
 
@@ -37,11 +37,22 @@ The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has f
 - **Output:** `data/large_land.json`.
 - **CLI:** `python scan.py --large-land-only`.
 
+## Caves & bunkers
+
+- **Purpose:** Active listings with MLS text evidence of a cave, underground bunker, storm shelter, earth-sheltered / underground home, or similar.
+- **Center:** ZIP **60189** (Wheaton). Drive hours ≈ haversine miles ÷ 55 mph.
+- **Banding:** Prefer ≤4 hr; accept ≤8 hr; strong evidence may appear out to ~12 hr.
+- **States:** IL, MO, AR, KY, IN, TN, MI (`config.yaml` → `caves_bunkers`).
+- **UI:** Town location panel is **hidden** (all-or-nothing). Filters: max drive hours, feature type.
+- **Discovery:** Regional hub fetches + description/details matching (HomeHarvest has no keyword search).
+- **Output:** `data/caves_listings.json`.
+- **CLI:** `python scan.py --caves-only`.
+
 ## Mode comparison
 
-| Concern | Distressed | New 7d | Pools | Large land |
-|---------|------------|--------|-------|------------|
-| Distress filter | Yes | No | No | No |
-| Town toggles | Yes | Yes | Yes | No (40 mi ring) |
-| Deep reverify fetch | Yes (full path) | Light | Negatives only | Negatives only |
-| Markdown export | Yes | No | No | No |
+| Concern | Distressed | New 7d | Pools | Large land | Caves |
+|---------|------------|--------|-------|------------|-------|
+| Distress filter | Yes | No | No | No | No |
+| Town toggles | Yes | Yes | Yes | No (40 mi ring) | No (60189 drive ring) |
+| Deep reverify fetch | Yes (full path) | Light | Negatives only | Negatives only | Negatives only |
+| Markdown export | Yes | No | No | No | No |

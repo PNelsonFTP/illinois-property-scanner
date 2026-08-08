@@ -2,7 +2,7 @@
 """
 Illinois Property Scanner — sequential entry point.
 
-Modes: distressed, new listings (7d), homes with pools, large land (20+ ac / 40 mi LH).
+Modes: distressed, new listings (7d), pools, large land, caves/bunkers (near 60189).
 For faster full refreshes prefer: scripts/parallel_full_refresh.py
 Publish viewing results to GitHub Pages (see docs/PUBLISHING.md).
 
@@ -18,7 +18,8 @@ Usage:
   python scan.py --new-listings-only  # Only refresh last-N-days all-listings view
   python scan.py --pool-listings-only # Only refresh homes-with-pools view
   python scan.py --large-land-only    # Only refresh 20+ acre land near Lake Holiday
-  python scan.py --no-new-listings|--no-pool-listings|--no-large-land|--no-reverify
+  python scan.py --caves-only         # Only refresh caves/bunkers near ZIP 60189
+  python scan.py --no-new-listings|--no-pool-listings|--no-large-land|--no-caves|--no-reverify
 """
 
 from __future__ import annotations
@@ -49,6 +50,12 @@ from scanner.fetch import (
     save_raw,
 )
 from scanner.geo import enabled_towns
+from scanner.caves import (
+    compile_caves_listings,
+    fetch_caves_listings,
+    print_caves_summary,
+    save_caves_listings,
+)
 from scanner.large_land import (
     compile_large_land,
     fetch_large_land,
@@ -187,6 +194,37 @@ def _run_large_land(
     return kept, stats
 
 
+def _run_caves_listings(
+    config: dict,
+    *,
+    raw_records: list | None = None,
+) -> tuple[list, dict]:
+    """Fetch/compile caves & underground bunkers near ZIP 60189."""
+    if raw_records is None:
+        log.info("Fetching caves/bunker inventory (hubs near ZIP 60189)...")
+        raw_records = fetch_caves_listings(config)
+        save_raw(raw_records, label="caves-listings")
+
+    records, stats = compile_caves_listings(raw_records, config=config)
+    kept, rejected = reverify_properties(
+        records,
+        raw_records=raw_records,
+        config=config,
+        check_urls=False,
+        do_reverify=False,
+        max_reverify=None,
+    )
+    write_rejection_audit(rejected, label="caves-validation")
+    stats["validation_kept"] = len(kept)
+    stats["validation_rejected"] = len(rejected)
+    stats["final_count"] = len(kept)
+    for i, record in enumerate(kept):
+        record["id"] = i + 1
+    save_caves_listings(kept, config=config)
+    print_caves_summary(kept, stats)
+    return kept, stats
+
+
 def _run_refresh_profile(profile: str, argv_rest: list[str]) -> int:
     """Dispatch named refresh profiles from config.yaml refresh_profiles."""
     config = load_config()
@@ -214,6 +252,8 @@ def _run_refresh_profile(profile: str, argv_rest: list[str]) -> int:
             cmd.append("--skip-large-land")
         if not cfg.get("include_pool_listings", True):
             cmd.append("--skip-pool-listings")
+        if not cfg.get("include_caves_listings", True):
+            cmd.append("--skip-caves")
         cmd.extend(argv_rest)
         log.info("Delegating to parallel refresh: %s", " ".join(cmd))
         return subprocess.call(cmd, cwd=PROJECT_ROOT)
@@ -258,6 +298,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Only refresh active homes-with-pools view")
     parser.add_argument("--large-land-only", action="store_true",
                         help="Only refresh 20+ acre land within 40 mi of Lake Holiday")
+    parser.add_argument("--caves-only", action="store_true",
+                        help="Only refresh caves/bunkers near ZIP 60189")
     parser.add_argument(
         "--no-legacy",
         action="store_true",
@@ -276,6 +318,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Skip the homes-with-pools pass")
     parser.add_argument("--no-large-land", action="store_true",
                         help="Skip the large-land (20+ acres) pass")
+    parser.add_argument("--no-caves", action="store_true",
+                        help="Skip the caves/bunkers pass")
     parser.add_argument("--include-optional", action="store_true",
                         help="Include Leland, Earlville, Waterman, Sheridan")
     parser.add_argument("--no-optional", action="store_true", help="Force-exclude optional towns")
@@ -335,6 +379,13 @@ def main(argv: list[str] | None = None) -> int:
     # --- Large land only ---
     if args.large_land_only:
         _run_large_land(config)
+        if not args.no_markdown:
+            rebuild_outputs(scan_date, scan_time)
+        return 0
+
+    # --- Caves / bunkers only ---
+    if args.caves_only:
+        _run_caves_listings(config)
         if not args.no_markdown:
             rebuild_outputs(scan_date, scan_time)
         return 0
@@ -490,6 +541,16 @@ def main(argv: list[str] | None = None) -> int:
     if do_land:
         land_records, _land_stats = _run_large_land(config)
         stats["large_land"] = len(land_records)
+
+    # --- Caves & bunkers (multi-state ring around ZIP 60189) ---
+    do_caves = (
+        scan_cfg.get("include_caves_listings", True)
+        and not args.no_caves
+        and not args.verify_only
+    )
+    if do_caves:
+        caves_records, _caves_stats = _run_caves_listings(config)
+        stats["caves_listings"] = len(caves_records)
 
     if not args.no_markdown and final:
         rebuild_outputs(scan_date, scan_time)

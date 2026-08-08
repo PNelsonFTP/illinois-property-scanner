@@ -6,8 +6,9 @@ Pipeline:
   2) Single-process distressed compile + full reverify + URL checks
   3) Homes-with-pools compile from that inventory
   4) Dedicated large-land fetch/compile (20+ ac / 40 mi Lake Holiday)
-  5) Parallel new-listings (7d) fetch/compile
-  6) Rebuild markdown + multi-mode dashboard
+  5) Dedicated caves/bunkers fetch/compile (near ZIP 60189)
+  6) Parallel new-listings (7d) fetch/compile
+  7) Rebuild markdown + multi-mode dashboard
 
 Speed comes from concurrent discovery. Accuracy comes from one merged compile
 and reverify before publish. See docs/OPERATIONS.md and docs/PUBLISHING.md.
@@ -50,6 +51,12 @@ from scanner.new_listings import (  # noqa: E402
     fetch_new_listings,
     print_new_listings_summary,
     save_new_listings,
+)
+from scanner.caves import (  # noqa: E402
+    compile_caves_listings,
+    fetch_caves_listings,
+    print_caves_summary,
+    save_caves_listings,
 )
 from scanner.large_land import (  # noqa: E402
     compile_large_land,
@@ -130,6 +137,7 @@ def main() -> int:
     parser.add_argument("--skip-new-listings", action="store_true")
     parser.add_argument("--skip-large-land", action="store_true")
     parser.add_argument("--skip-pool-listings", action="store_true")
+    parser.add_argument("--skip-caves", action="store_true")
     parser.add_argument("--no-markdown", action="store_true")
     parser.add_argument(
         "--enable-counties",
@@ -289,6 +297,32 @@ def main() -> int:
         save_large_land(land_kept)
         print_large_land_summary(land_kept, land_stats)
         meta["stats"]["large_land"] = len(land_kept)
+        with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
+            json.dump(meta, f, indent=2)
+
+    # --- Caves / bunkers (regional hubs; text evidence near ZIP 60189) ---
+    if not args.skip_caves and scan_cfg.get("include_caves_listings", True):
+        log.info("Fetching caves/bunker inventory (hubs near ZIP 60189)...")
+        caves_raw = fetch_caves_listings(config)
+        save_raw(caves_raw, label="caves-listings-parallel")
+        caves_records, caves_stats = compile_caves_listings(caves_raw, config=config)
+        caves_kept, caves_rejected = reverify_properties(
+            caves_records,
+            raw_records=caves_raw,
+            config=config,
+            check_urls=False,
+            do_reverify=False,
+            max_reverify=None,
+        )
+        write_rejection_audit(caves_rejected, label="caves-validation")
+        caves_stats["validation_kept"] = len(caves_kept)
+        caves_stats["validation_rejected"] = len(caves_rejected)
+        caves_stats["final_count"] = len(caves_kept)
+        for i, record in enumerate(caves_kept):
+            record["id"] = i + 1
+        save_caves_listings(caves_kept, config=config)
+        print_caves_summary(caves_kept, caves_stats)
+        meta["stats"]["caves_listings"] = len(caves_kept)
         with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
             json.dump(meta, f, indent=2)
 
