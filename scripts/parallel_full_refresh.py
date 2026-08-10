@@ -7,8 +7,9 @@ Pipeline:
   3) Homes-with-pools compile from that inventory
   4) Dedicated large-land fetch/compile (20+ ac / 40 mi Lake Holiday)
   5) Dedicated caves/bunkers fetch/compile (near ZIP 60189)
-  6) Parallel new-listings (7d) fetch/compile
-  7) Rebuild markdown + multi-mode dashboard
+  6) Dedicated Wheaton for-sale fetch/compile (all active)
+  7) Parallel new-listings (7d) fetch/compile
+  8) Rebuild markdown + multi-mode dashboard
 
 Speed comes from concurrent discovery. Accuracy comes from one merged compile
 and reverify before publish. See docs/OPERATIONS.md and docs/PUBLISHING.md.
@@ -57,6 +58,12 @@ from scanner.caves import (  # noqa: E402
     fetch_caves_listings,
     print_caves_summary,
     save_caves_listings,
+)
+from scanner.wheaton_listings import (  # noqa: E402
+    compile_wheaton_listings,
+    fetch_wheaton_listings,
+    print_wheaton_summary,
+    save_wheaton_listings,
 )
 from scanner.large_land import (  # noqa: E402
     compile_large_land,
@@ -138,6 +145,7 @@ def main() -> int:
     parser.add_argument("--skip-large-land", action="store_true")
     parser.add_argument("--skip-pool-listings", action="store_true")
     parser.add_argument("--skip-caves", action="store_true")
+    parser.add_argument("--skip-wheaton", action="store_true")
     parser.add_argument("--no-markdown", action="store_true")
     parser.add_argument(
         "--enable-counties",
@@ -323,6 +331,34 @@ def main() -> int:
         save_caves_listings(caves_kept, config=config)
         print_caves_summary(caves_kept, caves_stats)
         meta["stats"]["caves_listings"] = len(caves_kept)
+        with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
+            json.dump(meta, f, indent=2)
+
+    # --- Wheaton for sale (all active listings; live reverify) ---
+    if not args.skip_wheaton and scan_cfg.get("include_wheaton_listings", True):
+        log.info("Fetching all Wheaton, IL for-sale listings...")
+        wheaton_raw = fetch_wheaton_listings(config)
+        save_raw(wheaton_raw, label="wheaton-listings-parallel")
+        wheaton_records, wheaton_stats = compile_wheaton_listings(
+            wheaton_raw, config=config
+        )
+        wheaton_kept, wheaton_rejected = reverify_properties(
+            wheaton_records,
+            raw_records=wheaton_raw,
+            config=config,
+            check_urls=False,
+            do_reverify=True,
+            max_reverify=None,
+        )
+        write_rejection_audit(wheaton_rejected, label="wheaton-validation")
+        wheaton_stats["validation_kept"] = len(wheaton_kept)
+        wheaton_stats["validation_rejected"] = len(wheaton_rejected)
+        wheaton_stats["final_count"] = len(wheaton_kept)
+        for i, record in enumerate(wheaton_kept):
+            record["id"] = i + 1
+        save_wheaton_listings(wheaton_kept, config=config)
+        print_wheaton_summary(wheaton_kept, wheaton_stats)
+        meta["stats"]["wheaton_listings"] = len(wheaton_kept)
         with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
             json.dump(meta, f, indent=2)
 

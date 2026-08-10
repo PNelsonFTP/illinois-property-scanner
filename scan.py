@@ -2,7 +2,7 @@
 """
 Illinois Property Scanner — sequential entry point.
 
-Modes: distressed, new listings (7d), pools, large land, caves/bunkers (near 60189).
+Modes: distressed, new listings (7d), pools, large land, caves/bunkers, Wheaton for sale.
 For faster full refreshes prefer: scripts/parallel_full_refresh.py
 Publish viewing results to GitHub Pages (see docs/PUBLISHING.md).
 
@@ -19,7 +19,8 @@ Usage:
   python scan.py --pool-listings-only # Only refresh homes-with-pools view
   python scan.py --large-land-only    # Only refresh 20+ acre land near Lake Holiday
   python scan.py --caves-only         # Only refresh caves/bunkers near ZIP 60189
-  python scan.py --no-new-listings|--no-pool-listings|--no-large-land|--no-caves|--no-reverify
+  python scan.py --wheaton-only       # Only refresh all Wheaton, IL for-sale listings
+  python scan.py --no-new-listings|--no-pool-listings|--no-large-land|--no-caves|--no-wheaton|--no-reverify
 """
 
 from __future__ import annotations
@@ -55,6 +56,12 @@ from scanner.caves import (
     fetch_caves_listings,
     print_caves_summary,
     save_caves_listings,
+)
+from scanner.wheaton_listings import (
+    compile_wheaton_listings,
+    fetch_wheaton_listings,
+    print_wheaton_summary,
+    save_wheaton_listings,
 )
 from scanner.large_land import (
     compile_large_land,
@@ -225,6 +232,39 @@ def _run_caves_listings(
     return kept, stats
 
 
+def _run_wheaton_listings(
+    config: dict,
+    *,
+    raw_records: list | None = None,
+) -> tuple[list, dict]:
+    """Fetch/compile all active for-sale listings in Wheaton, IL."""
+    if raw_records is None:
+        log.info("Fetching all Wheaton, IL for-sale listings...")
+        raw_records = fetch_wheaton_listings(config)
+        save_raw(raw_records, label="wheaton-listings")
+
+    records, stats = compile_wheaton_listings(raw_records, config=config)
+    # Deep live reverify — Wheaton inventory is small and this mode is
+    # "show me everything actively for sale".
+    kept, rejected = reverify_properties(
+        records,
+        raw_records=raw_records,
+        config=config,
+        check_urls=False,
+        do_reverify=True,
+        max_reverify=None,
+    )
+    write_rejection_audit(rejected, label="wheaton-validation")
+    stats["validation_kept"] = len(kept)
+    stats["validation_rejected"] = len(rejected)
+    stats["final_count"] = len(kept)
+    for i, record in enumerate(kept):
+        record["id"] = i + 1
+    save_wheaton_listings(kept, config=config)
+    print_wheaton_summary(kept, stats)
+    return kept, stats
+
+
 def _run_refresh_profile(profile: str, argv_rest: list[str]) -> int:
     """Dispatch named refresh profiles from config.yaml refresh_profiles."""
     config = load_config()
@@ -254,6 +294,8 @@ def _run_refresh_profile(profile: str, argv_rest: list[str]) -> int:
             cmd.append("--skip-pool-listings")
         if not cfg.get("include_caves_listings", True):
             cmd.append("--skip-caves")
+        if not cfg.get("include_wheaton_listings", True):
+            cmd.append("--skip-wheaton")
         cmd.extend(argv_rest)
         log.info("Delegating to parallel refresh: %s", " ".join(cmd))
         return subprocess.call(cmd, cwd=PROJECT_ROOT)
@@ -300,6 +342,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Only refresh 20+ acre land within 40 mi of Lake Holiday")
     parser.add_argument("--caves-only", action="store_true",
                         help="Only refresh caves/bunkers near ZIP 60189")
+    parser.add_argument("--wheaton-only", action="store_true",
+                        help="Only refresh all Wheaton, IL for-sale listings")
     parser.add_argument(
         "--no-legacy",
         action="store_true",
@@ -320,6 +364,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Skip the large-land (20+ acres) pass")
     parser.add_argument("--no-caves", action="store_true",
                         help="Skip the caves/bunkers pass")
+    parser.add_argument("--no-wheaton", action="store_true",
+                        help="Skip the Wheaton for-sale pass")
     parser.add_argument("--include-optional", action="store_true",
                         help="Include Leland, Earlville, Waterman, Sheridan")
     parser.add_argument("--no-optional", action="store_true", help="Force-exclude optional towns")
@@ -386,6 +432,13 @@ def main(argv: list[str] | None = None) -> int:
     # --- Caves / bunkers only ---
     if args.caves_only:
         _run_caves_listings(config)
+        if not args.no_markdown:
+            rebuild_outputs(scan_date, scan_time)
+        return 0
+
+    # --- Wheaton for-sale only ---
+    if args.wheaton_only:
+        _run_wheaton_listings(config)
         if not args.no_markdown:
             rebuild_outputs(scan_date, scan_time)
         return 0
@@ -551,6 +604,16 @@ def main(argv: list[str] | None = None) -> int:
     if do_caves:
         caves_records, _caves_stats = _run_caves_listings(config)
         stats["caves_listings"] = len(caves_records)
+
+    # --- Wheaton for sale (all active listings in Wheaton, IL) ---
+    do_wheaton = (
+        scan_cfg.get("include_wheaton_listings", True)
+        and not args.no_wheaton
+        and not args.verify_only
+    )
+    if do_wheaton:
+        wheaton_records, _wheaton_stats = _run_wheaton_listings(config)
+        stats["wheaton_listings"] = len(wheaton_records)
 
     if not args.no_markdown and final:
         rebuild_outputs(scan_date, scan_time)

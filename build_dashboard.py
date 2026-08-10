@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate dashboard HTML from distressed, new, pool, land, and caves datasets."""
+"""Regenerate dashboard HTML from distressed, new, pool, land, caves, and Wheaton datasets."""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ NEW_LISTINGS = PROJECT_ROOT / "data" / "new_listings_7d.json"
 POOL_LISTINGS = PROJECT_ROOT / "data" / "pool_listings.json"
 LARGE_LAND = PROJECT_ROOT / "data" / "large_land.json"
 CAVES_LISTINGS = PROJECT_ROOT / "data" / "caves_listings.json"
+WHEATON_LISTINGS = PROJECT_ROOT / "data" / "wheaton_listings.json"
 CHANGES_LATEST = PROJECT_ROOT / "data" / "changes_latest.json"
 OUT = PROJECT_ROOT / "dashboard" / "distressed-property-dashboard.html"
 
@@ -55,6 +56,13 @@ CAVES_NOTE = (
     "(strong finds may appear out to ~12 hours). "
     "IL / MO / AR / KY / IN / TN / MI. Shown as one list (no town toggles). "
     "Refresh with <code>python scan.py --caves-only</code>."
+)
+WHEATON_NOTE = (
+    "Every active for-sale listing in <strong>Wheaton, IL</strong> "
+    "(ZIPs 60187 / 60189) — not limited to distressed or newly listed. "
+    "Pending/sold/contingent excluded; each listing is live-reverified. "
+    "Shown as one list (no town toggles). "
+    "Refresh with <code>python scan.py --wheaton-only</code>."
 )
 
 
@@ -132,6 +140,16 @@ def load_caves_listings():
     return payload.get("records", [])
 
 
+def load_wheaton_listings():
+    if not WHEATON_LISTINGS.exists():
+        return []
+    with open(WHEATON_LISTINGS) as f:
+        payload = json.load(f)
+    if isinstance(payload, list):
+        return payload
+    return payload.get("records", [])
+
+
 def load_changes_latest():
     """Slim change digest committed as data/changes_latest.json (optional)."""
     if not CHANGES_LATEST.exists():
@@ -152,6 +170,7 @@ def main():
     pool_data = load_pool_listings()
     land_data = load_large_land()
     caves_data = load_caves_listings()
+    wheaton_data = load_wheaton_listings()
     changes = load_changes_latest()
 
     verified = sum(1 for p in data if "realtor.com" in (p.get("verification_source") or ""))
@@ -164,8 +183,9 @@ def main():
     pool_area_stats = compute_area_stats(pool_data)
     land_area_stats = compute_area_stats(land_data)
     caves_area_stats = compute_area_stats(caves_data)
+    wheaton_area_stats = compute_area_stats(wheaton_data)
 
-    # Land / caves cities must NOT appear in location toggles — all-or-nothing modes.
+    # Land / caves / Wheaton-all must NOT appear in location toggles.
     towns_present = sorted({
         *(p.get("nearest_target") for p in data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in new_data if p.get("nearest_target")),
@@ -186,12 +206,14 @@ def main():
     pool_json = json.dumps(pool_data, separators=(",", ":"))
     land_json = json.dumps(land_data, separators=(",", ":"))
     caves_json = json.dumps(caves_data, separators=(",", ":"))
+    wheaton_json = json.dumps(wheaton_data, separators=(",", ":"))
     badges_json = json.dumps(badges, separators=(",", ":"))
     area_json = json.dumps(area_stats, separators=(",", ":"))
     new_area_json = json.dumps(new_area_stats, separators=(",", ":"))
     pool_area_json = json.dumps(pool_area_stats, separators=(",", ":"))
     land_area_json = json.dumps(land_area_stats, separators=(",", ":"))
     caves_area_json = json.dumps(caves_area_stats, separators=(",", ":"))
+    wheaton_area_json = json.dumps(wheaton_area_stats, separators=(",", ":"))
     changes_json = json.dumps(changes, separators=(",", ":"))
 
     html = f"""<!DOCTYPE html>
@@ -224,6 +246,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .pool-badge{{background:rgba(6,182,212,.14);color:#22d3ee;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .land-badge{{background:rgba(132,204,22,.14);color:#a3e635;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .caves-badge{{background:rgba(168,85,247,.14);color:#c084fc;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
+.wheaton-badge{{background:rgba(249,115,22,.14);color:#fb923c;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .v-stale{{color:var(--orange)}}
 .cd[data-stale="1"]{{opacity:.85;border-style:dashed}}
 .wrap{{max-width:1200px;margin:0 auto;padding:14px 20px}}
@@ -232,7 +255,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .mode-btn:hover{{border-color:var(--accent);color:var(--text)}}
 .mode-btn.active{{background:var(--accent);border-color:var(--accent);color:#fff}}
 .loc-panel{{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}}
-body.mode-land .loc-panel,body.mode-caves .loc-panel{{display:none}}
+body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-panel{{display:none}}
 .loc-head{{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}}
 .loc-head h2{{font-size:.7rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}}
 .loc-actions{{display:flex;gap:6px;flex-wrap:wrap}}
@@ -263,16 +286,19 @@ body.mode-land .loc-panel,body.mode-caves .loc-panel{{display:none}}
 .tp.pool-mode{{background:linear-gradient(135deg,rgba(6,182,212,.09),rgba(59,130,246,.04));border-color:rgba(6,182,212,.24)}}
 .tp.land-mode{{background:linear-gradient(135deg,rgba(132,204,22,.1),rgba(34,197,94,.04));border-color:rgba(132,204,22,.28)}}
 .tp.caves-mode{{background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(99,102,241,.04));border-color:rgba(168,85,247,.28)}}
+.tp.wheaton-mode{{background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(234,179,8,.04));border-color:rgba(249,115,22,.28)}}
 .tp h3{{font-size:.8rem;font-weight:700;color:var(--red);margin-bottom:8px}}
 .tp.new-mode h3{{color:var(--purple)}}
 .tp.pool-mode h3{{color:#22d3ee}}
 .tp.land-mode h3{{color:#a3e635}}
 .tp.caves-mode h3{{color:#c084fc}}
+.tp.wheaton-mode h3{{color:#fb923c}}
 .tpi{{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(239,68,68,.08);gap:10px}}
 .tp.new-mode .tpi{{border-bottom-color:rgba(168,85,247,.1)}}
 .tp.pool-mode .tpi{{border-bottom-color:rgba(6,182,212,.12)}}
 .tp.land-mode .tpi{{border-bottom-color:rgba(132,204,22,.14)}}
 .tp.caves-mode .tpi{{border-bottom-color:rgba(168,85,247,.14)}}
+.tp.wheaton-mode .tpi{{border-bottom-color:rgba(249,115,22,.14)}}
 .tpi-a{{font-weight:600;font-size:.8rem;flex:1}}.tpi-p{{color:var(--green);font-weight:700;font-size:.8rem}}
 .tpi-s{{min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;font-size:.7rem;color:#fff}}
 .s-h{{background:var(--orange)}}.s-m{{background:var(--yellow);color:#000}}.s-l{{background:var(--green)}}
@@ -280,6 +306,7 @@ body.mode-land .loc-panel,body.mode-caves .loc-panel{{display:none}}
 .s-pool{{background:#0891b2}}
 .s-land{{background:#65a30d}}
 .s-caves{{background:#7c3aed}}
+.s-wheaton{{background:#ea580c}}
 .vb{{display:inline-flex;padding:5px 12px;background:var(--accent);color:#fff;border-radius:var(--rs);font-size:.7rem;font-weight:600}}
 .vb-sm{{padding:4px 8px;font-size:.65rem;background:var(--card);color:var(--text2);border:1px solid var(--border)}}
 .vb-sm:hover{{border-color:var(--accent);color:var(--text);text-decoration:none}}
@@ -301,7 +328,7 @@ body.mode-land .no-land,body.mode-caves .no-land{{display:none}}
 body:not(.mode-pool) .sort-pool{{display:none}}
 body:not(.mode-land) .sort-land{{display:none}}
 body:not(.mode-caves) .sort-caves{{display:none}}
-body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-distress,body.mode-caves .sort-distress{{display:none}}
+body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-distress,body.mode-caves .sort-distress,body.mode-wheaton .sort-distress{{display:none}}
 .cd-tags{{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}}
 .t{{padding:1px 7px;border-radius:10px;font-size:.6rem;font-weight:600}}
 .t-fc{{background:rgba(239,68,68,.1);color:var(--red)}}.t-pr{{background:rgba(59,130,246,.1);color:var(--accent)}}
@@ -311,6 +338,7 @@ body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-
 .t-pool{{background:rgba(6,182,212,.15);color:#22d3ee}}
 .t-land{{background:rgba(132,204,22,.16);color:#a3e635}}
 .t-caves{{background:rgba(168,85,247,.18);color:#c084fc}}
+.t-wheaton{{background:rgba(249,115,22,.18);color:#fb923c}}
 .cd-ft{{display:flex;justify-content:space-between;align-items:center}}.cd-src{{font-size:.65rem;color:var(--muted)}}
 .cd-x{{display:none;padding:0 12px 12px;border-top:1px solid var(--border);margin-top:8px}}.cd.open .cd-x{{display:block}}
 .xg{{display:grid;grid-template-columns:1fr 1fr;gap:4px}}.xi{{font-size:.7rem}}.xi .l{{color:var(--muted)}}
@@ -319,8 +347,8 @@ body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-
 .badges{{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}}
 .bdg{{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:14px;font-size:.65rem;font-weight:600;background:var(--card);border:1px solid var(--border)}}
 .bdg .n{{background:var(--accent);color:#fff;padding:0 5px;border-radius:8px;font-size:.6rem}}
-.distress-only{{}}.new-only,.pool-only,.land-only,.caves-only{{display:none}}
-body.mode-new .distress-only,body.mode-pool .distress-only,body.mode-land .distress-only,body.mode-caves .distress-only{{display:none}}
+.distress-only{{}}.new-only,.pool-only,.land-only,.caves-only,.wheaton-only{{display:none}}
+body.mode-new .distress-only,body.mode-pool .distress-only,body.mode-land .distress-only,body.mode-caves .distress-only,body.mode-wheaton .distress-only{{display:none}}
 body.mode-new .new-only{{display:block}}
 body.mode-new .new-only-inline{{display:inline}}
 body.mode-new .new-only-flex{{display:flex}}
@@ -333,7 +361,10 @@ body.mode-land .land-only-flex{{display:flex}}
 body.mode-caves .caves-only{{display:block}}
 body.mode-caves .caves-only-inline{{display:inline}}
 body.mode-caves .caves-only-flex{{display:flex}}
-.new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex,.land-only-inline,.land-only-flex,.caves-only-inline,.caves-only-flex{{display:none}}
+body.mode-wheaton .wheaton-only{{display:block}}
+body.mode-wheaton .wheaton-only-inline{{display:inline}}
+body.mode-wheaton .wheaton-only-flex{{display:flex}}
+.new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex,.land-only-inline,.land-only-flex,.caves-only-inline,.caves-only-flex,.wheaton-only-inline,.wheaton-only-flex{{display:none}}
 </style>
 </head>
 <body>
@@ -350,6 +381,7 @@ body.mode-caves .caves-only-flex{{display:flex}}
       <span class="pool-badge pool-only-inline">{len(pool_data)} pool homes</span>
       <span class="land-badge land-only-inline">{len(land_data)} large tracts</span>
       <span class="caves-badge caves-only-inline">{len(caves_data)} caves/bunkers</span>
+      <span class="wheaton-badge wheaton-only-inline">{len(wheaton_data)} Wheaton for sale</span>
     </div>
   </div>
   <div class="badges distress-only" id="hBdg"></div>
@@ -361,12 +393,14 @@ body.mode-caves .caves-only-flex{{display:flex}}
     <button type="button" class="mode-btn" id="modePool" onclick="setMode('pool')">Homes with pools</button>
     <button type="button" class="mode-btn" id="modeLand" onclick="setMode('land')">Large land (20+ ac)</button>
     <button type="button" class="mode-btn" id="modeCaves" onclick="setMode('caves')">Caves &amp; bunkers</button>
+    <button type="button" class="mode-btn" id="modeWheaton" onclick="setMode('wheaton')">Wheaton for sale</button>
   </div>
   <div class="src-note distress-only">{VERIFIED_NOTE} Run <code>python scan.py --include-optional</code> to refresh. Use <code>--reverify-only</code> for a status-only pass.</div>
   <div class="src-note new-only">{NEW_NOTE}</div>
   <div class="src-note pool-only">{POOL_NOTE}</div>
   <div class="src-note land-only">{LAND_NOTE}</div>
   <div class="src-note caves-only">{CAVES_NOTE}</div>
+  <div class="src-note wheaton-only">{WHEATON_NOTE}</div>
   <div class="chg-strip" id="chgStrip"></div>
   <div class="loc-panel">
     <div class="loc-head">
@@ -422,12 +456,14 @@ const PN={new_json};
 const PP={pool_json};
 const PL={land_json};
 const PC={caves_json};
+const PW={wheaton_json};
 const B={badges_json};
 const ASD={area_json};
 const ASN={new_area_json};
 const ASP={pool_area_json};
 const ASL={land_area_json};
 const ASC={caves_area_json};
+const ASW={wheaton_area_json};
 const TOWNS={towns_json};
 const NEW_DAYS={new_days};
 const CHANGES={changes_json};
@@ -571,6 +607,7 @@ function currentData(){{
   if(mode==='pool')return PP;
   if(mode==='land')return PL;
   if(mode==='caves')return PC;
+  if(mode==='wheaton')return PW;
   return PD;
 }}
 function currentAreaStats(){{
@@ -578,7 +615,11 @@ function currentAreaStats(){{
   if(mode==='pool')return ASP;
   if(mode==='land')return ASL;
   if(mode==='caves')return ASC;
+  if(mode==='wheaton')return ASW;
   return ASD;
+}}
+function isAllOrNothingMode(){{
+  return mode==='land'||mode==='caves'||mode==='wheaton';
 }}
 function renderChanges(){{
   const box=$('chgStrip');
@@ -634,7 +675,7 @@ function applyHash(){{
     setIf('fPool','pool'); setIf('fAcres','acres'); setIf('fHours','hours'); setIf('fFeat','feat');
     setIf('fP','price'); setIf('fS','score');
     setIf('fBeds','beds'); setIf('fDom','dom'); setIf('fO','sort'); setIf('fQ','q');
-    if(m&&['distress','new','pool','land','caves'].includes(m))setMode(m,true);
+    if(m&&['distress','new','pool','land','caves','wheaton'].includes(m))setMode(m,true);
   }}finally{{_hashQuiet=false;}}
   return true;
 }}
@@ -644,13 +685,15 @@ function setMode(m, fromHash){{
   document.body.classList.toggle('mode-pool', m==='pool');
   document.body.classList.toggle('mode-land', m==='land');
   document.body.classList.toggle('mode-caves', m==='caves');
+  document.body.classList.toggle('mode-wheaton', m==='wheaton');
   $('modeDistress').classList.toggle('active', m==='distress');
   $('modeNew').classList.toggle('active', m==='new');
   $('modePool').classList.toggle('active', m==='pool');
   $('modeLand').classList.toggle('active', m==='land');
   $('modeCaves').classList.toggle('active', m==='caves');
+  $('modeWheaton').classList.toggle('active', m==='wheaton');
   const sort=$('fO');
-  $('tpBox').classList.remove('new-mode','pool-mode','land-mode','caves-mode');
+  $('tpBox').classList.remove('new-mode','pool-mode','land-mode','caves-mode','wheaton-mode');
   if(m==='new'){{
     if(!fromHash&&(sort.value==='score'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'||sort.value==='hours'))sort.value='listed';
     $('tpTitle').textContent='Newest listings';
@@ -671,6 +714,11 @@ function setMode(m, fromHash){{
     $('tpTitle').textContent='Closest caves & bunkers';
     $('tpBox').classList.add('caves-mode');
     $('hdrCount').textContent=PC.length+' caves/bunkers';
+  }}else if(m==='wheaton'){{
+    if(!fromHash)sort.value='listed';
+    $('tpTitle').textContent='Newest in Wheaton';
+    $('tpBox').classList.add('wheaton-mode');
+    $('hdrCount').textContent=PW.length+' Wheaton for sale';
   }}else{{
     if(!fromHash&&(sort.value==='listed'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'||sort.value==='hours'))sort.value='score';
     $('tpTitle').textContent='Top Picks';
@@ -685,15 +733,15 @@ function renderStats(){{
   const towns=enabledTowns();
   let h='';
   const saTitle=$('sATitle');
-  if(saTitle)saTitle.textContent=(mode==='land'||mode==='caves')?'By City':'By Town';
-  const areas=(mode==='land'||mode==='caves')?AS:AS.filter(a=>towns.has(a.area));
+  if(saTitle)saTitle.textContent=isAllOrNothingMode()?'By City':'By Town';
+  const areas=isAllOrNothingMode()?AS:AS.filter(a=>towns.has(a.area));
   areas.forEach(a=>{{h+=`<tr><td>${{a.area}}</td><td>${{a.count}}</td><td>${{a.avgPrice}}</td><td>${{a.avgDom}} ${{mode==='new'?'days':'DOM'}}</td></tr>`}});
   $('sA').innerHTML=h||'<tr><td colspan="4">No locations enabled</td></tr>';
   if(mode==='distress'){{
     h='';B.forEach(b=>{{h+=`<tr><td>${{b.tag}}</td><td>${{b.count}}</td></tr>`}});$('sD').innerHTML=h;
     $('hBdg').innerHTML=B.map(b=>`<span class="bdg">${{b.tag}}<span class="n">${{b.count}}</span></span>`).join('');
   }}
-  const filtered=(mode==='land'||mode==='caves')?P:P.filter(p=>towns.has(p.nearest_target));
+  const filtered=isAllOrNothingMode()?P:P.filter(p=>towns.has(p.nearest_target));
   h='';const ty={{}};filtered.forEach(p=>{{ty[p.property_type]=(ty[p.property_type]||0)+1}});
   Object.entries(ty).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{{h+=`<tr><td>${{k}}</td><td>${{v}}</td></tr>`}});
   $('sT').innerHTML=h||'<tr><td colspan="2">—</td></tr>';
@@ -707,8 +755,8 @@ function go(){{
   const maxDom=parseFloat(($('fDom')||{{}}).value);
   const maxHours=parseFloat(($('fHours')||{{}}).value)||8;
   const feat=($('fFeat')||{{}}).value||'';
-  // Land / caves modes are all-or-nothing — never gated by town toggles.
-  if(mode!=='land'&&mode!=='caves')f=f.filter(p=>towns.has(p.nearest_target));
+  // Land / caves / Wheaton modes are all-or-nothing — never gated by town toggles.
+  if(!isAllOrNothingMode())f=f.filter(p=>towns.has(p.nearest_target));
   if(t)f=f.filter(p=>p.property_type===t);
   if(mode==='distress'){{
     if(v==='live')f=f.filter(p=>(p.verification_source||'').includes('realtor.com'));
@@ -755,11 +803,13 @@ function go(){{
       default:return 0;
     }}
   }});
-  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':mode==='land'?'large tracts':mode==='caves'?'caves/bunkers':'properties';
+  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':mode==='land'?'large tracts':mode==='caves'?'caves/bunkers':mode==='wheaton'?'Wheaton for sale':'properties';
   if(mode==='land'){{
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · within 40 mi of Lake Holiday`;
   }}else if(mode==='caves'){{
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · drive hours from ZIP 60189 (approx)`;
+  }}else if(mode==='wheaton'){{
+    $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · Wheaton, IL (60187 / 60189)`;
   }}else{{
     const onCount=towns.size;
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · <strong>${{onCount}}</strong>/${{TOWNS.length}} locations on`;
@@ -772,6 +822,8 @@ function go(){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-land">${{Math.round(p.acres||0)}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target)}} · ${{e(p.miles_from_lake_holiday)}} mi</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No large tracts within 40 mi of Lake Holiday.</div></div>';
   }}else if(mode==='caves'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-caves">${{p.drive_hours_from_60189!=null?p.drive_hours_from_60189:'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city)}} ${{e(p.state)}} · ${{e(p.feature_type)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No cave/bunker listings in the current drive-hour filter. Run <code>python scan.py --caves-only</code>.</div></div>';
+  }}else if(mode==='wheaton'){{
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-wheaton">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · listed ${{e(listDate(p)||'?')}} · ${{e(p.property_type||'')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No Wheaton listings yet. Run <code>python scan.py --wheaton-only</code>.</div></div>';
   }}else{{
     const homes=f.filter(p=>!isLandFarm(p));
     $('tpL').innerHTML=homes.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No home Top Picks in the current filters (land/farm excluded from this list).</div></div>';
@@ -864,6 +916,28 @@ function go(){{
         ${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
       </div></div>`;
     }}
+    if(mode==='wheaton'){{
+      const age=ageDays(p);
+      const det=[];if(p.beds!=null)det.push(p.beds+' bd');if(p.baths!=null)det.push(p.baths+' ba');
+      if(listDate(p))det.push('Listed '+listDate(p));
+      if(age!=null)det.push(age+'d on market');
+      const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
+      const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🏠</div>'">`:'<div class="cd-ph">🏠</div>';
+      const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
+      const rev=(p.verification_source||'')==='realtor.com-reverified';
+      return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-wheaton">${{age??'W'}}</div>${{img}}<div class="cd-b">
+        <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||'Wheaton')}}, IL · ${{e(p.zip||'')}}</div>
+        ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
+        <div class="cd-tags"><span class="t t-wheaton">Wheaton</span><span class="t t-d">${{e(p.property_type||'')}}</span>${{rev?`<span class="t t-d">re-verified</span>`:''}}</div>
+        <div class="cd-ft">${{linkButtons(p)}}</div>
+        <div class="cd-x"><div class="xg">
+          <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
+          <div class="xi"><span class="l">Verified:</span> <span class="v v-ok">${{rev?'Live re-verified':'Live inventory'}}</span></div>
+          <div class="xi"><span class="l">Checked:</span> <span class="v">${{e(verifiedAt)}}</span></div>
+          <div class="xi"><span class="l">Sqft:</span> <span class="v">${{p.sqft||'N/A'}}</span></div>
+        </div>${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+      </div></div>`;
+    }}
     const verified=(p.verification_source||'').includes('realtor.com');
     const rev=p.verification_source==='realtor.com-reverified';
     const tags=(p.distress_types||[]).slice(0,5).map(x=>`<span class="t ${{TC[x.toLowerCase()]||'t-d'}}">${{x}}</span>`).join('');
@@ -905,7 +979,7 @@ window.addEventListener('hashchange',()=>{{if(!_hashQuiet)applyHash();}});
         f"Wrote dashboard: {OUT} "
         f"({len(data)} distressed, {len(new_data)} new/{new_days}d, "
         f"{len(pool_data)} pool homes, {len(land_data)} large tracts, "
-        f"{len(caves_data)} caves/bunkers, "
+        f"{len(caves_data)} caves/bunkers, {len(wheaton_data)} Wheaton for sale, "
         f"{verified} verified, {reverified} re-checked)"
     )
 

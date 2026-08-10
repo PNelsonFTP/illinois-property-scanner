@@ -15,6 +15,7 @@ LAKE_HOLIDAY_CENTER = (41.62617, -88.69912)
 # City-center fallbacks when a listing has no lat/lon (IL land ring).
 CITY_CENTER_COORDS: dict[str, tuple[float, float]] = {
     "lake holiday": LAKE_HOLIDAY_CENTER,
+    "wheaton": (41.8661, -88.1070),
     "sandwich": (41.6456, -88.6217),
     "somonauk": (41.6336, -88.6812),
     "sheridan": (41.5253, -88.6795),

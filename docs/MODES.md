@@ -1,6 +1,6 @@
 # Dashboard modes
 
-The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has five modes. Prefer opening it on GitHub Pages (see [PUBLISHING.md](PUBLISHING.md)).
+The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has six modes. Prefer opening it on GitHub Pages (see [PUBLISHING.md](PUBLISHING.md)).
 
 ## Distressed
 
@@ -48,11 +48,19 @@ The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has f
 - **Output:** `data/caves_listings.json`.
 - **CLI:** `python scan.py --caves-only`.
 
+## Wheaton for sale
+
+- **Purpose:** Every active for-sale listing in **Wheaton, IL** (ZIPs 60187 / 60189) — no distress or listing-age filters.
+- **UI:** Town location panel is **hidden** (all-or-nothing).
+- **Discovery:** Dedicated Wheaton city + ZIP fetches; sold/pending negatives; live reverify of kept listings.
+- **Output:** `data/wheaton_listings.json`.
+- **CLI:** `python scan.py --wheaton-only`.
+
 ## Mode comparison
 
-| Concern | Distressed | New 7d | Pools | Large land | Caves |
-|---------|------------|--------|-------|------------|-------|
-| Distress filter | Yes | No | No | No | No |
-| Town toggles | Yes | Yes | Yes | No (40 mi ring) | No (60189 drive ring) |
-| Deep reverify fetch | Yes (full path) | Light | Negatives only | Negatives only | Negatives only |
-| Markdown export | Yes | No | No | No | No |
+| Concern | Distressed | New 7d | Pools | Large land | Caves | Wheaton |
+|---------|------------|--------|-------|------------|-------|---------|
+| Distress filter | Yes | No | No | No | No | No |
+| Town toggles | Yes | Yes | Yes | No (40 mi ring) | No (60189 drive ring) | No (Wheaton only) |
+| Deep reverify fetch | Yes (full path) | Light | Negatives only | Negatives only | Negatives only | Yes (live reverify) |
+| Markdown export | Yes | No | No | No | No | No |

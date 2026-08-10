@@ -6,6 +6,7 @@
 #   - Homes with pools    → data/pool_listings.json     (include_pool_listings)
 #   - Large land 20+ ac   → data/large_land.json        (include_large_land)
 #   - Caves & bunkers     → data/caves_listings.json    (include_caves_listings)
+#   - Wheaton for sale    → data/wheaton_listings.json  (include_wheaton_listings)
 #
 # Optional towns default ON below (Leland, Earlville, Waterman, Sheridan).
 # CLI can force with --include-optional / --no-optional.
@@ -32,6 +33,17 @@ scan:
   include_pool_listings: true
   include_large_land: true
   include_caves_listings: true
+  include_wheaton_listings: true
+
+# All active for-sale listings in Wheaton, IL (no distress / age filters).
+# Dashboard mode is all-or-nothing (no town toggles). Active status is
+# verified via MLS fields, sold/pending negatives, and a live reverify.
+wheaton_for_sale:
+  search_location: "Wheaton, IL"
+  label: "Wheaton, IL"
+  radius_miles: 3
+  cities: [wheaton]
+  zips: ["60187", "60189"]
 
 # Large tracts (≥20 acres) within 40 miles of Lake Holiday, IL.
 # Primary inventory is Realtor/MLS via HomeHarvest (land + farm).
@@ -208,6 +220,7 @@ refresh_profiles:
     include_pool_listings: false
     include_large_land: false
     include_caves_listings: false
+    include_wheaton_listings: false
     include_legacy: false
   daily:
     description: Parallel full discovery without county sweeps
@@ -218,6 +231,7 @@ refresh_profiles:
     include_pool_listings: true
     include_large_land: true
     include_caves_listings: true
+    include_wheaton_listings: true
     include_public_records: false
   full:
     description: Parallel + counties + public-record CSV + all modes
@@ -228,6 +242,7 @@ refresh_profiles:
     include_pool_listings: true
     include_large_land: true
     include_caves_listings: true
+    include_wheaton_listings: true
     include_public_records: true
 
 inactive_statuses:

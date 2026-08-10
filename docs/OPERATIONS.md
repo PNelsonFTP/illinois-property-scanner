@@ -31,15 +31,16 @@ What it does:
 3. Compile pools from that inventory
 4. Dedicated large-land fetch/compile
 5. Dedicated caves/bunkers fetch/compile (ZIP 60189 ring)
-6. Parallel new-listings fetch/compile (city + ZIP; counties when enabled)
-7. Rebuild markdown + dashboard
+6. Dedicated Wheaton for-sale fetch/compile (all active; live reverify)
+7. Parallel new-listings fetch/compile (city + ZIP; counties when enabled)
+8. Rebuild markdown + dashboard
 
 Flags:
 
 - `--workers N` — parallel town-group workers (default 3)
 - `--enable-counties` — turn on county sweeps for this run
 - `--include-public-records` — merge `data/public_records/*.csv`
-- `--skip-new-listings` / `--skip-large-land` / `--skip-pool-listings` / `--skip-caves`
+- `--skip-new-listings` / `--skip-large-land` / `--skip-pool-listings` / `--skip-caves` / `--skip-wheaton`
 - `--no-markdown` — skip rebuild
 - `--new-days N` — new-listings window
 
@@ -60,12 +61,13 @@ python scan.py --new-listings-only --include-optional
 python scan.py --pool-listings-only --include-optional
 python scan.py --large-land-only
 python scan.py --caves-only
+python scan.py --wheaton-only
 python scan.py --reverify-only
 python scan.py --verify-only
 python scan.py --towns Sheridan,Leland
 ```
 
-Skip flags on a full run: `--no-new-listings`, `--no-pool-listings`, `--no-large-land`, `--no-caves`, `--no-reverify`, `--no-markdown`, `--no-optional`.
+Skip flags on a full run: `--no-new-listings`, `--no-pool-listings`, `--no-large-land`, `--no-caves`, `--no-wheaton`, `--no-reverify`, `--no-markdown`, `--no-optional`.
 
 **Legacy note:** Sequential and parallel paths exclude `v2-*.json` by default. Use `--include-legacy` only when needed.
 
