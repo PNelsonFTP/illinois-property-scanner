@@ -1,49 +1,15 @@
 {
-  "generated_at": "2026-08-08T15:37:21.618406+00:00",
+  "generated_at": "2026-08-10T00:34:08.837651+00:00",
   "newly_active": [
     {
-      "address": "98 Maple Ln",
-      "city": "Sandwich",
+      "address": "1750 Suzy St",
+      "city": "Lake Holiday",
       "nearest_target": "Lake Holiday",
-      "list_price": 43000,
+      "list_price": 375000,
       "distress_score": 2,
-      "property_id": "8979473324"
-    },
-    {
-      "address": "1515 Hill Ave",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 385000,
-      "distress_score": 2,
-      "property_id": "7782020643"
+      "property_id": "7856507098"
     }
   ],
-  "removed": [
-    {
-      "address": "117 E Elm St",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 385000,
-      "distress_score": 3,
-      "property_id": "7560929326"
-    },
-    {
-      "address": "116 E Farnham Ln",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 1400000,
-      "distress_score": 2,
-      "property_id": "8347672161"
-    }
-  ],
-  "price_cuts": [
-    {
-      "address": "128 Laurie Ln",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 299000,
-      "distress_score": 3,
-      "property_id": "8582745022"
-    }
-  ]
+  "removed": [],
+  "price_cuts": []
 }
