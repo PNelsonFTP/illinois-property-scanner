@@ -1,15 +1,6 @@
 {
-  "generated_at": "2026-08-10T00:34:08.837651+00:00",
-  "newly_active": [
-    {
-      "address": "1750 Suzy St",
-      "city": "Lake Holiday",
-      "nearest_target": "Lake Holiday",
-      "list_price": 375000,
-      "distress_score": 2,
-      "property_id": "7856507098"
-    }
-  ],
+  "generated_at": "2026-08-10T12:53:15.325496+00:00",
+  "newly_active": [],
   "removed": [],
   "price_cuts": []
 }
