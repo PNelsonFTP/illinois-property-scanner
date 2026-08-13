@@ -1,65 +1,23 @@
 {
-  "generated_at": "2026-08-13T00:09:15.154082+00:00",
+  "generated_at": "2026-08-13T21:24:48.760015+00:00",
   "newly_active": [
     {
-      "address": "2530 Shauna Dr",
-      "city": "Montgomery",
-      "nearest_target": "Oswego",
-      "list_price": 339000,
-      "distress_score": 2,
-      "property_id": "7299218469"
-    },
-    {
-      "address": "3614 Wolf Rd",
+      "address": "115 Piper Glen Ave",
       "city": "Oswego",
       "nearest_target": "Oswego",
-      "list_price": 950000,
+      "list_price": 615000,
       "distress_score": 2,
-      "property_id": "7667822571"
+      "property_id": "9592194516"
     },
     {
-      "address": "136 Dolores St",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 319919,
+      "address": "1487 Castlewood Dr",
+      "city": "Wheaton",
+      "nearest_target": "Wheaton",
+      "list_price": 450000,
       "distress_score": 2,
-      "property_id": "7235867956"
+      "property_id": "7719794039"
     }
   ],
-  "removed": [
-    {
-      "address": "983 Council Rd",
-      "city": "Somonauk",
-      "nearest_target": "Somonauk",
-      "list_price": 645000,
-      "distress_score": 2,
-      "property_id": "8256497776"
-    },
-    {
-      "address": "1750 Suzy St",
-      "city": "Lake Holiday",
-      "nearest_target": "Lake Holiday",
-      "list_price": 375000,
-      "distress_score": 2,
-      "property_id": "7856507098"
-    }
-  ],
-  "price_cuts": [
-    {
-      "address": "421 DE Kalb St",
-      "city": "Sandwich",
-      "nearest_target": "Sandwich",
-      "list_price": 324000,
-      "distress_score": 4,
-      "property_id": "8158453527"
-    },
-    {
-      "address": "574 Sudbury Cir",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 379000,
-      "distress_score": 2,
-      "property_id": "7059298405"
-    }
-  ]
+  "removed": [],
+  "price_cuts": []
 }

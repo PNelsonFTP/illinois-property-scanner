@@ -1,6 +1,6 @@
 # Distressed Properties — Foreclosures & Bank-Owned / Auction
 
-**Scan Date:** August 12, 2026 at 7:08 PM CDT  
+**Scan Date:** August 13, 2026 at 4:23 PM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
 **Properties:** 1
 
