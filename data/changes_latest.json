@@ -1,6 +1,144 @@
 {
-  "generated_at": "2026-08-13T21:24:48.760015+00:00",
+  "generated_at": "2026-08-14T19:03:22.850382+00:00",
   "newly_active": [
+    {
+      "address": "16323 Griswold Springs Rd",
+      "city": "Plano",
+      "nearest_target": "Plano",
+      "list_price": 569900,
+      "distress_score": 6,
+      "property_id": "7177307936"
+    },
+    {
+      "address": "3747 Bailey Rd",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 297900,
+      "distress_score": 6,
+      "property_id": "9591382717"
+    },
+    {
+      "address": "3919 Pratt St",
+      "city": "Plano",
+      "nearest_target": "Plano",
+      "list_price": 219000,
+      "distress_score": 4,
+      "property_id": "7610239871"
+    },
+    {
+      "address": "753 Fir Ct",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 720000,
+      "distress_score": 4,
+      "property_id": "7733663604"
+    },
+    {
+      "address": "495 Timber Oak Ln",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 625000,
+      "distress_score": 4,
+      "property_id": "8234017303"
+    },
+    {
+      "address": "15555 McGirr Rd",
+      "city": "Hinckley",
+      "nearest_target": "Hinckley",
+      "list_price": 795000,
+      "distress_score": 3,
+      "property_id": "9072079710"
+    },
+    {
+      "address": "8539 E Highpoint Rd",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 894940,
+      "distress_score": 2,
+      "property_id": "8280295276"
+    },
+    {
+      "address": "1332 Douglas Ave Trlr 84",
+      "city": "Montgomery",
+      "nearest_target": "Oswego",
+      "list_price": 65000,
+      "distress_score": 2,
+      "property_id": "9899008468"
+    },
+    {
+      "address": "1330 Gates St",
+      "city": "Montgomery",
+      "nearest_target": "Oswego",
+      "list_price": 164999,
+      "distress_score": 2,
+      "property_id": "8816293832"
+    }
+  ],
+  "removed": [
+    {
+      "address": "608 Bender St",
+      "city": "Sandwich",
+      "nearest_target": "Sandwich",
+      "list_price": 445000,
+      "distress_score": 3,
+      "property_id": "7339254686"
+    },
+    {
+      "address": "917 Sunset Ave",
+      "city": "Earlville",
+      "nearest_target": "Earlville",
+      "list_price": 329000,
+      "distress_score": 2,
+      "property_id": "7100619516"
+    },
+    {
+      "address": "574 Sudbury Cir",
+      "city": "Oswego",
+      "nearest_target": "Oswego",
+      "list_price": 379000,
+      "distress_score": 2,
+      "property_id": "7059298405"
+    },
+    {
+      "address": "2530 Shauna Dr",
+      "city": "Montgomery",
+      "nearest_target": "Oswego",
+      "list_price": 339000,
+      "distress_score": 2,
+      "property_id": "7299218469"
+    },
+    {
+      "address": "3614 Wolf Rd",
+      "city": "Oswego",
+      "nearest_target": "Oswego",
+      "list_price": 950000,
+      "distress_score": 2,
+      "property_id": "7667822571"
+    },
+    {
+      "address": "25 Cedar Ln",
+      "city": "Sandwich",
+      "nearest_target": "Lake Holiday",
+      "list_price": 79000,
+      "distress_score": 2,
+      "property_id": "9812778727"
+    },
+    {
+      "address": "1045 Linda Ln",
+      "city": "Lake Holiday",
+      "nearest_target": "Lake Holiday",
+      "list_price": 439900,
+      "distress_score": 2,
+      "property_id": "7003206342"
+    },
+    {
+      "address": "123 Eisenhower Dr",
+      "city": "Oswego",
+      "nearest_target": "Oswego",
+      "list_price": 419900,
+      "distress_score": 2,
+      "property_id": "7758783661"
+    },
     {
       "address": "115 Piper Glen Ave",
       "city": "Oswego",
@@ -8,16 +146,7 @@
       "list_price": 615000,
       "distress_score": 2,
       "property_id": "9592194516"
-    },
-    {
-      "address": "1487 Castlewood Dr",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 450000,
-      "distress_score": 2,
-      "property_id": "7719794039"
     }
   ],
-  "removed": [],
   "price_cuts": []
 }

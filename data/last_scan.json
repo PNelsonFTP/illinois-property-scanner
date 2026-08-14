@@ -1,29 +1,30 @@
 {
-  "scan_date": "August 13, 2026",
-  "scan_time": "4:23 PM CDT",
+  "scan_date": "August 14, 2026",
+  "scan_time": "2:01 PM CDT",
   "total_properties": 26,
   "stats": {
-    "live_normalized": 1473,
-    "negative_check_inventory": 646,
-    "rejected_no_distress": 135,
+    "live_normalized": 2012,
+    "negative_check_inventory": 902,
+    "rejected_weak_composite": 89,
     "accepted_pre_dedup": 26,
-    "rejected_weak_composite": 55,
-    "rejected_renovated_flip": 44,
-    "rejected_outside_radius": 95,
-    "rejected_small_vacant_lot": 60,
-    "rejected_out_of_zone": 1049,
-    "rejected_missing_address": 9,
+    "rejected_no_distress": 229,
+    "rejected_renovated_flip": 86,
+    "rejected_small_vacant_lot": 79,
+    "rejected_outside_radius": 97,
+    "rejected_missing_address": 12,
+    "rejected_out_of_zone": 1394,
     "duplicates_merged": 0,
     "final_count": 26,
     "reverify_kept": 26,
     "reverify_rejected": 0,
-    "pool_listings": 43,
-    "large_land": 42,
-    "caves_listings": 14,
+    "pool_listings": 85,
+    "large_land": 22,
+    "caves_listings": 6,
     "wheaton_listings": 58,
-    "new_listings_7d": 48
+    "coming_soon": 0,
+    "new_listings_7d": 78
   },
-  "live_fetched": 2119,
+  "live_fetched": 2914,
   "parallel_groups": [
     [
       "Wheaton",
@@ -39,11 +40,16 @@
       "Earlville",
       "Waterman",
       "Sheridan"
+    ],
+    [
+      "Yorkville",
+      "Plano",
+      "Hinckley"
     ]
   ],
   "changes": {
-    "newly_active": 2,
-    "removed": 0,
+    "newly_active": 9,
+    "removed": 9,
     "price_cuts": 0
   }
 }
