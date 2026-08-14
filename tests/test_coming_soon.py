@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from scanner.coming_soon import compile_coming_soon, is_coming_soon
+from scanner.fetch import inject_coming_soon_or_filter
 
 
 def _raw(
@@ -56,7 +57,19 @@ def _config() -> dict:
 def test_is_coming_soon_flag_and_status():
     assert is_coming_soon(_raw())
     assert is_coming_soon(_raw(flags={}, mls_status="Coming Soon"))
+    dated = _raw(flags={}, mls_status="Active")
+    dated["coming_soon_date"] = "2026-08-20"
+    assert is_coming_soon(dated)
     assert not is_coming_soon(_raw(flags={}, mls_status="Active", status="for_sale"))
+
+
+def test_inject_coming_soon_or_filter():
+    plain = "query { search_location: $search_location status: for_sale }"
+    injected = inject_coming_soon_or_filter(plain)
+    assert "is_coming_soon: true" in injected
+    assert "search_location: $search_location" in injected
+    already = "search_location: $search_location is_coming_soon: true"
+    assert inject_coming_soon_or_filter(already) == already
 
 
 def test_compile_keeps_coming_soon_in_wheaton():

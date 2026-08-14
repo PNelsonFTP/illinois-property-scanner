@@ -35,9 +35,6 @@ log = logging.getLogger(__name__)
 LARGE_LAND_PATH = PROJECT_ROOT / "data" / "large_land.json"
 LAND_TYPES = {"Land", "Farm"}
 SQFT_PER_ACRE = 43560.0
-# 15 acres — slightly under the 20-acre publish bar so MLS-omitted-sqft
-# listings near the threshold can still appear in the filtered land/farm fetch.
-LOT_SQFT_MIN_15AC = 653400
 
 # Structured MLS fields (highest trust).
 _ACRES_DETAIL = re.compile(
@@ -303,7 +300,6 @@ def fetch_large_land(config: dict) -> list[dict[str, Any]]:
             radius=None,
             exclude_pending=exclude_pending,
             property_type=property_types,
-            lot_sqft_min=LOT_SQFT_MIN_15AC,
             pass_name=f"large-land-county-{county}",
         )
         for record in batch:
@@ -318,7 +314,6 @@ def fetch_large_land(config: dict) -> list[dict[str, Any]]:
             radius=radius,
             exclude_pending=exclude_pending,
             property_type=property_types,
-            lot_sqft_min=LOT_SQFT_MIN_15AC,
             pass_name=f"large-land-hub-{hub}",
         )
         for record in batch:
@@ -340,7 +335,6 @@ def fetch_large_land(config: dict) -> list[dict[str, Any]]:
                 past_days=sold_days,
                 exclude_pending=False,
                 property_type=property_types,
-                lot_sqft_min=LOT_SQFT_MIN_15AC,
                 pass_name=f"large-land-sold-{location}",
             )
             for record in sold:
@@ -356,7 +350,6 @@ def fetch_large_land(config: dict) -> list[dict[str, Any]]:
                 past_days=pending_days,
                 exclude_pending=False,
                 property_type=property_types,
-                lot_sqft_min=LOT_SQFT_MIN_15AC,
                 pass_name=f"large-land-pending-{location}",
             )
             for record in pending:
@@ -435,15 +428,17 @@ def compile_large_land(
             stats["rejected_no_location"] += 1
             continue
         lat, lon, coords_source = coords_info
-        if coords_source == "city_center":
-            stats["rejected_city_center_coords"] += 1
-            continue
         miles = haversine_miles(
             LAKE_HOLIDAY_CENTER[0],
             LAKE_HOLIDAY_CENTER[1],
             lat,
             lon,
         )
+        # City-center fallbacks are approximate — keep them inside the tighter
+        # centroid ring instead of dropping every tract that omitted lat/lon.
+        if coords_source == "city_center" and miles > centroid_max:
+            stats["rejected_city_center_coords"] += 1
+            continue
         if miles > max_miles:
             stats["rejected_out_of_radius"] += 1
             continue

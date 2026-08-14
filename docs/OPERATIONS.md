@@ -41,7 +41,7 @@ Flags:
 - `--workers N` — parallel town-group workers (default 3)
 - `--enable-counties` — turn on county sweeps for this run
 - `--include-public-records` — merge `data/public_records/*.csv`
-- `--skip-new-listings` / `--skip-large-land` / `--skip-pool-listings` / `--skip-caves` / `--skip-wheaton` / `--skip-coming-soon` (coming soon: to be wired by parent)
+- `--skip-new-listings` / `--skip-large-land` / `--skip-pool-listings` / `--skip-caves` / `--skip-wheaton` / `--skip-coming-soon`
 - `--no-markdown` — skip rebuild
 - `--new-days N` — new-listings window
 

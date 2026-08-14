@@ -70,7 +70,8 @@ WHEATON_NOTE = (
 SOON_NOTE = (
     "Coming-soon / pre-market listings (not active for-sale inventory). "
     "Loaded from <code>data/coming_soon.json</code> when present. "
-    "Shown as one list (no town toggles); not mixed into other modes."
+    "Use the Locations sliders to include or exclude towns; not mixed into other modes. "
+    "Refresh with <code>python scan.py --coming-soon-only --include-optional</code>."
 )
 
 
@@ -223,11 +224,13 @@ def main():
     wheaton_area_stats = compute_area_stats(wheaton_data)
     soon_area_stats = compute_area_stats(soon_data)
 
-    # Land / caves / Wheaton-all / coming-soon must NOT appear in location toggles.
+    # Land / caves / Wheaton-all must NOT add extra cities to location toggles.
+    # Coming soon uses the same town sliders as distressed / new / pools.
     towns_present = sorted({
         *(p.get("nearest_target") for p in data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in new_data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in pool_data if p.get("nearest_target")),
+        *(p.get("nearest_target") for p in soon_data if p.get("nearest_target")),
     })
     towns_json = embed_json(towns_present)
     town_toggles = "".join(
@@ -308,7 +311,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .mode-btn:hover{{border-color:var(--accent);color:var(--text)}}
 .mode-btn.active{{background:var(--accent);border-color:var(--accent);color:#fff}}
 .loc-panel{{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}}
-body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-panel,body.mode-soon .loc-panel,body.mode-coming .loc-panel{{display:none}}
+body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-panel{{display:none}}
 .loc-head{{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}}
 .loc-head h2{{font-size:.7rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}}
 .loc-actions{{display:flex;gap:6px;flex-wrap:wrap}}
@@ -790,7 +793,7 @@ function currentAreaStats(){{
   return ASD;
 }}
 function isAllOrNothingMode(){{
-  return mode==='land'||mode==='caves'||mode==='wheaton'||mode==='soon'||mode==='coming';
+  return mode==='land'||mode==='caves'||mode==='wheaton';
 }}
 function modeSupportsMap(){{
   return mode==='distress'||mode==='new'||mode==='pool'||mode==='land'||mode==='caves';
@@ -1135,7 +1138,7 @@ function go(){{
   }}else if(mode==='wheaton'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-wheaton">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · listed ${{e(listDate(p)||'?')}} · ${{e(p.property_type||'')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No Wheaton listings yet. Run <code>python scan.py --wheaton-only</code>.</div></div>';
   }}else if(mode==='soon'||mode==='coming'){{
-    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-soon">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target||'')}} · ${{e(listDate(p)||'?')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No coming-soon listings yet. Add <code>data/coming_soon.json</code>.</div></div>';
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-soon">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target||'')}} · ${{e(listDate(p)||'?')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No coming-soon listings in the enabled locations. Run <code>python scan.py --coming-soon-only --include-optional</code>.</div></div>';
   }}else{{
     const homes=f.filter(p=>!isLandFarm(p));
     $('tpL').innerHTML=homes.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No home Top Picks in the current filters (land/farm excluded from this list).</div></div>';

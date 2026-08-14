@@ -199,28 +199,23 @@ def meets_publish_composite(
 
     if tagset & STRONG_TAGS or any(k in text for k in STRONG_DISTRESS_KEYWORDS):
         return True
-    # high-dom + price-reduced only when the cut is meaningful (not a tiny trim).
+    # Stale listing + any recorded cut is a real seller-motivation pair.
     if "high-dom" in tagset and "price-reduced" in tagset:
-        if _meaningful_price_cut(
-            reduction_pct=reduction_pct,
-            price_reductions=cuts,
-            min_publish_reduction_pct=min_cut,
-        ):
-            return True
+        return True
     if "high-dom" in tagset and has_as_is_signal(tagset, text):
+        return True
+    # Meaningful cut alone (no high DOM) still counts — tiny trims do not.
+    if "price-reduced" in tagset and _meaningful_price_cut(
+        reduction_pct=reduction_pct,
+        price_reductions=cuts,
+        min_publish_reduction_pct=min_cut,
+    ):
         return True
     if score >= min_score and (
         "price-reduced" in tagset or has_as_is_signal(tagset, text) or "high-dom" in tagset
     ):
-        # Score alone with only weak tags still needs a second signal beyond
-        # a single DOM or single cut — require combination or strong score+as-is.
         if "high-dom" in tagset and "price-reduced" in tagset:
-            if _meaningful_price_cut(
-                reduction_pct=reduction_pct,
-                price_reductions=cuts,
-                min_publish_reduction_pct=min_cut,
-            ):
-                return True
+            return True
         if score >= max(min_score, 5) and has_as_is_signal(tagset, text):
             return True
     return False

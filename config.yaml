@@ -239,11 +239,12 @@ distress:
   land_max_price_signal: 30000
   mobile_max_price_signal: 50000
   min_price_reduction_pct: 0.02
-  # Publish bar for meaningful price cuts; tagging still uses min_price_reduction_pct.
+  # Publish bar for a price cut *without* high DOM; tagging still uses min_price_reduction_pct.
+  # High-DOM + any recorded cut still publishes (tiny trim + stale listing).
   min_meaningful_reduction_pct: 0.10
   # Vacant lots under this size are excluded from distressed mode (use Large land mode).
   min_land_acres_for_distress: 20
-  # Reject DOM-only / price-cut-only unless composite or score meets this with a second signal.
+  # Reject DOM-only / tiny-cut-only unless composite or score meets this with a second signal.
   min_publish_score: 3
 
 # Named refresh profiles for `python scan.py refresh {quick,daily,full}`

@@ -1,7 +1,8 @@
 """Coming-soon listings — quarantined stream, not merged into active for-sale modes.
 
-HomeHarvest has no ``coming_soon`` listing_type; we fetch ``for_sale`` and keep
-rows whose status / mls_status / flags indicate coming soon.
+HomeHarvest has no ``coming_soon`` listing_type. Realtor.com hides these from
+a plain ``for_sale`` search, so we fetch with ``is_coming_soon: true`` and keep
+rows whose flags / status / coming_soon_date indicate coming soon.
 """
 
 from __future__ import annotations
@@ -57,6 +58,8 @@ def is_coming_soon(record: dict[str, Any]) -> bool:
     flags = record.get("flags") or {}
     if flags.get("is_coming_soon"):
         return True
+    if record.get("coming_soon_date"):
+        return True
     for field in (record.get("mls_status"), record.get("status")):
         normalized = normalize_status(field)
         if not normalized:
@@ -91,12 +94,12 @@ def fetch_coming_soon(
 
     HomeHarvest listing types: for_sale, for_rent, sold, pending, off_market,
     new_community, other, ready_to_build — no dedicated coming_soon type.
+    Realtor.com hides coming-soon from a plain for_sale search, so the primary
+    pass injects ``is_coming_soon: true``.
     """
     scan_cfg = config.get("scan", {})
     default_radius = scan_cfg.get("radius_miles", 3)
     rural_radius = scan_cfg.get("rural_radius_miles", 6)
-    # Coming soon is not pending; keep exclude_pending so pending/contingent drop out early.
-    exclude_pending = scan_cfg.get("exclude_pending", True)
 
     towns = enabled_towns(config, include_optional=include_optional)
     if towns_filter:
@@ -105,6 +108,12 @@ def fetch_coming_soon(
 
     all_records: list[dict[str, Any]] = []
     seen: set[str] = set()
+
+    def _keep(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        kept = [r for r in batch if is_coming_soon(r)]
+        for record in kept:
+            record["_coming_soon_fetch"] = True
+        return kept
 
     for town_name, town_cfg in towns.items():
         location = town_cfg["search_location"]
@@ -115,13 +124,12 @@ def fetch_coming_soon(
             town_name,
             location,
             radius=radius,
-            exclude_pending=exclude_pending,
+            exclude_pending=False,
             listing_type="for_sale",
             pass_name="coming-soon",
+            coming_soon=True,
         )
-        kept = [r for r in batch if is_coming_soon(r)]
-        for record in kept:
-            record["_coming_soon_fetch"] = True
+        kept = _keep(batch)
         added = _merge_unique(all_records, seen, kept)
         log.info("  %s coming-soon unique added: %d (of %d fetched)", town_name, added, len(batch))
 
@@ -130,13 +138,12 @@ def fetch_coming_soon(
                 town_name,
                 str(zip_code),
                 radius=radius,
-                exclude_pending=exclude_pending,
+                exclude_pending=False,
                 listing_type="for_sale",
                 pass_name=f"coming-soon-zip-{zip_code}",
+                coming_soon=True,
             )
-            zip_kept = [r for r in zip_batch if is_coming_soon(r)]
-            for record in zip_kept:
-                record["_coming_soon_fetch"] = True
+            zip_kept = _keep(zip_batch)
             zip_added = _merge_unique(all_records, seen, zip_kept)
             log.info(
                 "  %s coming-soon zip %s unique added: %d (of %d fetched)",

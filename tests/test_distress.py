@@ -9,17 +9,17 @@ def test_dom_only_fails_publish_composite():
     assert meets_publish_composite(["high-dom"], score=2, text="") is False
 
 
-def test_high_dom_plus_price_reduced_without_pct_fails():
-    """Tiny / unknown cut + high DOM is not enough to publish."""
+def test_high_dom_plus_price_reduced_publishes():
+    """Stale listing + any recorded cut is enough (tiny trim still counts)."""
     assert (
         meets_publish_composite(
             ["high-dom", "price-reduced"],
             score=2,
             text="",
             reduction_pct=None,
-            price_reductions=0,
+            price_reductions=1,
         )
-        is False
+        is True
     )
     assert (
         meets_publish_composite(
@@ -29,7 +29,33 @@ def test_high_dom_plus_price_reduced_without_pct_fails():
             reduction_pct=0.03,
             price_reductions=1,
         )
+        is True
+    )
+
+
+def test_tiny_cut_without_high_dom_fails():
+    assert (
+        meets_publish_composite(
+            ["price-reduced"],
+            score=2,
+            text="",
+            reduction_pct=0.03,
+            price_reductions=1,
+        )
         is False
+    )
+
+
+def test_meaningful_cut_without_high_dom_passes():
+    assert (
+        meets_publish_composite(
+            ["price-reduced"],
+            score=2,
+            text="",
+            reduction_pct=0.12,
+            price_reductions=1,
+        )
+        is True
     )
 
 

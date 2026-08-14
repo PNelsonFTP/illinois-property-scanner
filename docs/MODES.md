@@ -60,7 +60,8 @@ The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has s
 
 - **Purpose:** Listings that are **coming soon** (not yet active for-sale).
 - **Quarantined:** Saved to its own file; **not** merged into distressed / new / pools / large land / caves / Wheaton.
-- **Discovery:** Dedicated town + ZIP fetches; HomeHarvest has no `coming_soon` listing type, so `for_sale` results are filtered by MLS status / flags (`is_coming_soon`).
+- **Discovery:** Dedicated town + ZIP fetches. HomeHarvest has no `coming_soon` listing type, and Realtor.com hides these from a plain `for_sale` search, so fetches inject `is_coming_soon: true` and keep rows with coming-soon flags / status / `coming_soon_date`.
+- **UI:** Town location toggles apply (same sliders as Distressed / New / Pools).
 - **Output:** `data/coming_soon.json`.
 - **Gate:** `scan.include_coming_soon` (daily/full profiles on; quick off).
 

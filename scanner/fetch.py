@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import json
 import logging
+import threading
 import time
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -13,6 +15,51 @@ from homeharvest import scrape_property
 
 from scanner.config import RAW_DIR
 from scanner.geo import enabled_towns
+
+_COMING_SOON_FETCH = threading.local()
+
+
+def inject_coming_soon_or_filter(query: str) -> str:
+    """Ask Realtor.com for coming-soon rows (HomeHarvest has no listing_type).
+
+    ``is_coming_soon`` is a top-level HomeSearchCriteria field. ``coming_soon``
+    is not a HomeStatus enum value and is not valid inside ``or_filters``.
+    """
+    if not query or "is_coming_soon: true" in query:
+        return query
+    if "search_location: $search_location" in query:
+        return query.replace(
+            "search_location: $search_location",
+            "search_location: $search_location\n                                        is_coming_soon: true",
+        )
+    return query
+
+
+def _ensure_coming_soon_patch() -> None:
+    from homeharvest.core.scrapers.realtor import RealtorScraper
+
+    if getattr(RealtorScraper, "_dps_coming_soon_patched", False):
+        return
+    original = RealtorScraper._graphql_post
+
+    def patched(self, query: str, variables: dict, operation_name: str):
+        if getattr(_COMING_SOON_FETCH, "enabled", False) and isinstance(query, str):
+            query = inject_coming_soon_or_filter(query)
+        return original(self, query, variables, operation_name)
+
+    RealtorScraper._graphql_post = patched
+    RealtorScraper._dps_coming_soon_patched = True
+
+
+@contextmanager
+def coming_soon_or_filter():
+    """Enable the Realtor coming-soon or_filters hook for this thread."""
+    _ensure_coming_soon_patch()
+    _COMING_SOON_FETCH.enabled = True
+    try:
+        yield
+    finally:
+        _COMING_SOON_FETCH.enabled = False
 
 log = logging.getLogger(__name__)
 
@@ -57,7 +104,10 @@ def fetch_town_listings(
     past_days: int | None = None,
     lot_sqft_min: int | None = None,
     pass_name: str = "for_sale",
+    coming_soon: bool = False,
 ) -> list[dict[str, Any]]:
+    if coming_soon:
+        exclude_pending = False
     kwargs: dict[str, Any] = {
         "location": search_location,
         "listing_type": listing_type,
@@ -78,12 +128,16 @@ def fetch_town_listings(
         kwargs["lot_sqft_min"] = lot_sqft_min
 
     log.info(
-        "Fetching %s [%s] (type=%s, foreclosure=%s, radius=%s)...",
-        search_location, pass_name, listing_type, foreclosure, radius,
+        "Fetching %s [%s] (type=%s, foreclosure=%s, radius=%s, coming_soon=%s)...",
+        search_location, pass_name, listing_type, foreclosure, radius, coming_soon,
     )
     _FETCH_HEALTH["calls"] += 1
     try:
-        results = scrape_property(**kwargs)
+        if coming_soon:
+            with coming_soon_or_filter():
+                results = scrape_property(**kwargs)
+        else:
+            results = scrape_property(**kwargs)
     except Exception as e:
         _FETCH_HEALTH["failed"] += 1
         log.warning("Fetch failed for %s [%s]: %s", search_location, pass_name, e)
