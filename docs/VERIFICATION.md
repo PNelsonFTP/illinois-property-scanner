@@ -45,6 +45,8 @@ On full `scan.py` / `parallel_full_refresh.py` distressed compile:
 | New 7d | Via its fetch | No deep pass | No |
 | Pools | Via residential raw | No | No |
 | Large land | Via land fetch | No | No |
+| Caves / bunkers | Via caves hub fetch (all hubs) | No | No |
+| Wheaton for-sale | Via Wheaton city + ZIP fetch | Live reverify when enabled in scan path | No |
 
 ## Operator tips
 

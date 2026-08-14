@@ -6,3 +6,7 @@ data/raw/
 data/history/
 data/audit/
 *.egg-info/
+.env
+.env.*
+credentials*.json
+*.pem

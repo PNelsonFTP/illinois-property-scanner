@@ -2,6 +2,16 @@
 
 Drop one or more `.csv` files here to add off-MLS distress candidates (tax sales, sheriff sales, county notices, etc.). The scanner loads every `*.csv` on compile when wired via the `full` profile; an empty directory is a no-op.
 
+## How to load
+
+1. Drop one or more `.csv` files into this directory (`data/public_records/`).
+2. Run a refresh that enables public records:
+   - `python scan.py refresh full`, or
+   - `scripts/parallel_full_refresh.py ... --include-public-records`
+3. Suggested counties to source from: **LaSalle**, **DeKalb**, **Kendall**, **DuPage**.
+
+Do not invent fake listing rows — only real tax / sheriff / county notice data.
+
 ## Required columns
 
 | Column | Required | Notes |

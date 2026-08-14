@@ -99,6 +99,9 @@ CITY_TO_TOWN: dict[str, tuple[str, str]] = {
     "earlville": ("Earlville", "LaSalle"),
     "waterman": ("Waterman", "DeKalb"),
     "sheridan": ("Sheridan", "LaSalle"),
+    "yorkville": ("Yorkville", "Kendall"),
+    "plano": ("Plano", "Kendall"),
+    "hinckley": ("Hinckley", "DeKalb"),
 }
 
 
@@ -360,7 +363,10 @@ def classify_town(record: dict[str, Any], config: dict | None = None) -> tuple[s
 
     if city in city_map:
         town, county = city_map[city]
-        if town in ("Leland", "Earlville", "Waterman", "Sheridan") and not include_optional:
+        if town in (
+            "Leland", "Earlville", "Waterman", "Sheridan",
+            "Yorkville", "Plano", "Hinckley",
+        ) and not include_optional:
             return None, None
         return town, county
 
@@ -370,7 +376,10 @@ def classify_town(record: dict[str, Any], config: dict | None = None) -> tuple[s
         if re.search(rf"\b{re.escape(key)}\b", addr):
             if town == "Lake Holiday" or is_lake_holiday_area(record, hints):
                 return "Lake Holiday", county
-            if town in ("Leland", "Earlville", "Waterman", "Sheridan") and not include_optional:
+            if town in (
+                "Leland", "Earlville", "Waterman", "Sheridan",
+                "Yorkville", "Plano", "Hinckley",
+            ) and not include_optional:
                 return None, None
             if key != "lake holiday":
                 return town, county

@@ -96,6 +96,13 @@ def test_accepts_underground_wine_cellar():
     assert strength == "weak"
 
 
+def test_rejects_community_inground_storm_shelter():
+    feature, _, _ = detect_cave_bunker_evidence(
+        _raw("Community amenities include in-ground storm shelter and pool.")
+    )
+    assert feature is None
+
+
 def test_rejects_bare_storm_shelter():
     feature, _, _ = detect_cave_bunker_evidence(
         _raw("Community amenities include storm shelter and in-ground pool.")
@@ -103,12 +110,12 @@ def test_rejects_bare_storm_shelter():
     assert feature is None
 
 
-def test_accepts_inground_storm_shelter():
+def test_accepts_private_inground_storm_shelter_weak():
     feature, _, strength = detect_cave_bunker_evidence(
         _raw("Property has an in-ground storm shelter near the garage.")
     )
     assert feature == "Storm shelter"
-    assert strength == "strong"
+    assert strength == "weak"
 
 
 def test_rejects_bare_cave_token():
@@ -118,9 +125,16 @@ def test_rejects_bare_cave_token():
     assert feature is None
 
 
-def test_accepts_root_cellar():
-    feature, _, strength = detect_cave_bunker_evidence(
+def test_rejects_bare_root_cellar():
+    feature, _, _ = detect_cave_bunker_evidence(
         _raw("Historic farmhouse with original root cellar.")
+    )
+    assert feature is None
+
+
+def test_accepts_root_cellar_with_underground_cue():
+    feature, _, strength = detect_cave_bunker_evidence(
+        _raw("Historic farmhouse with original underground root cellar.")
     )
     assert feature == "Cellar"
     assert strength == "weak"

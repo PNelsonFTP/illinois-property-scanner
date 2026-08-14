@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import ipaddress
 import logging
 import re
+import socket
 import time
 from collections import defaultdict
 from datetime import datetime, timezone
 from typing import Any
+from urllib.parse import urljoin, urlparse
 
 import httpx
 
@@ -28,6 +31,23 @@ DEAD_PAGE_MARKERS = (
     "listing is pending",
     "under contract",
 )
+
+# Listing probes may only hit these hosts (and realtor.com subdomains).
+_ALLOWED_HOST_EXACT = frozenset({
+    "realtor.com",
+    "www.realtor.com",
+    "zillow.com",
+    "www.zillow.com",
+    "redfin.com",
+    "www.redfin.com",
+    "www.google.com",
+})
+_ALLOWED_HOST_SUFFIXES = (".realtor.com", ".zillow.com", ".redfin.com")
+_BLOCKED_HOSTNAMES = frozenset({
+    "localhost",
+    "metadata.google.internal",
+    "metadata",
+})
 
 
 def _addr_key(address: str, city: str = "", zip_code: str = "") -> str:
@@ -79,9 +99,96 @@ def check_against_negatives(
     return True, "not in sold/pending inventory"
 
 
+def _hostname_allowed(hostname: str) -> bool:
+    host = (hostname or "").lower().rstrip(".")
+    if not host or host in _BLOCKED_HOSTNAMES:
+        return False
+    if host in _ALLOWED_HOST_EXACT:
+        return True
+    return any(host.endswith(suffix) for suffix in _ALLOWED_HOST_SUFFIXES)
+
+
+def _ip_is_forbidden(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
+    return bool(
+        ip.is_private
+        or ip.is_loopback
+        or ip.is_link_local
+        or ip.is_multicast
+        or ip.is_reserved
+        or ip.is_unspecified
+    )
+
+
+def _host_is_forbidden_target(hostname: str) -> tuple[bool, str]:
+    """Reject private/link-local/loopback/metadata targets in the URL or via DNS."""
+    host = (hostname or "").lower().rstrip(".")
+    if not host:
+        return True, "empty host"
+    if host in _BLOCKED_HOSTNAMES:
+        return True, f"blocked hostname: {host}"
+
+    try:
+        ip = ipaddress.ip_address(host)
+    except ValueError:
+        ip = None
+
+    if ip is not None:
+        if _ip_is_forbidden(ip):
+            return True, f"forbidden ip: {host}"
+        return False, "ok"
+
+    # Best-effort DNS check; resolution failure is not treated as forbidden.
+    try:
+        infos = socket.getaddrinfo(host, None)
+    except OSError:
+        return False, "ok"
+
+    for info in infos:
+        addr = info[4][0]
+        try:
+            resolved = ipaddress.ip_address(addr)
+        except ValueError:
+            continue
+        if _ip_is_forbidden(resolved):
+            return True, f"resolves to forbidden ip: {addr}"
+    return False, "ok"
+
+
+def validate_listing_url_for_fetch(url: str) -> tuple[bool, str]:
+    """
+    SSRF gate for listing probes.
+    Returns (True, reason) only when a network fetch is allowed.
+    """
+    parsed = urlparse(url)
+    scheme = (parsed.scheme or "").lower()
+    host = (parsed.hostname or "").lower()
+
+    if scheme not in ("http", "https"):
+        return False, f"scheme not allowed: {scheme or 'none'}"
+    if not host:
+        return False, "missing host"
+    if not _hostname_allowed(host):
+        return False, f"host not allowlisted: {host}"
+    # https required in general; http only for allowlisted hosts (checked above)
+    # and never to private/link-local/loopback targets (checked below).
+
+    forbidden, why = _host_is_forbidden_target(host)
+    if forbidden:
+        return False, why
+
+    # https preferred; http permitted only for allowlisted hosts (already checked)
+    # and never to private IPs (already checked).
+    return True, "ok"
+
+
 def check_listing_url(url: str, *, timeout: float = 12.0) -> tuple[bool, str]:
     if not url or not url.startswith("http"):
         return True, "no url to check"
+
+    allowed, gate_reason = validate_listing_url_for_fetch(url)
+    if not allowed:
+        # Do not probe; treat as inconclusive so SSRF blocks never mark a listing dead.
+        return True, f"url blocked ({gate_reason}) — inconclusive"
 
     headers = {
         "User-Agent": (
@@ -91,8 +198,21 @@ def check_listing_url(url: str, *, timeout: float = 12.0) -> tuple[bool, str]:
         "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
     }
     try:
-        with httpx.Client(follow_redirects=True, timeout=timeout, headers=headers) as client:
+        # Do not auto-follow redirects; re-validate Location hosts ourselves.
+        with httpx.Client(follow_redirects=False, timeout=timeout, headers=headers) as client:
             r = client.get(url)
+            if r.status_code in (301, 302, 303, 307, 308):
+                loc = (r.headers.get("location") or "").strip()
+                if not loc:
+                    return True, f"http {r.status_code} redirect (inconclusive)"
+                redirect_url = urljoin(url, loc)
+                redir_ok, redir_reason = validate_listing_url_for_fetch(redirect_url)
+                if not redir_ok:
+                    return True, (
+                        f"http {r.status_code} redirect blocked ({redir_reason}) — inconclusive"
+                    )
+                return True, f"http {r.status_code} to allowlisted host (inconclusive)"
+
             if r.status_code in (404, 410):
                 return False, f"http {r.status_code}"
             # Realtor.com bot-protection / rate limits — not proof the listing is dead

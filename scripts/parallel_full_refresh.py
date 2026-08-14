@@ -73,8 +73,15 @@ from scanner.large_land import (  # noqa: E402
 )
 from scanner.pool_listings import (  # noqa: E402
     compile_pool_listings,
+    fetch_pool_listings,
     print_pool_listings_summary,
     save_pool_listings,
+)
+from scanner.coming_soon import (  # noqa: E402
+    compile_coming_soon,
+    fetch_coming_soon,
+    print_coming_soon_summary,
+    save_coming_soon,
 )
 from scanner.verify import reverify_properties  # noqa: E402
 
@@ -90,6 +97,7 @@ TOWN_GROUPS = [
     ["Wheaton", "Oswego"],
     ["Sandwich", "Somonauk", "Lake Holiday"],
     ["Leland", "Earlville", "Waterman", "Sheridan"],
+    ["Yorkville", "Plano", "Hinckley"],
 ]
 
 
@@ -146,6 +154,7 @@ def main() -> int:
     parser.add_argument("--skip-pool-listings", action="store_true")
     parser.add_argument("--skip-caves", action="store_true")
     parser.add_argument("--skip-wheaton", action="store_true")
+    parser.add_argument("--skip-coming-soon", action="store_true")
     parser.add_argument("--no-markdown", action="store_true")
     parser.add_argument(
         "--enable-counties",
@@ -256,16 +265,16 @@ def main() -> int:
         f"{len(changes.get('price_cuts') or [])} price cuts"
     )
 
-    # --- Pool listings from the complete active inventory ---
+    # --- Dedicated pool fetch (not limited to distress inventory) ---
     if not args.skip_pool_listings and scan_cfg.get("include_pool_listings", True):
-        pool_records, pool_stats = compile_pool_listings(live_records, config=config)
+        log.info("Fetching dedicated homes-with-pools inventory...")
+        pool_raw = fetch_pool_listings(config, include_optional=True)
+        save_raw(pool_raw, label="pool-listings-parallel")
+        pool_records, pool_stats = compile_pool_listings(pool_raw, config=config)
         pool_kept, pool_rejected = reverify_properties(
             pool_records,
-            raw_records=live_records,
+            raw_records=pool_raw,
             config=config,
-            # Pool records came from this run's live for-sale inventory. Validate
-            # against sold/pending inventories without causing a second wave of
-            # immediately rate-limited Realtor requests.
             check_urls=False,
             do_reverify=False,
             max_reverify=None,
@@ -293,7 +302,7 @@ def main() -> int:
             raw_records=land_raw,
             config=config,
             check_urls=False,
-            do_reverify=False,
+            do_reverify=True,
             max_reverify=None,
         )
         write_rejection_audit(land_rejected, label="large-land-validation")
@@ -319,7 +328,7 @@ def main() -> int:
             raw_records=caves_raw,
             config=config,
             check_urls=False,
-            do_reverify=False,
+            do_reverify=True,
             max_reverify=None,
         )
         write_rejection_audit(caves_rejected, label="caves-validation")
@@ -359,6 +368,18 @@ def main() -> int:
         save_wheaton_listings(wheaton_kept, config=config)
         print_wheaton_summary(wheaton_kept, wheaton_stats)
         meta["stats"]["wheaton_listings"] = len(wheaton_kept)
+        with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
+            json.dump(meta, f, indent=2)
+
+    # --- Coming soon (quarantined; not merged into active modes) ---
+    if not args.skip_coming_soon and scan_cfg.get("include_coming_soon", True):
+        log.info("Fetching coming-soon listings (quarantined stream)...")
+        soon_raw = fetch_coming_soon(config, include_optional=True)
+        save_raw(soon_raw, label="coming-soon-parallel")
+        soon_records, soon_stats = compile_coming_soon(soon_raw, config=config)
+        save_coming_soon(soon_records)
+        print_coming_soon_summary(soon_records, soon_stats)
+        meta["stats"]["coming_soon"] = len(soon_records)
         with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
             json.dump(meta, f, indent=2)
 

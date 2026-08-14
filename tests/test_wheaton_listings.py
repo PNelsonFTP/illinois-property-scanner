@@ -93,3 +93,33 @@ def test_compile_rejects_inactive_and_out_of_town():
     assert stats.get("rejected_inactive", 0) >= 1
     assert stats.get("rejected_out_of_wheaton", 0) >= 1
     assert any(r.get("property_id") == "good-1" for r in records)
+
+
+def test_no_coords_rejects_non_wheaton_zip_bleed():
+    """City says Wheaton but ZIP is Carol Stream (60188) and no listing coords."""
+    config = {
+        "wheaton_for_sale": {
+            "cities": ["wheaton"],
+            "zips": ["60187", "60189"],
+            "radius_miles": 3,
+        },
+        "towns": {
+            "Wheaton": {
+                "search_location": "Wheaton, IL",
+                "cities": ["wheaton"],
+                "zips": ["60187", "60189"],
+                "radius_miles": 3,
+                "county": "DuPage",
+            }
+        },
+        "scan": {"radius_miles": 3},
+    }
+    bleed = _raw(city="Wheaton", zip_code="60188", property_id="bleed-60188")
+    del bleed["location"]["address"]["coordinate"]
+    keep = _raw(city="Wheaton", zip_code="60189", property_id="keep-60189")
+    del keep["location"]["address"]["coordinate"]
+
+    records, stats = compile_wheaton_listings([bleed, keep], config=config)
+    assert stats.get("rejected_zip_bleed", 0) >= 1
+    assert not any(r.get("property_id") == "bleed-60188" for r in records)
+    assert any(r.get("property_id") == "keep-60189" for r in records)

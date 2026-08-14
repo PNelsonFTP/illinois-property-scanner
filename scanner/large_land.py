@@ -35,6 +35,9 @@ log = logging.getLogger(__name__)
 LARGE_LAND_PATH = PROJECT_ROOT / "data" / "large_land.json"
 LAND_TYPES = {"Land", "Farm"}
 SQFT_PER_ACRE = 43560.0
+# 15 acres — slightly under the 20-acre publish bar so MLS-omitted-sqft
+# listings near the threshold can still appear in the filtered land/farm fetch.
+LOT_SQFT_MIN_15AC = 653400
 
 # Structured MLS fields (highest trust).
 _ACRES_DETAIL = re.compile(
@@ -217,7 +220,13 @@ def extract_acres_with_source(
 
     # Prefer lot-context / leading-dot subject mentions over amenity leftovers.
     lot_candidates = [c for c in candidates if c[2]]
-    pool = lot_candidates or candidates
+    if not lot_candidates:
+        # Marketing copy with an acre number but no lot/parcel/tract cue —
+        # callers that publish large tracts should reject this source.
+        acres = max(c[0] for c in candidates)
+        return round(acres, 2), "text_no_lot_cue"
+
+    pool = lot_candidates
     # Prefer the smallest plausible subject-lot mention when values conflict
     # (e.g. ".58 acre lot" vs leftover community copy). For true large tracts,
     # structured fields usually exist; text-only large tracts still pass via
@@ -294,6 +303,7 @@ def fetch_large_land(config: dict) -> list[dict[str, Any]]:
             radius=None,
             exclude_pending=exclude_pending,
             property_type=property_types,
+            lot_sqft_min=LOT_SQFT_MIN_15AC,
             pass_name=f"large-land-county-{county}",
         )
         for record in batch:
@@ -308,6 +318,7 @@ def fetch_large_land(config: dict) -> list[dict[str, Any]]:
             radius=radius,
             exclude_pending=exclude_pending,
             property_type=property_types,
+            lot_sqft_min=LOT_SQFT_MIN_15AC,
             pass_name=f"large-land-hub-{hub}",
         )
         for record in batch:
@@ -329,6 +340,7 @@ def fetch_large_land(config: dict) -> list[dict[str, Any]]:
                 past_days=sold_days,
                 exclude_pending=False,
                 property_type=property_types,
+                lot_sqft_min=LOT_SQFT_MIN_15AC,
                 pass_name=f"large-land-sold-{location}",
             )
             for record in sold:
@@ -344,6 +356,7 @@ def fetch_large_land(config: dict) -> list[dict[str, Any]]:
                 past_days=pending_days,
                 exclude_pending=False,
                 property_type=property_types,
+                lot_sqft_min=LOT_SQFT_MIN_15AC,
                 pass_name=f"large-land-pending-{location}",
             )
             for record in pending:
@@ -403,36 +416,35 @@ def compile_large_land(
             continue
         # Large-tract claims from marketing copy alone are easy to misread
         # (".58 Acre" → 58). Require MLS acres/sqft/dimensions, or a clear
-        # text lot-size statement with no conflicting small-lot signal.
+        # text lot/parcel/tract cue (no conflicting small-lot signal).
         if acres_source not in _TRUSTED_ACRE_SOURCES:
             if acres_source == "text_lot_conflict_prefer_small":
                 stats["rejected_acre_conflict"] += 1
                 continue
-            if acres_source != "text_description":
+            if acres_source == "text_description":
+                # Lot-cue path from extract_acres_with_source — accept.
+                stats["accepted_text_acres"] += 1
+            else:
+                # text_no_lot_cue and any other untrusted tag.
                 stats["rejected_untrusted_acres"] += 1
                 continue
-            # Text-only large tracts: require an explicit lot/tract cue nearby
-            # (already preferred in candidate scoring) and block if dimensions
-            # imply a house lot — dimensions path should have won already.
-            stats["accepted_text_acres"] += 1
 
-        # Prefer listing coords; fall back to city-center (flagged for review).
+        # Prefer listing coords; never publish city-center fallbacks.
         coords_info = extract_coords_with_source(raw) or extract_coords_with_source(rec)
         if coords_info is None:
             stats["rejected_no_location"] += 1
             continue
         lat, lon, coords_source = coords_info
+        if coords_source == "city_center":
+            stats["rejected_city_center_coords"] += 1
+            continue
         miles = haversine_miles(
             LAKE_HOLIDAY_CENTER[0],
             LAKE_HOLIDAY_CENTER[1],
             lat,
             lon,
         )
-        if coords_source == "city_center":
-            if miles > centroid_max:
-                stats["rejected_centroid_too_far"] += 1
-                continue
-        elif miles > max_miles:
+        if miles > max_miles:
             stats["rejected_out_of_radius"] += 1
             continue
 
@@ -447,7 +459,7 @@ def compile_large_land(
 
         price = rec.get("list_price")
         price_per_acre = round(price / acres, 2) if price and acres else None
-        needs_review = coords_source == "city_center"
+        needs_review = False
 
         evidence = [
             f"{acres:g} acres",

@@ -35,3 +35,13 @@ def test_text_only_dot_fifty_eight_acre():
     acres, source = extract_acres_with_source(raw, None)
     assert acres == 0.58
     assert source == "text_description"
+
+
+def test_text_acres_without_lot_cue_tagged_untrusted():
+    raw = {
+        "description": {"text": "Enjoy 25 acres of recreation nearby"},
+        "details": [],
+    }
+    acres, source = extract_acres_with_source(raw, None)
+    assert acres == 25.0
+    assert source == "text_no_lot_cue"

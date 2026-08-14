@@ -56,11 +56,20 @@ The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has s
 - **Output:** `data/wheaton_listings.json`.
 - **CLI:** `python scan.py --wheaton-only`.
 
+## Coming soon (quarantined)
+
+- **Purpose:** Listings that are **coming soon** (not yet active for-sale).
+- **Quarantined:** Saved to its own file; **not** merged into distressed / new / pools / large land / caves / Wheaton.
+- **Discovery:** Dedicated town + ZIP fetches; HomeHarvest has no `coming_soon` listing type, so `for_sale` results are filtered by MLS status / flags (`is_coming_soon`).
+- **Output:** `data/coming_soon.json`.
+- **Gate:** `scan.include_coming_soon` (daily/full profiles on; quick off).
+
 ## Mode comparison
 
-| Concern | Distressed | New 7d | Pools | Large land | Caves | Wheaton |
-|---------|------------|--------|-------|------------|-------|---------|
-| Distress filter | Yes | No | No | No | No | No |
-| Town toggles | Yes | Yes | Yes | No (40 mi ring) | No (60189 drive ring) | No (Wheaton only) |
-| Deep reverify fetch | Yes (full path) | Light | Negatives only | Negatives only | Negatives only | Yes (live reverify) |
-| Markdown export | Yes | No | No | No | No | No |
+| Concern | Distressed | New 7d | Pools | Large land | Caves | Wheaton | Coming soon |
+|---------|------------|--------|-------|------------|-------|---------|-------------|
+| Distress filter | Yes | No | No | No | No | No | No |
+| Town toggles | Yes | Yes | Yes | No (40 mi ring) | No (60189 drive ring) | No (Wheaton only) | Yes (geo) |
+| Deep reverify fetch | Yes (full path) | Light | Negatives only | Negatives only | Negatives only | Yes (live reverify) | No |
+| Markdown export | Yes | No | No | No | No | No | No |
+| Merged into for-sale modes | — | — | — | — | — | — | **No (quarantined)** |

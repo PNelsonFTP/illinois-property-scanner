@@ -7,7 +7,7 @@
 | `radius_miles` | Default town search radius |
 | `rural_radius_miles` | Default for optional towns |
 | `exclude_pending` | HomeHarvest for-sale exclude_pending |
-| `include_optional_towns` | Enable Leland / Earlville / Waterman / Sheridan (default true) |
+| `include_optional_towns` | Enable optional towns (default true): Leland, Earlville, Waterman, Sheridan, Yorkville, Plano, Hinckley |
 | `include_zip_searches` | Extra ZIP queries per town |
 | `include_county_searches` | County-wide sweeps (slow; parallel script can force with `--enable-counties`) |
 | `include_distress_passes` | Land/mobile typed passes from `distress_passes` |
@@ -18,6 +18,8 @@
 | `include_new_listings` / `new_listings_days` | Gate + window for new-to-market mode |
 | `include_pool_listings` | Gate pool mode on full scans |
 | `include_large_land` | Gate large-land mode on full scans |
+| `include_caves_listings` / `include_wheaton_listings` | Gate caves / Wheaton modes |
+| `include_coming_soon` | Gate quarantined coming-soon stream (`data/coming_soon.json`) |
 
 Note: `include_land` / `include_mobile` top-level-style flags are historical; typed passes are driven by `distress_passes`.
 
@@ -29,9 +31,13 @@ Note: `include_land` / `include_mobile` top-level-style flags are historical; ty
 | `radius_miles` | Miles from Lake Holiday center (default 40) |
 | `center` | Label for the ring center |
 | `property_types` | HomeHarvest types (`land`, `farm`) |
-| `counties` / `hubs` | Discovery locations |
+| `counties` / `hubs` | Discovery locations (counties include Grundy/Lee; hubs include Mendota/Dixon/Minooka/Plano/Newark) |
 
 Acreage trust rules are code-side — see [ACREAGE.md](ACREAGE.md).
+
+## `caves_bunkers`
+
+Regional hubs + drive-hour banding from ZIP 60189. `include_land_pass` enables a land/farm hub pass (implemented in `caves.py`).
 
 ## `verification`
 
@@ -49,14 +55,20 @@ Each town:
 - `search_location` — HomeHarvest location string
 - `county` — display / metadata
 - `cities` — city names that map into this town
-- `zips` — optional ZIP passes
+- `zips` — optional ZIP passes (Oswego includes 60543 + 60538)
 - `radius_miles` — override
 
 **Lake Holiday ≠ Sheridan.** Wildwood streets under Sandwich city map to Lake Holiday via `scanner/geo.py`.
 
+Top-level `counties` (edge sweeps): DeKalb, LaSalle, Kendall, Grundy, Lee.
+
 ## `distress` / `distress_passes`
 
-Thresholds for high DOM, cheap land/mobile signals, min price-reduction percent, plus named fetch passes (`foreclosure`, `land`, `mobile`, …).
+Thresholds for high DOM, cheap land/mobile signals, `min_price_reduction_pct` (tagging), `min_meaningful_reduction_pct` (publish bar), plus named fetch passes (`foreclosure`, `land`, `mobile`, …).
+
+## `refresh_profiles`
+
+`quick` / `daily` / `full` gate modes including `include_coming_soon` (false on quick; true on daily/full).
 
 ## `inactive_statuses` / `not_distressed_phrases`
 

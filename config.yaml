@@ -7,6 +7,7 @@
 #   - Large land 20+ ac   → data/large_land.json        (include_large_land)
 #   - Caves & bunkers     → data/caves_listings.json    (include_caves_listings)
 #   - Wheaton for sale    → data/wheaton_listings.json  (include_wheaton_listings)
+#   - Coming soon         → data/coming_soon.json       (include_coming_soon; quarantined)
 #
 # Optional towns default ON below (Leland, Earlville, Waterman, Sheridan).
 # CLI can force with --include-optional / --no-optional.
@@ -34,6 +35,7 @@ scan:
   include_large_land: true
   include_caves_listings: true
   include_wheaton_listings: true
+  include_coming_soon: true
 
 # All active for-sale listings in Wheaton, IL (no distress / age filters).
 # Dashboard mode is all-or-nothing (no town toggles). Active status is
@@ -71,6 +73,11 @@ large_land:
     - "DeKalb, IL"
     - "Morris, IL"
     - "Amboy, IL"
+    - "Mendota, IL"
+    - "Dixon, IL"
+    - "Minooka, IL"
+    - "Plano, IL"
+    - "Newark, IL"
 
 # Caves / underground bunkers / underground structures near ZIP 60189.
 # Hub fetches + MLS text evidence (HomeHarvest has no keyword search).
@@ -112,10 +119,16 @@ caves_bunkers:
     - "Chattanooga, TN"
     - "Little Rock, AR"
     - "Fayetteville, AR"
+    - "Eureka Springs, AR"
+    - "Cape Girardeau, MO"
+    - "Paducah, KY"
+    - "Glasgow, KY"
     - "Detroit, MI"
     - "Grand Rapids, MI"
     - "Ann Arbor, MI"
     - "Lansing, MI"
+  # Land/farm hub pass is implemented in caves.py by another agent; config flag only.
+  include_land_pass: true
 
 verification:
   require_reverify: true
@@ -135,7 +148,7 @@ towns:
     search_location: "Oswego, IL"
     county: Kendall
     cities: [oswego, montgomery, boulder hill]
-    zips: ["60543"]
+    zips: ["60543", "60538"]
     radius_miles: 3
   Sandwich:
     search_location: "Sandwich, IL"
@@ -182,12 +195,32 @@ optional_towns:
     cities: [sheridan]
     zips: ["60551"]
     radius_miles: 6
+  Yorkville:
+    search_location: "Yorkville, IL"
+    county: Kendall
+    cities: [yorkville]
+    zips: ["60560"]
+    radius_miles: 6
+  Plano:
+    search_location: "Plano, IL"
+    county: Kendall
+    cities: [plano]
+    zips: ["60545"]
+    radius_miles: 6
+  Hinckley:
+    search_location: "Hinckley, IL"
+    county: DeKalb
+    cities: [hinckley]
+    zips: ["60520"]
+    radius_miles: 6
 
 # Extra county-level searches for edge parcels
 counties:
   - "DeKalb County, IL"
   - "LaSalle County, IL"
   - "Kendall County, IL"
+  - "Grundy County, IL"
+  - "Lee County, IL"
 
 # Targeted distress query passes (beyond plain for_sale)
 distress_passes:
@@ -206,6 +239,8 @@ distress:
   land_max_price_signal: 30000
   mobile_max_price_signal: 50000
   min_price_reduction_pct: 0.02
+  # Publish bar for meaningful price cuts; tagging still uses min_price_reduction_pct.
+  min_meaningful_reduction_pct: 0.10
   # Vacant lots under this size are excluded from distressed mode (use Large land mode).
   min_land_acres_for_distress: 20
   # Reject DOM-only / price-cut-only unless composite or score meets this with a second signal.
@@ -221,6 +256,7 @@ refresh_profiles:
     include_large_land: false
     include_caves_listings: false
     include_wheaton_listings: false
+    include_coming_soon: false
     include_legacy: false
   daily:
     description: Parallel full discovery without county sweeps
@@ -232,6 +268,7 @@ refresh_profiles:
     include_large_land: true
     include_caves_listings: true
     include_wheaton_listings: true
+    include_coming_soon: true
     include_public_records: false
   full:
     description: Parallel + counties + public-record CSV + all modes
@@ -243,6 +280,7 @@ refresh_profiles:
     include_large_land: true
     include_caves_listings: true
     include_wheaton_listings: true
+    include_coming_soon: true
     include_public_records: true
 
 inactive_statuses:

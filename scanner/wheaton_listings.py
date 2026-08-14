@@ -17,7 +17,7 @@ from typing import Any
 from scanner.config import PROJECT_ROOT
 from scanner.dedup import deduplicate
 from scanner.fetch import _merge_unique, fetch_town_listings, save_raw
-from scanner.geo import within_town_radius
+from scanner.geo import extract_coords_with_source, within_town_radius
 from scanner.links import attach_alt_links
 from scanner.normalize import normalize_realtor_record
 from scanner.status import is_verified_active
@@ -170,7 +170,22 @@ def compile_wheaton_listings(
             stats["rejected_out_of_wheaton"] += 1
             continue
 
-        if not within_town_radius(rec, "Wheaton", config):
+        # ZIP bleed guard: city-label "Wheaton" without listing coords can
+        # pull Carol Stream / Glen Ellyn ZIPs. Require a Wheaton ZIP when
+        # listing lat/lon are missing; otherwise keep the radius check.
+        coord_info = extract_coords_with_source(raw) or extract_coords_with_source(rec)
+        has_listing_coords = (
+            coord_info is not None and coord_info[2] == "listing"
+        )
+        if not has_listing_coords:
+            zip_code = str(rec.get("zip") or "").strip()[:5]
+            allowed_zips = {
+                str(z).strip()[:5] for z in (wcfg.get("zips") or _DEFAULT_ZIPS)
+            }
+            if zip_code not in allowed_zips:
+                stats["rejected_zip_bleed"] += 1
+                continue
+        elif not within_town_radius(rec, "Wheaton", config):
             stats["rejected_outside_radius"] += 1
             continue
 

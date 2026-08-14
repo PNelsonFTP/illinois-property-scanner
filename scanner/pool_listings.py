@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import time
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -16,7 +17,8 @@ from typing import Any
 
 from scanner.config import PROJECT_ROOT
 from scanner.dedup import deduplicate
-from scanner.geo import classify_town, within_town_radius
+from scanner.fetch import fetch_town_listings, _merge_unique
+from scanner.geo import classify_town, enabled_towns, within_town_radius
 from scanner.links import attach_alt_links
 from scanner.normalize import normalize_realtor_record
 from scanner.status import is_verified_active
@@ -25,6 +27,85 @@ log = logging.getLogger(__name__)
 
 POOL_LISTINGS_PATH = PROJECT_ROOT / "data" / "pool_listings.json"
 RESIDENTIAL_TYPES = {"SFH", "Condo", "Townhome", "Manufactured", "Multi-Family"}
+
+
+def fetch_pool_listings(
+    config: dict,
+    *,
+    include_optional: bool | None = None,
+    towns_filter: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Fetch all active for_sale listings per town (city + ZIP) for pool compile.
+
+    Mirrors ``fetch_new_listings`` but without ``past_days`` — full active
+    inventory. County sweeps run when ``scan.include_county_searches`` is true.
+    """
+    scan_cfg = config.get("scan", {})
+    default_radius = scan_cfg.get("radius_miles", 3)
+    rural_radius = scan_cfg.get("rural_radius_miles", 6)
+    exclude_pending = scan_cfg.get("exclude_pending", True)
+    include_counties = scan_cfg.get("include_county_searches", False)
+
+    towns = enabled_towns(config, include_optional=include_optional)
+    if towns_filter:
+        wanted = {t.lower() for t in towns_filter}
+        towns = {k: v for k, v in towns.items() if k.lower() in wanted}
+
+    all_records: list[dict[str, Any]] = []
+    seen: set[str] = set()
+
+    for town_name, town_cfg in towns.items():
+        location = town_cfg["search_location"]
+        radius = town_cfg.get("radius_miles") or (
+            rural_radius if town_name in (config.get("optional_towns") or {}) else default_radius
+        )
+        batch = fetch_town_listings(
+            town_name,
+            location,
+            radius=radius,
+            exclude_pending=exclude_pending,
+            listing_type="for_sale",
+            pass_name="pool",
+        )
+        for record in batch:
+            record["_pool_listings_fetch"] = True
+        added = _merge_unique(all_records, seen, batch)
+        log.info("  %s pool unique added: %d", town_name, added)
+
+        for zip_code in town_cfg.get("zips") or []:
+            zip_batch = fetch_town_listings(
+                town_name,
+                str(zip_code),
+                radius=radius,
+                exclude_pending=exclude_pending,
+                listing_type="for_sale",
+                pass_name=f"pool-zip-{zip_code}",
+            )
+            for record in zip_batch:
+                record["_pool_listings_fetch"] = True
+            zip_added = _merge_unique(all_records, seen, zip_batch)
+            log.info("  %s pool zip %s unique added: %d", town_name, zip_code, zip_added)
+
+        time.sleep(0.25)
+
+    if include_counties:
+        for county in config.get("counties") or []:
+            county_batch = fetch_town_listings(
+                "_county",
+                county,
+                radius=None,
+                exclude_pending=exclude_pending,
+                listing_type="for_sale",
+                pass_name=f"pool-county-{county}",
+            )
+            for record in county_batch:
+                record["_pool_listings_fetch"] = True
+            county_added = _merge_unique(all_records, seen, county_batch)
+            log.info("  county %s pool unique added: %d", county, county_added)
+            time.sleep(0.25)
+
+    log.info("Pool listings raw fetch: %d unique", len(all_records))
+    return all_records
 
 _PRIVATE_POOL_TEXT = re.compile(
     r"\b(private|backyard|heated|indoor|in[- ]?ground|above[- ]?ground) pool\b",

@@ -2,7 +2,7 @@
 """
 Illinois Property Scanner — sequential entry point.
 
-Modes: distressed, new listings (7d), pools, large land, caves/bunkers, Wheaton for sale.
+Modes: distressed, new listings (7d), pools, large land, caves/bunkers, Wheaton for sale, coming soon.
 For faster full refreshes prefer: scripts/parallel_full_refresh.py
 Publish viewing results to GitHub Pages (see docs/PUBLISHING.md).
 
@@ -20,7 +20,8 @@ Usage:
   python scan.py --large-land-only    # Only refresh 20+ acre land near Lake Holiday
   python scan.py --caves-only         # Only refresh caves/bunkers near ZIP 60189
   python scan.py --wheaton-only       # Only refresh all Wheaton, IL for-sale listings
-  python scan.py --no-new-listings|--no-pool-listings|--no-large-land|--no-caves|--no-wheaton|--no-reverify
+  python scan.py --coming-soon-only   # Only refresh quarantined coming-soon stream
+  python scan.py --no-new-listings|--no-pool-listings|--no-large-land|--no-caves|--no-wheaton|--no-coming-soon|--no-reverify
 """
 
 from __future__ import annotations
@@ -77,8 +78,15 @@ from scanner.new_listings import (
 )
 from scanner.pool_listings import (
     compile_pool_listings,
+    fetch_pool_listings,
     print_pool_listings_summary,
     save_pool_listings,
+)
+from scanner.coming_soon import (
+    compile_coming_soon,
+    fetch_coming_soon,
+    print_coming_soon_summary,
+    save_coming_soon,
 )
 from scanner.verify import reverify_properties
 
@@ -139,8 +147,8 @@ def _run_pool_listings(
 ) -> tuple[list, dict]:
     """Compile and reverify all active residential pool listings in scope."""
     if raw_records is None:
-        log.info("Fetching active inventory for homes-with-pools view...")
-        raw_records = fetch_all_towns(
+        log.info("Fetching dedicated homes-with-pools inventory...")
+        raw_records = fetch_pool_listings(
             config,
             include_optional=include_optional,
             towns_filter=towns_filter,
@@ -187,7 +195,7 @@ def _run_large_land(
         raw_records=raw_records,
         config=config,
         check_urls=False,
-        do_reverify=False,
+        do_reverify=True,
         max_reverify=None,
     )
     write_rejection_audit(rejected, label="large-land-validation")
@@ -218,7 +226,7 @@ def _run_caves_listings(
         raw_records=raw_records,
         config=config,
         check_urls=False,
-        do_reverify=False,
+        do_reverify=True,
         max_reverify=None,
     )
     write_rejection_audit(rejected, label="caves-validation")
@@ -265,6 +273,26 @@ def _run_wheaton_listings(
     return kept, stats
 
 
+def _run_coming_soon(
+    config: dict,
+    *,
+    include_optional: bool,
+    towns_filter: list[str] | None,
+) -> tuple[list, dict]:
+    """Fetch/compile coming-soon listings (quarantined; not active for-sale)."""
+    log.info("Fetching coming-soon listings (quarantined stream)...")
+    raw_records = fetch_coming_soon(
+        config,
+        include_optional=include_optional,
+        towns_filter=towns_filter,
+    )
+    save_raw(raw_records, label="coming-soon")
+    records, stats = compile_coming_soon(raw_records, config=config)
+    save_coming_soon(records)
+    print_coming_soon_summary(records, stats)
+    return records, stats
+
+
 def _run_refresh_profile(profile: str, argv_rest: list[str]) -> int:
     """Dispatch named refresh profiles from config.yaml refresh_profiles."""
     config = load_config()
@@ -296,6 +324,8 @@ def _run_refresh_profile(profile: str, argv_rest: list[str]) -> int:
             cmd.append("--skip-caves")
         if not cfg.get("include_wheaton_listings", True):
             cmd.append("--skip-wheaton")
+        if not cfg.get("include_coming_soon", True):
+            cmd.append("--skip-coming-soon")
         cmd.extend(argv_rest)
         log.info("Delegating to parallel refresh: %s", " ".join(cmd))
         return subprocess.call(cmd, cwd=PROJECT_ROOT)
@@ -344,6 +374,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Only refresh caves/bunkers near ZIP 60189")
     parser.add_argument("--wheaton-only", action="store_true",
                         help="Only refresh all Wheaton, IL for-sale listings")
+    parser.add_argument("--coming-soon-only", action="store_true",
+                        help="Only refresh the quarantined coming-soon stream")
     parser.add_argument(
         "--no-legacy",
         action="store_true",
@@ -366,6 +398,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Skip the caves/bunkers pass")
     parser.add_argument("--no-wheaton", action="store_true",
                         help="Skip the Wheaton for-sale pass")
+    parser.add_argument("--no-coming-soon", action="store_true",
+                        help="Skip the coming-soon pass")
     parser.add_argument("--include-optional", action="store_true",
                         help="Include Leland, Earlville, Waterman, Sheridan")
     parser.add_argument("--no-optional", action="store_true", help="Force-exclude optional towns")
@@ -439,6 +473,17 @@ def main(argv: list[str] | None = None) -> int:
     # --- Wheaton for-sale only ---
     if args.wheaton_only:
         _run_wheaton_listings(config)
+        if not args.no_markdown:
+            rebuild_outputs(scan_date, scan_time)
+        return 0
+
+    # --- Coming soon only (quarantined) ---
+    if args.coming_soon_only:
+        _run_coming_soon(
+            config,
+            include_optional=include_optional,
+            towns_filter=towns_filter,
+        )
         if not args.no_markdown:
             rebuild_outputs(scan_date, scan_time)
         return 0
@@ -581,7 +626,6 @@ def main(argv: list[str] | None = None) -> int:
             config,
             include_optional=include_optional,
             towns_filter=towns_filter,
-            raw_records=live_records,
         )
         stats["pool_listings"] = len(pool_records)
 
@@ -614,6 +658,19 @@ def main(argv: list[str] | None = None) -> int:
     if do_wheaton:
         wheaton_records, _wheaton_stats = _run_wheaton_listings(config)
         stats["wheaton_listings"] = len(wheaton_records)
+
+    do_soon = (
+        scan_cfg.get("include_coming_soon", True)
+        and not args.no_coming_soon
+        and not args.verify_only
+    )
+    if do_soon:
+        soon_records, _soon_stats = _run_coming_soon(
+            config,
+            include_optional=include_optional,
+            towns_filter=towns_filter,
+        )
+        stats["coming_soon"] = len(soon_records)
 
     if not args.no_markdown and final:
         rebuild_outputs(scan_date, scan_time)

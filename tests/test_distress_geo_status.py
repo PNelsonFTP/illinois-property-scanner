@@ -39,8 +39,14 @@ def test_acreage_point58_not_58():
 
 def test_dom_only_fails_publish_composite():
     assert not meets_publish_composite(["high-dom"], score=2, text="nice home")
-    assert meets_publish_composite(
+    assert not meets_publish_composite(
         ["high-dom", "price-reduced"], score=4, text="price cut stale listing"
+    )
+    assert meets_publish_composite(
+        ["high-dom", "price-reduced"],
+        score=4,
+        text="price cut stale listing",
+        reduction_pct=0.12,
     )
     assert meets_publish_composite(["foreclosure"], score=5, text="bank owned")
 

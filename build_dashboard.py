@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import copy
+import html
 import json
 import os
 from collections import Counter
@@ -15,6 +17,7 @@ POOL_LISTINGS = PROJECT_ROOT / "data" / "pool_listings.json"
 LARGE_LAND = PROJECT_ROOT / "data" / "large_land.json"
 CAVES_LISTINGS = PROJECT_ROOT / "data" / "caves_listings.json"
 WHEATON_LISTINGS = PROJECT_ROOT / "data" / "wheaton_listings.json"
+COMING_SOON = PROJECT_ROOT / "data" / "coming_soon.json"
 CHANGES_LATEST = PROJECT_ROOT / "data" / "changes_latest.json"
 OUT = PROJECT_ROOT / "dashboard" / "distressed-property-dashboard.html"
 
@@ -63,6 +66,11 @@ WHEATON_NOTE = (
     "Pending/sold/contingent excluded; each listing is live-reverified. "
     "Shown as one list (no town toggles). "
     "Refresh with <code>python scan.py --wheaton-only</code>."
+)
+SOON_NOTE = (
+    "Coming-soon / pre-market listings (not active for-sale inventory). "
+    "Loaded from <code>data/coming_soon.json</code> when present. "
+    "Shown as one list (no town toggles); not mixed into other modes."
 )
 
 
@@ -150,6 +158,16 @@ def load_wheaton_listings():
     return payload.get("records", [])
 
 
+def load_coming_soon():
+    if not COMING_SOON.exists():
+        return []
+    with open(COMING_SOON) as f:
+        payload = json.load(f)
+    if isinstance(payload, list):
+        return payload
+    return payload.get("records", [])
+
+
 def load_changes_latest():
     """Slim change digest committed as data/changes_latest.json (optional)."""
     if not CHANGES_LATEST.exists():
@@ -162,6 +180,24 @@ def load_changes_latest():
         return {}
 
 
+def truncate_notes_for_embed(records, limit=200):
+    """Copy records and truncate notes for public Pages embed (do not mutate disk)."""
+    out = []
+    for rec in records:
+        r = copy.copy(rec)
+        notes = r.get("notes")
+        if isinstance(notes, str) and len(notes) > limit:
+            r["notes"] = notes[:limit]
+        out.append(r)
+    return out
+
+
+def embed_json(obj):
+    """JSON for HTML <script> — ASCII + escaped angle brackets so </script> cannot break out."""
+    s = json.dumps(obj, separators=(",", ":"), ensure_ascii=True)
+    return s.replace("<", "\\u003c").replace(">", "\\u003e")
+
+
 def main():
     with open(COMPILED) as f:
         data = json.load(f)
@@ -171,6 +207,7 @@ def main():
     land_data = load_large_land()
     caves_data = load_caves_listings()
     wheaton_data = load_wheaton_listings()
+    soon_data = load_coming_soon()
     changes = load_changes_latest()
 
     verified = sum(1 for p in data if "realtor.com" in (p.get("verification_source") or ""))
@@ -184,44 +221,59 @@ def main():
     land_area_stats = compute_area_stats(land_data)
     caves_area_stats = compute_area_stats(caves_data)
     wheaton_area_stats = compute_area_stats(wheaton_data)
+    soon_area_stats = compute_area_stats(soon_data)
 
-    # Land / caves / Wheaton-all must NOT appear in location toggles.
+    # Land / caves / Wheaton-all / coming-soon must NOT appear in location toggles.
     towns_present = sorted({
         *(p.get("nearest_target") for p in data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in new_data if p.get("nearest_target")),
         *(p.get("nearest_target") for p in pool_data if p.get("nearest_target")),
     })
-    towns_json = json.dumps(towns_present, separators=(",", ":"))
+    towns_json = embed_json(towns_present)
     town_toggles = "".join(
-        f'<label class="loc-toggle" data-town="{t}">'
-        f'<input type="checkbox" class="loc-cb" value="{t}" checked onchange="onTownToggle()">'
+        f'<label class="loc-toggle" data-town="{html.escape(t, quote=True)}">'
+        f'<input type="checkbox" class="loc-cb" value="{html.escape(t, quote=True)}" checked onchange="onTownToggle()">'
         f'<span class="loc-switch" aria-hidden="true"></span>'
-        f'<span class="loc-name">{t}</span>'
+        f'<span class="loc-name">{html.escape(t)}</span>'
         f'</label>'
         for t in towns_present
     )
 
-    props_json = json.dumps(data, separators=(",", ":"))
-    new_json = json.dumps(new_data, separators=(",", ":"))
-    pool_json = json.dumps(pool_data, separators=(",", ":"))
-    land_json = json.dumps(land_data, separators=(",", ":"))
-    caves_json = json.dumps(caves_data, separators=(",", ":"))
-    wheaton_json = json.dumps(wheaton_data, separators=(",", ":"))
-    badges_json = json.dumps(badges, separators=(",", ":"))
-    area_json = json.dumps(area_stats, separators=(",", ":"))
-    new_area_json = json.dumps(new_area_stats, separators=(",", ":"))
-    pool_area_json = json.dumps(pool_area_stats, separators=(",", ":"))
-    land_area_json = json.dumps(land_area_stats, separators=(",", ":"))
-    caves_area_json = json.dumps(caves_area_stats, separators=(",", ":"))
-    wheaton_area_json = json.dumps(wheaton_area_stats, separators=(",", ":"))
-    changes_json = json.dumps(changes, separators=(",", ":"))
+    land_cities = sorted({
+        (p.get("city") or p.get("nearest_target") or "").strip()
+        for p in land_data
+        if (p.get("city") or p.get("nearest_target") or "").strip()
+    })
+    land_city_opts = "".join(
+        f'<option value="{html.escape(c, quote=True)}">{html.escape(c)}</option>'
+        for c in land_cities
+    )
 
-    html = f"""<!DOCTYPE html>
+    props_json = embed_json(truncate_notes_for_embed(data))
+    new_json = embed_json(truncate_notes_for_embed(new_data))
+    pool_json = embed_json(truncate_notes_for_embed(pool_data))
+    land_json = embed_json(truncate_notes_for_embed(land_data))
+    caves_json = embed_json(truncate_notes_for_embed(caves_data))
+    wheaton_json = embed_json(truncate_notes_for_embed(wheaton_data))
+    soon_json = embed_json(truncate_notes_for_embed(soon_data))
+    badges_json = embed_json(badges)
+    area_json = embed_json(area_stats)
+    new_area_json = embed_json(new_area_stats)
+    pool_area_json = embed_json(pool_area_stats)
+    land_area_json = embed_json(land_area_stats)
+    caves_area_json = embed_json(caves_area_stats)
+    wheaton_area_json = embed_json(wheaton_area_stats)
+    soon_area_json = embed_json(soon_area_stats)
+    changes_json = embed_json(changes)
+
+    page = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Distressed Property Scanner — Illinois</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
 *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
 :root{{
@@ -247,6 +299,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .land-badge{{background:rgba(132,204,22,.14);color:#a3e635;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .caves-badge{{background:rgba(168,85,247,.14);color:#c084fc;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .wheaton-badge{{background:rgba(249,115,22,.14);color:#fb923c;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
+.soon-badge{{background:rgba(236,72,153,.14);color:#f472b6;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .v-stale{{color:var(--orange)}}
 .cd[data-stale="1"]{{opacity:.85;border-style:dashed}}
 .wrap{{max-width:1200px;margin:0 auto;padding:14px 20px}}
@@ -255,7 +308,8 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .mode-btn:hover{{border-color:var(--accent);color:var(--text)}}
 .mode-btn.active{{background:var(--accent);border-color:var(--accent);color:#fff}}
 .loc-panel{{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}}
-body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-panel{{display:none}}
+body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-panel,body.mode-soon .loc-panel,body.mode-coming .loc-panel{{display:none}}
+body.mode-land .mob-loc,body.mode-caves .mob-loc,body.mode-wheaton .mob-loc,body.mode-soon .mob-loc,body.mode-coming .mob-loc{{display:none}}
 .loc-head{{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}}
 .loc-head h2{{font-size:.7rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}}
 .loc-actions{{display:flex;gap:6px;flex-wrap:wrap}}
@@ -275,7 +329,25 @@ body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-pane
 .ctrls{{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:14px;background:var(--bg2);padding:12px;border-radius:var(--r);border:1px solid var(--border)}}
 .cg label{{display:block;font-size:.65rem;font-weight:600;color:var(--text2);margin-bottom:3px;text-transform:uppercase}}
 .cg select,.cg input{{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:var(--rs);background:var(--card);color:var(--text);font-size:.75rem}}
+.cg-check{{display:flex;align-items:flex-end;padding-bottom:2px}}
+.cg-check label{{display:flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600;color:var(--text2);text-transform:none;margin:0;cursor:pointer}}
+.cg-check input{{width:auto}}
 .rc{{font-size:.75rem;color:var(--text2);margin-bottom:10px}}.rc strong{{color:var(--text)}}
+.view-bar{{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}}
+.view-btn{{padding:5px 12px;border:1px solid var(--border);border-radius:var(--rs);background:var(--card);color:var(--text2);font-size:.7rem;font-weight:600;cursor:pointer}}
+.view-btn:hover{{border-color:var(--accent);color:var(--text)}}
+.view-btn.active{{background:var(--accent);border-color:var(--accent);color:#fff}}
+#mapEl{{display:none;height:420px;border-radius:var(--r);border:1px solid var(--border);margin-bottom:14px;z-index:1}}
+body.view-map #mapEl{{display:block}}
+body.view-map #grd{{display:none}}
+body.view-list .grid{{display:flex;flex-direction:column;gap:6px}}
+body.view-list .cd{{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:default}}
+body.view-list .cd-s,body.view-list .cd-ph,body.view-list .cd-img,body.view-list .cd-det,body.view-list .cd-tags,body.view-list .cd-x,body.view-list .cd-price,body.view-list .cd-ft{{display:none!important}}
+body.view-list .cd-b{{padding:0;flex:1;display:flex;align-items:center;gap:10px;flex-wrap:wrap}}
+body.view-list .cd-addr{{font-size:.8rem}}
+body.view-list .cd-city{{margin:0;font-size:.7rem}}
+body.view-list .list-meta{{font-size:.75rem;color:var(--text2);margin-left:auto}}
+body.view-list .list-z{{flex-shrink:0}}
 .stats{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:16px}}
 .sc{{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px}}
 .sc h3{{font-size:.7rem;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase}}
@@ -287,18 +359,21 @@ body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-pane
 .tp.land-mode{{background:linear-gradient(135deg,rgba(132,204,22,.1),rgba(34,197,94,.04));border-color:rgba(132,204,22,.28)}}
 .tp.caves-mode{{background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(99,102,241,.04));border-color:rgba(168,85,247,.28)}}
 .tp.wheaton-mode{{background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(234,179,8,.04));border-color:rgba(249,115,22,.28)}}
+.tp.soon-mode{{background:linear-gradient(135deg,rgba(236,72,153,.1),rgba(168,85,247,.04));border-color:rgba(236,72,153,.28)}}
 .tp h3{{font-size:.8rem;font-weight:700;color:var(--red);margin-bottom:8px}}
 .tp.new-mode h3{{color:var(--purple)}}
 .tp.pool-mode h3{{color:#22d3ee}}
 .tp.land-mode h3{{color:#a3e635}}
 .tp.caves-mode h3{{color:#c084fc}}
 .tp.wheaton-mode h3{{color:#fb923c}}
+.tp.soon-mode h3{{color:#f472b6}}
 .tpi{{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(239,68,68,.08);gap:10px}}
 .tp.new-mode .tpi{{border-bottom-color:rgba(168,85,247,.1)}}
 .tp.pool-mode .tpi{{border-bottom-color:rgba(6,182,212,.12)}}
 .tp.land-mode .tpi{{border-bottom-color:rgba(132,204,22,.14)}}
 .tp.caves-mode .tpi{{border-bottom-color:rgba(168,85,247,.14)}}
 .tp.wheaton-mode .tpi{{border-bottom-color:rgba(249,115,22,.14)}}
+.tp.soon-mode .tpi{{border-bottom-color:rgba(236,72,153,.14)}}
 .tpi-a{{font-weight:600;font-size:.8rem;flex:1}}.tpi-p{{color:var(--green);font-weight:700;font-size:.8rem}}
 .tpi-s{{min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;font-size:.7rem;color:#fff}}
 .s-h{{background:var(--orange)}}.s-m{{background:var(--yellow);color:#000}}.s-l{{background:var(--green)}}
@@ -307,6 +382,7 @@ body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-pane
 .s-land{{background:#65a30d}}
 .s-caves{{background:#7c3aed}}
 .s-wheaton{{background:#ea580c}}
+.s-soon{{background:#db2777}}
 .vb{{display:inline-flex;padding:5px 12px;background:var(--accent);color:#fff;border-radius:var(--rs);font-size:.7rem;font-weight:600}}
 .vb-sm{{padding:4px 8px;font-size:.65rem;background:var(--card);color:var(--text2);border:1px solid var(--border)}}
 .vb-sm:hover{{border-color:var(--accent);color:var(--text);text-decoration:none}}
@@ -321,14 +397,20 @@ body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-pane
 .cd-price{{font-size:1.1rem;font-weight:800;color:var(--green)}}.cd-orig{{font-size:.7rem;color:var(--muted);text-decoration:line-through;margin-left:6px;font-weight:500}}
 .cd-cut{{font-size:.7rem;color:var(--orange);margin-left:6px;font-weight:700}}
 .cd-det{{display:flex;flex-wrap:wrap;gap:8px;font-size:.7rem;color:var(--text2);margin:6px 0}}
+.hist{{font-size:.65rem;color:var(--text2);margin-top:6px;line-height:1.4}}
 .chg-strip{{display:none;font-size:.75rem;color:var(--text2);margin-bottom:12px;padding:10px 12px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:var(--r)}}
 .chg-strip strong{{color:var(--text)}}
 .chg-strip .chg-samples{{color:var(--muted)}}
+.chg-chip{{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;margin:0 2px;border-radius:12px;border:1px solid rgba(59,130,246,.35);background:rgba(59,130,246,.12);color:var(--accent);font-weight:600;font-size:.7rem;cursor:pointer}}
+.chg-chip:hover{{background:rgba(59,130,246,.22)}}
+.chg-chip.active{{background:var(--accent);color:#fff;border-color:var(--accent)}}
+.empty-msg{{padding:28px;text-align:center;color:var(--text2);background:var(--bg2);border:1px dashed var(--border);border-radius:var(--r)}}
+.empty-msg button{{margin-top:10px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--rs);background:var(--card);color:var(--text);font-weight:600;cursor:pointer}}
 body.mode-land .no-land,body.mode-caves .no-land{{display:none}}
 body:not(.mode-pool) .sort-pool{{display:none}}
 body:not(.mode-land) .sort-land{{display:none}}
 body:not(.mode-caves) .sort-caves{{display:none}}
-body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-distress,body.mode-caves .sort-distress,body.mode-wheaton .sort-distress{{display:none}}
+body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-distress,body.mode-caves .sort-distress,body.mode-wheaton .sort-distress,body.mode-soon .sort-distress,body.mode-coming .sort-distress{{display:none}}
 .cd-tags{{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}}
 .t{{padding:1px 7px;border-radius:10px;font-size:.6rem;font-weight:600}}
 .t-fc{{background:rgba(239,68,68,.1);color:var(--red)}}.t-pr{{background:rgba(59,130,246,.1);color:var(--accent)}}
@@ -339,6 +421,12 @@ body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-
 .t-land{{background:rgba(132,204,22,.16);color:#a3e635}}
 .t-caves{{background:rgba(168,85,247,.18);color:#c084fc}}
 .t-wheaton{{background:rgba(249,115,22,.18);color:#fb923c}}
+.t-soon{{background:rgba(236,72,153,.18);color:#f472b6}}
+.t-wf{{background:rgba(14,165,233,.15);color:#38bdf8}}
+.t-hoa{{background:rgba(234,179,8,.12);color:var(--yellow)}}
+.t-mh{{background:rgba(249,115,22,.15);color:var(--orange)}}
+.t-sub{{background:rgba(107,114,128,.12);color:#9ca3af}}
+.t-approx{{background:rgba(234,179,8,.14);color:var(--yellow)}}
 .cd-ft{{display:flex;justify-content:space-between;align-items:center}}.cd-src{{font-size:.65rem;color:var(--muted)}}
 .cd-x{{display:none;padding:0 12px 12px;border-top:1px solid var(--border);margin-top:8px}}.cd.open .cd-x{{display:block}}
 .xg{{display:grid;grid-template-columns:1fr 1fr;gap:4px}}.xi{{font-size:.7rem}}.xi .l{{color:var(--muted)}}
@@ -347,8 +435,8 @@ body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-
 .badges{{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}}
 .bdg{{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:14px;font-size:.65rem;font-weight:600;background:var(--card);border:1px solid var(--border)}}
 .bdg .n{{background:var(--accent);color:#fff;padding:0 5px;border-radius:8px;font-size:.6rem}}
-.distress-only{{}}.new-only,.pool-only,.land-only,.caves-only,.wheaton-only{{display:none}}
-body.mode-new .distress-only,body.mode-pool .distress-only,body.mode-land .distress-only,body.mode-caves .distress-only,body.mode-wheaton .distress-only{{display:none}}
+.distress-only{{}}.new-only,.pool-only,.land-only,.caves-only,.wheaton-only,.soon-only{{display:none}}
+body.mode-new .distress-only,body.mode-pool .distress-only,body.mode-land .distress-only,body.mode-caves .distress-only,body.mode-wheaton .distress-only,body.mode-soon .distress-only,body.mode-coming .distress-only{{display:none}}
 body.mode-new .new-only{{display:block}}
 body.mode-new .new-only-inline{{display:inline}}
 body.mode-new .new-only-flex{{display:flex}}
@@ -364,7 +452,27 @@ body.mode-caves .caves-only-flex{{display:flex}}
 body.mode-wheaton .wheaton-only{{display:block}}
 body.mode-wheaton .wheaton-only-inline{{display:inline}}
 body.mode-wheaton .wheaton-only-flex{{display:flex}}
-.new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex,.land-only-inline,.land-only-flex,.caves-only-inline,.caves-only-flex,.wheaton-only-inline,.wheaton-only-flex{{display:none}}
+body.mode-soon .soon-only,body.mode-coming .soon-only{{display:block}}
+body.mode-soon .soon-only-inline,body.mode-coming .soon-only-inline{{display:inline}}
+body.mode-soon .soon-only-flex,body.mode-coming .soon-only-flex{{display:flex}}
+.new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex,.land-only-inline,.land-only-flex,.caves-only-inline,.caves-only-flex,.wheaton-only-inline,.wheaton-only-flex,.soon-only-inline,.soon-only-flex{{display:none}}
+.mob-details{{display:contents}}
+.mob-details>summary{{display:none}}
+@media (max-width:800px){{
+  .mode-btn{{padding:6px 10px;font-size:.7rem}}
+  .mob-details{{display:block;margin-bottom:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r)}}
+  .mob-details>summary{{display:block;padding:10px 12px;cursor:pointer;font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.03em;list-style:none}}
+  .mob-details>summary::-webkit-details-marker{{display:none}}
+  .mob-details .loc-panel,.mob-details .stats{{margin:0;border:0;border-radius:0;border-top:1px solid var(--border)}}
+  .wrap{{display:flex;flex-direction:column}}
+  .view-bar,#grd,#mapEl,.tp,.rc{{order:1}}
+  .mob-loc{{order:2}}
+  .ctrls{{order:0}}
+  .mob-stats{{order:3}}
+  .src-note{{order:0}}
+  .mode-bar{{order:0}}
+  .chg-strip{{order:0}}
+}}
 </style>
 </head>
 <body>
@@ -382,6 +490,7 @@ body.mode-wheaton .wheaton-only-flex{{display:flex}}
       <span class="land-badge land-only-inline">{len(land_data)} large tracts</span>
       <span class="caves-badge caves-only-inline">{len(caves_data)} caves/bunkers</span>
       <span class="wheaton-badge wheaton-only-inline">{len(wheaton_data)} Wheaton for sale</span>
+      <span class="soon-badge soon-only-inline">{len(soon_data)} coming soon</span>
     </div>
   </div>
   <div class="badges distress-only" id="hBdg"></div>
@@ -394,6 +503,7 @@ body.mode-wheaton .wheaton-only-flex{{display:flex}}
     <button type="button" class="mode-btn" id="modeLand" onclick="setMode('land')">Large land (20+ ac)</button>
     <button type="button" class="mode-btn" id="modeCaves" onclick="setMode('caves')">Caves &amp; bunkers</button>
     <button type="button" class="mode-btn" id="modeWheaton" onclick="setMode('wheaton')">Wheaton for sale</button>
+    <button type="button" class="mode-btn" id="modeSoon" onclick="setMode('soon')">Coming soon</button>
   </div>
   <div class="src-note distress-only">{VERIFIED_NOTE} Run <code>python scan.py --include-optional</code> to refresh. Use <code>--reverify-only</code> for a status-only pass.</div>
   <div class="src-note new-only">{NEW_NOTE}</div>
@@ -401,33 +511,43 @@ body.mode-wheaton .wheaton-only-flex{{display:flex}}
   <div class="src-note land-only">{LAND_NOTE}</div>
   <div class="src-note caves-only">{CAVES_NOTE}</div>
   <div class="src-note wheaton-only">{WHEATON_NOTE}</div>
+  <div class="src-note soon-only">{SOON_NOTE}</div>
   <div class="chg-strip" id="chgStrip"></div>
-  <div class="loc-panel">
-    <div class="loc-head">
-      <h2>Locations</h2>
-      <div class="loc-actions">
-        <button type="button" onclick="setAllTowns(true)">All on</button>
-        <button type="button" onclick="setAllTowns(false)">All off</button>
-        <button type="button" onclick="invertTowns()">Invert</button>
+  <details class="mob-details mob-loc">
+    <summary>Locations</summary>
+    <div class="loc-panel">
+      <div class="loc-head">
+        <h2>Locations</h2>
+        <div class="loc-actions">
+          <button type="button" onclick="setAllTowns(true)">All on</button>
+          <button type="button" onclick="setAllTowns(false)">All off</button>
+          <button type="button" onclick="invertTowns()">Invert</button>
+        </div>
       </div>
+      <div class="loc-grid" id="locGrid">{town_toggles}</div>
     </div>
-    <div class="loc-grid" id="locGrid">{town_toggles}</div>
-  </div>
+  </details>
   <div class="ctrls">
     <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Condo">Condo</option><option value="Manufactured">Manufactured</option><option value="Land">Large tracts only (rare in distress)</option><option value="Farm">Farm</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
     <div class="cg pool-only"><label>Pool</label><select id="fPool" onchange="go()"><option value="">Private + community</option><option value="private">Private pool</option><option value="community">Community pool</option></select></div>
     <div class="cg land-only"><label>Min acres</label><select id="fAcres" onchange="go()"><option value="20">20+</option><option value="40">40+</option><option value="80">80+</option><option value="160">160+</option></select></div>
+    <div class="cg land-only"><label>Max miles from LH</label><select id="fMiles" onchange="go()"><option value="10">10 mi</option><option value="20">20 mi</option><option value="30">30 mi</option><option value="40" selected>40 mi</option></select></div>
+    <div class="cg land-only"><label>City</label><select id="fLandCity" onchange="go()"><option value="">All cities</option>{land_city_opts}</select></div>
     <div class="cg caves-only"><label>Max drive hr</label><select id="fHours" onchange="go()"><option value="4">≤ 4 hr (preferred)</option><option value="8" selected>≤ 8 hr</option><option value="12">≤ 12 hr (exceptional)</option></select></div>
     <div class="cg caves-only"><label>Feature</label><select id="fFeat" onchange="go()"><option value="">All</option><option value="Cave">Cave</option><option value="Bunker">Bunker</option><option value="Underground home">Underground home</option><option value="Storm shelter">Storm shelter</option><option value="Cellar">Cellar</option></select></div>
     <div class="cg distress-only"><label>Distress</label><select id="fD" onchange="go()"><option value="">All</option><option value="foreclosure">Foreclosure</option><option value="as-is">As-Is/Fixer</option><option value="price-reduced">Price Reduced</option><option value="high-dom">High DOM</option><option value="below-market">Below Market</option></select></div>
     <div class="cg distress-only"><label>Verified</label><select id="fV" onchange="go()"><option value="">All</option><option value="live">Verified Only</option><option value="reverified">Re-verified Only</option></select></div>
     <div class="cg distress-only"><label>Freshness</label><select id="fFresh" onchange="go()"><option value="">All</option><option value="fresh">Fresh only</option><option value="stale">Stale only</option></select></div>
+    <div class="cg distress-only cg-check"><label><input type="checkbox" id="fWf" onchange="go()"> Waterfront only</label></div>
+    <div class="cg distress-only cg-check"><label><input type="checkbox" id="fExMh" onchange="go()"> Exclude manufactured</label></div>
+    <div class="cg distress-only"><label>Max HOA $/mo</label><input type="number" id="fHoa" min="0" step="1" placeholder="No max" onchange="go()"></div>
     <div class="cg no-land"><label>Min beds</label><input type="number" id="fBeds" min="0" step="1" placeholder="Any" onchange="go()"></div>
     <div class="cg no-land"><label>Max DOM</label><input type="number" id="fDom" min="0" step="1" placeholder="No max" onchange="go()"></div>
     <div class="cg"><label>Max Price</label><input type="number" id="fP" placeholder="No max" onchange="go()"></div>
     <div class="cg distress-only"><label>Min Score</label><select id="fS" onchange="go()"><option value="0">All</option><option value="3">3+</option><option value="4">4+</option><option value="5">5+</option></select></div>
     <div class="cg"><label>Sort</label><select id="fO" onchange="go()">
       <option value="score" class="sort-distress">Score</option>
+      <option value="cut" class="sort-distress">Biggest total cut</option>
       <option value="listed">Newest listed</option>
       <option value="pool" class="sort-pool">Pool type</option>
       <option value="acres" class="sort-land">Acres High</option>
@@ -442,12 +562,23 @@ body.mode-wheaton .wheaton-only-flex{{display:flex}}
     <div class="cg"><label>Search</label><input type="text" id="fQ" placeholder="Address..." oninput="go()"></div>
   </div>
   <div class="rc" id="rc"></div>
-  <div class="stats">
-    <div class="sc"><h3 id="sATitle">By Town</h3><table class="st" id="sA"></table></div>
-    <div class="sc distress-only"><h3>Distress Types</h3><table class="st" id="sD"></table></div>
-    <div class="sc"><h3>Property Types</h3><table class="st" id="sT"></table></div>
+  <div class="view-bar">
+    <button type="button" class="view-btn active" id="btnCards" onclick="setDensity('cards')">Cards</button>
+    <button type="button" class="view-btn" id="btnList" onclick="setDensity('list')">List</button>
+    <span style="color:var(--muted);font-size:.7rem">|</span>
+    <button type="button" class="view-btn active" id="btnGridView" onclick="setView('cards')">Grid</button>
+    <button type="button" class="view-btn" id="btnMap" onclick="setView('map')">Map</button>
   </div>
+  <details class="mob-details mob-stats">
+    <summary>Stats</summary>
+    <div class="stats">
+      <div class="sc"><h3 id="sATitle">By Town</h3><table class="st" id="sA"></table></div>
+      <div class="sc distress-only"><h3>Distress Types</h3><table class="st" id="sD"></table></div>
+      <div class="sc"><h3>Property Types</h3><table class="st" id="sT"></table></div>
+    </div>
+  </details>
   <div class="tp" id="tpBox"><h3 id="tpTitle">Top Picks</h3><div id="tpL"></div></div>
+  <div id="mapEl"></div>
   <div class="grid" id="grd"></div>
 </div>
 <script>
@@ -457,6 +588,7 @@ const PP={pool_json};
 const PL={land_json};
 const PC={caves_json};
 const PW={wheaton_json};
+const PS={soon_json};
 const B={badges_json};
 const ASD={area_json};
 const ASN={new_area_json};
@@ -464,16 +596,34 @@ const ASP={pool_area_json};
 const ASL={land_area_json};
 const ASC={caves_area_json};
 const ASW={wheaton_area_json};
+const ASS={soon_area_json};
 const TOWNS={towns_json};
 const NEW_DAYS={new_days};
 const CHANGES={changes_json};
 const LOC_KEY='dps-enabled-towns';
 const TC={{'foreclosure':'t-fc','as-is':'t-ai','as is':'t-ai','fixer':'t-ai','price-reduced':'t-pr','high-dom':'t-hd','below-market':'t-d','investor':'t-ai','estate':'t-d'}};
 let mode='distress';
+let density='cards';
+let viewMode='cards';
+let changeFilter=null;
 let _hashQuiet=false;
+let _map=null;
+let _markers=null;
+let _lastFiltered=[];
 function $(id){{return document.getElementById(id)}}
 function fmt(n){{if(n==null)return'TBD';return'$'+n.toLocaleString('en-US',{{maximumFractionDigits:0}})}}
 function e(s){{if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}}
+function safeHttpUrl(u){{
+  if(u==null)return'';
+  const s=String(u).trim();
+  if(!s)return'';
+  try{{
+    const abs=/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(s)?s:('https://'+s);
+    const parsed=new URL(abs);
+    if(parsed.protocol!=='http:'&&parsed.protocol!=='https:')return'';
+    return parsed.href;
+  }}catch(_err){{return'';}}
+}}
 function tcl(s){{return s>=5?'s-h':s>=3?'s-m':'s-l'}}
 function listDate(p){{return (p.list_date||'').toString().slice(0,10)}}
 function ageDays(p){{
@@ -501,6 +651,40 @@ function priceBlock(p){{
   const cut=priceCutAmount(p);
   const showOrig=p.original_list_price!=null&&p.list_price!=null&&p.original_list_price>p.list_price;
   return `<div class="cd-price">${{fmt(p.list_price)}}${{showOrig?` <span class="cd-orig">${{fmt(p.original_list_price)}}</span>`:''}}${{cut?` <span class="cd-cut">−${{fmt(cut)}}</span>`:''}}</div>`;
+}}
+function historyBlock(p){{
+  const ph=p.price_history||[];
+  const dh=p.dom_history||[];
+  let html='';
+  if(ph.length){{
+    const uniq=[];
+    ph.forEach(x=>{{const v=x&&x.v;if(v==null)return;if(!uniq.length||uniq[uniq.length-1]!==v)uniq.push(v);}});
+    if(uniq.length)html+=`<div class="hist">Price: ${{uniq.map(v=>fmt(v)).join(' → ')}}</div>`;
+  }}
+  if(dh.length){{
+    const uniq=[];
+    dh.forEach(x=>{{const v=x&&x.v;if(v==null)return;if(!uniq.length||uniq[uniq.length-1]!==v)uniq.push(v);}});
+    if(uniq.length)html+=`<div class="hist">DOM: ${{uniq.map(v=>e(String(v))).join(' → ')}}</div>`;
+  }}
+  return html;
+}}
+function lakeBadges(p){{
+  const bits=[];
+  if(p.waterfront)bits.push('<span class="t t-wf">Waterfront</span>');
+  if(p.manufactured)bits.push('<span class="t t-mh">Manufactured</span>');
+  if(p.hoa_fee!=null&&p.hoa_fee!=='')bits.push(`<span class="t t-hoa">HOA ${{fmt(p.hoa_fee)}}/mo</span>`);
+  if(p.lot_rent_monthly!=null&&p.lot_rent_monthly!=='')bits.push(`<span class="t t-hoa">Lot rent ${{fmt(p.lot_rent_monthly)}}/mo</span>`);
+  if(p.subdivision)bits.push(`<span class="t t-sub">${{e(p.subdivision)}}</span>`);
+  return bits.join('');
+}}
+function approxBadge(p){{
+  if(p.needs_review||p.coords_source==='city_center')return'<span class="t t-approx">Approx location</span>';
+  return'';
+}}
+function photoHtml(p, fallback){{
+  const src=safeHttpUrl(p.photo_url);
+  if(src)return`<img class="cd-img" src="${{e(src)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>${{fallback}}</div>'">`;
+  return`<div class="cd-ph">${{fallback}}</div>`;
 }}
 function fullAddr(p){{
   return [p.address,p.city||p.nearest_target,p.state||'IL',p.zip].filter(Boolean).join(' ');
@@ -532,29 +716,37 @@ function ppa(p){{
   return null;
 }}
 function linkButtons(p){{
-  // Prefer Zillow/Google — Realtor.com frequently serves bot-block pages
-  const z=zillowUrl(p), g=googleUrl(p), r=redfinUrl(p), rd=p.listing_url||'';
-  const landExtra=mode==='land'?`<a href="${{e(landwatchUrl(p))}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">LandWatch</a>
-    <a href="${{e(loaUrl(p))}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">LOA</a>`:'';
+  const z=safeHttpUrl(zillowUrl(p)), g=safeHttpUrl(googleUrl(p)), r=safeHttpUrl(redfinUrl(p)), rd=safeHttpUrl(p.listing_url||'');
+  const asr=safeHttpUrl(p.assessor_url||''), parcel=safeHttpUrl(p.parcel_search_url||'');
+  const landExtra=mode==='land'?`${{safeHttpUrl(landwatchUrl(p))?`<a href="${{e(safeHttpUrl(landwatchUrl(p)))}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">LandWatch</a>`:''}}
+    ${{safeHttpUrl(loaUrl(p))?`<a href="${{e(safeHttpUrl(loaUrl(p)))}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">LOA</a>`:''}}`:'';
   return `<div class="link-row" onclick="event.stopPropagation()">
-    <a href="${{e(z)}}" target="_blank" rel="noopener noreferrer" class="vb">Zillow →</a>
-    <a href="${{e(g)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Google</a>
-    <a href="${{e(r)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Redfin</a>
+    ${{z?`<a href="${{e(z)}}" target="_blank" rel="noopener noreferrer" class="vb">Zillow →</a>`:''}}
+    ${{g?`<a href="${{e(g)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Google</a>`:''}}
+    ${{r?`<a href="${{e(r)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Redfin</a>`:''}}
     ${{landExtra}}
     ${{rd?`<a href="${{e(rd)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm" title="May be blocked by Realtor.com">Realtor</a>`:''}}
+    ${{asr?`<a href="${{e(asr)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Assessor</a>`:''}}
+    ${{parcel?`<a href="${{e(parcel)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Parcel</a>`:''}}
   </div>`;
 }}
 function linkButtonsCompact(p){{
-  const z=zillowUrl(p), g=googleUrl(p);
+  const z=safeHttpUrl(zillowUrl(p)), g=safeHttpUrl(googleUrl(p));
+  const asr=safeHttpUrl(p.assessor_url||''), parcel=safeHttpUrl(p.parcel_search_url||'');
   if(mode==='land'){{
+    const lw=safeHttpUrl(landwatchUrl(p));
     return `<span class="link-row" onclick="event.stopPropagation()">
-      <a href="${{e(z)}}" target="_blank" rel="noopener noreferrer" class="vb">Zillow →</a>
-      <a href="${{e(landwatchUrl(p))}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">LandWatch</a>
+      ${{z?`<a href="${{e(z)}}" target="_blank" rel="noopener noreferrer" class="vb">Zillow →</a>`:''}}
+      ${{lw?`<a href="${{e(lw)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">LandWatch</a>`:''}}
+      ${{asr?`<a href="${{e(asr)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Assessor</a>`:''}}
+      ${{parcel?`<a href="${{e(parcel)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Parcel</a>`:''}}
     </span>`;
   }}
   return `<span class="link-row" onclick="event.stopPropagation()">
-    <a href="${{e(z)}}" target="_blank" rel="noopener noreferrer" class="vb">Zillow →</a>
-    <a href="${{e(g)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Google</a>
+    ${{z?`<a href="${{e(z)}}" target="_blank" rel="noopener noreferrer" class="vb">Zillow →</a>`:''}}
+    ${{g?`<a href="${{e(g)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Google</a>`:''}}
+    ${{asr?`<a href="${{e(asr)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Assessor</a>`:''}}
+    ${{parcel?`<a href="${{e(parcel)}}" target="_blank" rel="noopener noreferrer" class="vb vb-sm">Parcel</a>`:''}}
   </span>`;
 }}
 function enabledTowns(){{
@@ -576,10 +768,8 @@ function loadTownPrefs(){{
     const raw=localStorage.getItem(LOC_KEY);
     if(!raw)return;
     const saved=new Set(JSON.parse(raw));
-    // Only apply if at least one known town is present (avoid wiping on empty/corrupt)
     const known=TOWNS.filter(t=>saved.has(t));
     if(!known.length && saved.size){{
-      // Saved prefs exist but none match current towns — leave defaults (all on)
       return;
     }}
     if(!known.length)return;
@@ -608,6 +798,7 @@ function currentData(){{
   if(mode==='land')return PL;
   if(mode==='caves')return PC;
   if(mode==='wheaton')return PW;
+  if(mode==='soon'||mode==='coming')return PS;
   return PD;
 }}
 function currentAreaStats(){{
@@ -616,10 +807,95 @@ function currentAreaStats(){{
   if(mode==='land')return ASL;
   if(mode==='caves')return ASC;
   if(mode==='wheaton')return ASW;
+  if(mode==='soon'||mode==='coming')return ASS;
   return ASD;
 }}
 function isAllOrNothingMode(){{
-  return mode==='land'||mode==='caves'||mode==='wheaton';
+  return mode==='land'||mode==='caves'||mode==='wheaton'||mode==='soon'||mode==='coming';
+}}
+function modeSupportsMap(){{
+  return mode==='distress'||mode==='new'||mode==='pool'||mode==='land'||mode==='caves';
+}}
+function setDensity(d, fromHash){{
+  density=d==='list'?'list':'cards';
+  document.body.classList.toggle('view-list', density==='list');
+  $('btnCards').classList.toggle('active', density==='cards');
+  $('btnList').classList.toggle('active', density==='list');
+  if(viewMode==='map')setView('cards', true);
+  if(!fromHash)writeHash();
+  go();
+}}
+function setView(v, quiet){{
+  if(v==='map'&&!modeSupportsMap())v='cards';
+  viewMode=v==='map'?'map':'cards';
+  document.body.classList.toggle('view-map', viewMode==='map');
+  $('btnMap').classList.toggle('active', viewMode==='map');
+  $('btnGridView').classList.toggle('active', viewMode==='cards');
+  if(viewMode==='map'){{
+    document.body.classList.remove('view-list');
+    renderMap(_lastFiltered);
+  }}
+  if(!quiet)writeHash();
+}}
+function ensureMap(){{
+  if(_map||typeof L==='undefined')return;
+  _map=L.map('mapEl');
+  L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{
+    maxZoom:19,
+    attribution:'&copy; OpenStreetMap'
+  }}).addTo(_map);
+  _markers=L.layerGroup().addTo(_map);
+}}
+function renderMap(list){{
+  if(viewMode!=='map'||!modeSupportsMap())return;
+  ensureMap();
+  if(!_map)return;
+  _markers.clearLayers();
+  const pts=[];
+  (list||[]).forEach((p,i)=>{{
+    const lat=p.lat!=null?p.lat:p.latitude;
+    const lon=p.lon!=null?p.lon:(p.lng!=null?p.lng:p.longitude);
+    if(lat==null||lon==null||Number.isNaN(+lat)||Number.isNaN(+lon))return;
+    const m=L.marker([+lat,+lon]);
+    const z=safeHttpUrl(zillowUrl(p));
+    const label=e(p.address||'Listing');
+    m.bindPopup(`<strong>${{label}}</strong><br>${{fmt(p.list_price)}}${{z?`<br><a href="${{e(z)}}" target="_blank" rel="noopener noreferrer">Zillow</a>`:''}}`);
+    m.on('click',()=>{{
+      if(z){{window.open(z,'_blank','noopener,noreferrer');return;}}
+      const el=document.querySelector('[data-card-idx="'+i+'"]');
+      if(el){{setView('cards',true);el.scrollIntoView({{behavior:'smooth',block:'center'}});el.classList.add('open');}}
+    }});
+    m.addTo(_markers);
+    pts.push([+lat,+lon]);
+  }});
+  setTimeout(()=>{{
+    _map.invalidateSize();
+    if(pts.length){{_map.fitBounds(pts,{{padding:[24,24]}});}}
+    else{{_map.setView([41.62,-88.66],9);}}
+  }},50);
+}}
+function clearFilters(){{
+  changeFilter=null;
+  ['fT','fD','fV','fFresh','fPool','fFeat','fQ','fP','fBeds','fDom','fHoa'].forEach(id=>{{const el=$(id);if(el)el.value='';}});
+  if($('fS'))$('fS').value='0';
+  if($('fAcres'))$('fAcres').value='20';
+  if($('fMiles'))$('fMiles').value='40';
+  if($('fLandCity'))$('fLandCity').value='';
+  if($('fHours'))$('fHours').value='8';
+  if($('fO'))$('fO').value=mode==='distress'?'score':mode==='pool'?'pool':mode==='land'?'acres':mode==='caves'?'hours':'listed';
+  if($('fWf'))$('fWf').checked=false;
+  if($('fExMh'))$('fExMh').checked=false;
+  setAllTowns(true);
+  document.querySelectorAll('.chg-chip').forEach(c=>c.classList.remove('active'));
+  go();
+}}
+function applyChangeFilter(kind){{
+  if(mode!=='distress')setMode('distress');
+  changeFilter=(changeFilter===kind)?null:kind;
+  document.querySelectorAll('.chg-chip').forEach(c=>{{
+    c.classList.toggle('active', c.dataset.kind===changeFilter);
+  }});
+  go();
 }}
 function renderChanges(){{
   const box=$('chgStrip');
@@ -630,27 +906,36 @@ function renderChanges(){{
   if(!neu.length&&!rem.length&&!cuts.length){{box.style.display='none';return;}}
   const samples=[...neu,...cuts].map(p=>p&&p.address).filter(Boolean).slice(0,5).map(e);
   box.style.display='block';
-  box.innerHTML=`<strong>Since last scan</strong> · +${{neu.length}} new · ${{rem.length}} removed · ${{cuts.length}} price cuts`+
+  box.innerHTML=`<strong>Since last scan</strong> · `+
+    `<button type="button" class="chg-chip" data-kind="new" onclick="applyChangeFilter('new')">New (${{neu.length}})</button> · `+
+    `${{rem.length}} removed · `+
+    `<button type="button" class="chg-chip" data-kind="cuts" onclick="applyChangeFilter('cuts')">Cuts (${{cuts.length}})</button>`+
     (samples.length?` <span class="chg-samples">· e.g. ${{samples.join(', ')}}</span>`:'');
 }}
 function writeHash(){{
   if(_hashQuiet)return;
   const p=new URLSearchParams();
   p.set('mode', mode);
+  if(density==='list')p.set('density','list');
+  if(viewMode==='map')p.set('view','map');
   const towns=[...enabledTowns()];
   if(towns.length&&towns.length<TOWNS.length)p.set('towns', towns.join(','));
-  const map=[['type','fT'],['distress','fD'],['verified','fV'],['fresh','fFresh'],['pool','fPool'],['acres','fAcres'],['hours','fHours'],['feat','fFeat'],['price','fP'],['score','fS'],['beds','fBeds'],['dom','fDom'],['sort','fO'],['q','fQ']];
+  const map=[['type','fT'],['distress','fD'],['verified','fV'],['fresh','fFresh'],['pool','fPool'],['acres','fAcres'],['miles','fMiles'],['landCity','fLandCity'],['hours','fHours'],['feat','fFeat'],['price','fP'],['score','fS'],['beds','fBeds'],['dom','fDom'],['hoa','fHoa'],['sort','fO'],['q','fQ']];
   map.forEach(([k,id])=>{{
     const el=$(id); if(!el)return;
     const v=(el.value||'').trim();
     if(!v||(k==='score'&&v==='0')||(k==='acres'&&v==='20'&&mode!=='land'))return;
     if(k==='acres'&&mode!=='land')return;
+    if(k==='miles'&&(mode!=='land'||v==='40'))return;
+    if(k==='landCity'&&mode!=='land')return;
     if(k==='pool'&&mode!=='pool')return;
     if((k==='hours'||k==='feat')&&mode!=='caves')return;
     if(k==='hours'&&v==='8')return;
-    if((k==='distress'||k==='verified'||k==='fresh'||k==='score')&&mode!=='distress')return;
+    if((k==='distress'||k==='verified'||k==='fresh'||k==='score'||k==='hoa')&&mode!=='distress')return;
     p.set(k,v);
   }});
+  if(mode==='distress'&&$('fWf')&&$('fWf').checked)p.set('wf','1');
+  if(mode==='distress'&&$('fExMh')&&$('fExMh').checked)p.set('exMh','1');
   const next='#'+p.toString();
   if(location.hash!==next)history.replaceState(null,'',next);
 }}
@@ -661,9 +946,6 @@ function applyHash(){{
   _hashQuiet=true;
   try{{
     const m=p.get('mode');
-    if(m&&['distress','new','pool','land'].includes(m)){{
-      // setMode below; stash filters first
-    }}
     const towns=p.get('towns');
     if(towns){{
       const want=new Set(towns.split(',').map(s=>s.trim()).filter(Boolean));
@@ -672,58 +954,85 @@ function applyHash(){{
     }}
     const setIf=(id,key)=>{{const el=$(id); if(el&&p.has(key))el.value=p.get(key);}};
     setIf('fT','type'); setIf('fD','distress'); setIf('fV','verified'); setIf('fFresh','fresh');
-    setIf('fPool','pool'); setIf('fAcres','acres'); setIf('fHours','hours'); setIf('fFeat','feat');
-    setIf('fP','price'); setIf('fS','score');
+    setIf('fPool','pool'); setIf('fAcres','acres'); setIf('fMiles','miles'); setIf('fLandCity','landCity');
+    setIf('fHours','hours'); setIf('fFeat','feat');
+    setIf('fP','price'); setIf('fS','score'); setIf('fHoa','hoa');
     setIf('fBeds','beds'); setIf('fDom','dom'); setIf('fO','sort'); setIf('fQ','q');
-    if(m&&['distress','new','pool','land','caves','wheaton'].includes(m))setMode(m,true);
+    if($('fWf'))$('fWf').checked=p.get('wf')==='1';
+    if($('fExMh'))$('fExMh').checked=p.get('exMh')==='1';
+    if(p.get('density')==='list'){{density='list';document.body.classList.add('view-list');$('btnCards').classList.remove('active');$('btnList').classList.add('active');}}
+    if(m&&['distress','new','pool','land','caves','wheaton','soon','coming'].includes(m))setMode(m,true);
+    if(p.get('view')==='map')setView('map',true);
   }}finally{{_hashQuiet=false;}}
   return true;
 }}
 function setMode(m, fromHash){{
-  mode=m;
-  document.body.classList.toggle('mode-new', m==='new');
-  document.body.classList.toggle('mode-pool', m==='pool');
-  document.body.classList.toggle('mode-land', m==='land');
-  document.body.classList.toggle('mode-caves', m==='caves');
-  document.body.classList.toggle('mode-wheaton', m==='wheaton');
-  $('modeDistress').classList.toggle('active', m==='distress');
-  $('modeNew').classList.toggle('active', m==='new');
-  $('modePool').classList.toggle('active', m==='pool');
-  $('modeLand').classList.toggle('active', m==='land');
-  $('modeCaves').classList.toggle('active', m==='caves');
-  $('modeWheaton').classList.toggle('active', m==='wheaton');
+  mode=(m==='coming')?'soon':m;
+  document.body.classList.toggle('mode-new', mode==='new');
+  document.body.classList.toggle('mode-pool', mode==='pool');
+  document.body.classList.toggle('mode-land', mode==='land');
+  document.body.classList.toggle('mode-caves', mode==='caves');
+  document.body.classList.toggle('mode-wheaton', mode==='wheaton');
+  document.body.classList.toggle('mode-soon', mode==='soon');
+  document.body.classList.toggle('mode-coming', mode==='soon');
+  $('modeDistress').classList.toggle('active', mode==='distress');
+  $('modeNew').classList.toggle('active', mode==='new');
+  $('modePool').classList.toggle('active', mode==='pool');
+  $('modeLand').classList.toggle('active', mode==='land');
+  $('modeCaves').classList.toggle('active', mode==='caves');
+  $('modeWheaton').classList.toggle('active', mode==='wheaton');
+  $('modeSoon').classList.toggle('active', mode==='soon');
   const sort=$('fO');
-  $('tpBox').classList.remove('new-mode','pool-mode','land-mode','caves-mode','wheaton-mode');
-  if(m==='new'){{
-    if(!fromHash&&(sort.value==='score'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'||sort.value==='hours'))sort.value='listed';
+  $('tpBox').classList.remove('new-mode','pool-mode','land-mode','caves-mode','wheaton-mode','soon-mode');
+  changeFilter=null;
+  document.querySelectorAll('.chg-chip').forEach(c=>c.classList.remove('active'));
+  if(!fromHash){{
+    if(mode==='new'||mode==='wheaton'){{
+      density='list';
+      document.body.classList.add('view-list');
+      $('btnCards').classList.remove('active');
+      $('btnList').classList.add('active');
+    }}else if(density==='list'&&mode!=='new'&&mode!=='wheaton'){{
+      /* keep user density unless switching into default-list modes above */
+    }}
+  }}
+  if(mode==='new'){{
+    if(!fromHash&&(sort.value==='score'||sort.value==='cut'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'||sort.value==='hours'))sort.value='listed';
     $('tpTitle').textContent='Newest listings';
     $('tpBox').classList.add('new-mode');
     $('hdrCount').textContent=PN.length+' new listings';
-  }}else if(m==='pool'){{
+  }}else if(mode==='pool'){{
     if(!fromHash)sort.value='pool';
     $('tpTitle').textContent='Homes with pools';
     $('tpBox').classList.add('pool-mode');
     $('hdrCount').textContent=PP.length+' pool homes';
-  }}else if(m==='land'){{
+  }}else if(mode==='land'){{
     if(!fromHash)sort.value='acres';
     $('tpTitle').textContent='Largest tracts';
     $('tpBox').classList.add('land-mode');
     $('hdrCount').textContent=PL.length+' large tracts';
-  }}else if(m==='caves'){{
+  }}else if(mode==='caves'){{
     if(!fromHash)sort.value='hours';
     $('tpTitle').textContent='Closest caves & bunkers';
     $('tpBox').classList.add('caves-mode');
     $('hdrCount').textContent=PC.length+' caves/bunkers';
-  }}else if(m==='wheaton'){{
+  }}else if(mode==='wheaton'){{
     if(!fromHash)sort.value='listed';
     $('tpTitle').textContent='Newest in Wheaton';
     $('tpBox').classList.add('wheaton-mode');
     $('hdrCount').textContent=PW.length+' Wheaton for sale';
+  }}else if(mode==='soon'){{
+    if(!fromHash)sort.value='listed';
+    $('tpTitle').textContent='Coming soon';
+    $('tpBox').classList.add('soon-mode');
+    $('hdrCount').textContent=PS.length+' coming soon';
   }}else{{
     if(!fromHash&&(sort.value==='listed'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'||sort.value==='hours'))sort.value='score';
     $('tpTitle').textContent='Top Picks';
     $('hdrCount').textContent=PD.length+' properties';
   }}
+  if(viewMode==='map'&&!modeSupportsMap())setView('cards',true);
+  $('btnMap').style.display=modeSupportsMap()?'':'none';
   renderStats();
   go();
 }}
@@ -735,15 +1044,15 @@ function renderStats(){{
   const saTitle=$('sATitle');
   if(saTitle)saTitle.textContent=isAllOrNothingMode()?'By City':'By Town';
   const areas=isAllOrNothingMode()?AS:AS.filter(a=>towns.has(a.area));
-  areas.forEach(a=>{{h+=`<tr><td>${{a.area}}</td><td>${{a.count}}</td><td>${{a.avgPrice}}</td><td>${{a.avgDom}} ${{mode==='new'?'days':'DOM'}}</td></tr>`}});
+  areas.forEach(a=>{{h+=`<tr><td>${{e(a.area)}}</td><td>${{a.count}}</td><td>${{e(a.avgPrice)}}</td><td>${{e(a.avgDom)}} ${{mode==='new'?'days':'DOM'}}</td></tr>`}});
   $('sA').innerHTML=h||'<tr><td colspan="4">No locations enabled</td></tr>';
   if(mode==='distress'){{
-    h='';B.forEach(b=>{{h+=`<tr><td>${{b.tag}}</td><td>${{b.count}}</td></tr>`}});$('sD').innerHTML=h;
-    $('hBdg').innerHTML=B.map(b=>`<span class="bdg">${{b.tag}}<span class="n">${{b.count}}</span></span>`).join('');
+    h='';B.forEach(b=>{{h+=`<tr><td>${{e(b.tag)}}</td><td>${{b.count}}</td></tr>`}});$('sD').innerHTML=h;
+    $('hBdg').innerHTML=B.map(b=>`<span class="bdg">${{e(b.tag)}}<span class="n">${{b.count}}</span></span>`).join('');
   }}
   const filtered=isAllOrNothingMode()?P:P.filter(p=>towns.has(p.nearest_target));
   h='';const ty={{}};filtered.forEach(p=>{{ty[p.property_type]=(ty[p.property_type]||0)+1}});
-  Object.entries(ty).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{{h+=`<tr><td>${{k}}</td><td>${{v}}</td></tr>`}});
+  Object.entries(ty).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{{h+=`<tr><td>${{e(k)}}</td><td>${{v}}</td></tr>`}});
   $('sT').innerHTML=h||'<tr><td colspan="2">—</td></tr>';
 }}
 function go(){{
@@ -755,7 +1064,11 @@ function go(){{
   const maxDom=parseFloat(($('fDom')||{{}}).value);
   const maxHours=parseFloat(($('fHours')||{{}}).value)||8;
   const feat=($('fFeat')||{{}}).value||'';
-  // Land / caves / Wheaton modes are all-or-nothing — never gated by town toggles.
+  const maxMiles=parseFloat(($('fMiles')||{{}}).value)||40;
+  const landCity=($('fLandCity')||{{}}).value||'';
+  const maxHoa=parseFloat(($('fHoa')||{{}}).value);
+  const wfOnly=$('fWf')&&$('fWf').checked;
+  const exMh=$('fExMh')&&$('fExMh').checked;
   if(!isAllOrNothingMode())f=f.filter(p=>towns.has(p.nearest_target));
   if(t)f=f.filter(p=>p.property_type===t);
   if(mode==='distress'){{
@@ -765,9 +1078,23 @@ function go(){{
     if(fr==='stale')f=f.filter(p=>p.is_stale);
     if(d)f=f.filter(p=>(p.distress_types||[]).some(x=>x.toLowerCase().includes(d)));
     if(ms)f=f.filter(p=>p.distress_score>=ms);
+    if(wfOnly)f=f.filter(p=>!!p.waterfront);
+    if(exMh)f=f.filter(p=>!p.manufactured&&(p.property_type||'')!=='Manufactured');
+    if(!Number.isNaN(maxHoa))f=f.filter(p=>p.hoa_fee==null||p.hoa_fee<=maxHoa);
+    if(changeFilter==='new'){{
+      const ids=new Set((CHANGES.newly_active||[]).map(x=>x&&(x.property_id||x.address)).filter(Boolean));
+      f=f.filter(p=>ids.has(p.property_id)||ids.has(p.address));
+    }}else if(changeFilter==='cuts'){{
+      const ids=new Set((CHANGES.price_cuts||[]).map(x=>x&&(x.property_id||x.address)).filter(Boolean));
+      f=f.filter(p=>ids.has(p.property_id)||ids.has(p.address));
+    }}
   }}
   if(mode==='pool'&&pt)f=f.filter(p=>(p.pool_type||'').toLowerCase().includes(pt));
-  if(mode==='land')f=f.filter(p=>(p.acres||0)>=minAc);
+  if(mode==='land'){{
+    f=f.filter(p=>(p.acres||0)>=minAc);
+    f=f.filter(p=>p.miles_from_lake_holiday==null||p.miles_from_lake_holiday<=maxMiles);
+    if(landCity)f=f.filter(p=>(p.city||p.nearest_target||'')===landCity);
+  }}
   if(mode==='caves'){{
     f=f.filter(p=>(p.drive_hours_from_60189??99)<=maxHours);
     if(feat)f=f.filter(p=>(p.feature_type||'')===feat);
@@ -775,7 +1102,7 @@ function go(){{
   if(mode!=='land'&&mode!=='caves'&&!Number.isNaN(minBeds))f=f.filter(p=>p.beds!=null&&p.beds>=minBeds);
   if(mode!=='land'&&mode!=='caves'&&!Number.isNaN(maxDom))f=f.filter(p=>{{const a=ageDays(p);return a!=null&&a<=maxDom}});
   if(mp<Infinity)f=f.filter(p=>p.list_price!=null&&p.list_price<=mp);
-  if(q)f=f.filter(p=>(p.address+' '+(p.notes||'')+' '+(p.distress_types||[]).join(' ')+' '+(p.pool_evidence||[]).join(' ')+' '+(p.land_evidence||[]).join(' ')+' '+(p.cave_evidence||[]).join(' ')+' '+(p.feature_type||'')+' '+(p.city||'')).toLowerCase().includes(q));
+  if(q)f=f.filter(p=>(p.address+' '+(p.notes||'')+' '+(p.distress_types||[]).join(' ')+' '+(p.pool_evidence||[]).join(' ')+' '+(p.land_evidence||[]).join(' ')+' '+(p.cave_evidence||[]).join(' ')+' '+(p.feature_type||'')+' '+(p.city||'')+' '+(p.subdivision||'')).toLowerCase().includes(q));
   f.sort((a,b)=>{{
     switch(o){{
       case'score':{{
@@ -783,6 +1110,7 @@ function go(){{
         if(ha!==hb)return ha-hb;
         return(b.distress_score||0)-(a.distress_score||0)||(b.dom||0)-(a.dom||0);
       }}
+      case'cut':return(priceCutAmount(b)||0)-(priceCutAmount(a)||0)||(b.distress_score||0)-(a.distress_score||0);
       case'listed':{{
         const da=listDate(a),db=listDate(b);
         if(db!==da)return db.localeCompare(da);
@@ -803,13 +1131,16 @@ function go(){{
       default:return 0;
     }}
   }});
-  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':mode==='land'?'large tracts':mode==='caves'?'caves/bunkers':mode==='wheaton'?'Wheaton for sale':'properties';
+  _lastFiltered=f;
+  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':mode==='land'?'large tracts':mode==='caves'?'caves/bunkers':mode==='wheaton'?'Wheaton for sale':(mode==='soon'||mode==='coming')?'coming soon':'properties';
   if(mode==='land'){{
-    $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · within 40 mi of Lake Holiday`;
+    $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · within ${{maxMiles}} mi of Lake Holiday`;
   }}else if(mode==='caves'){{
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · drive hours from ZIP 60189 (approx)`;
   }}else if(mode==='wheaton'){{
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · Wheaton, IL (60187 / 60189)`;
+  }}else if(mode==='soon'||mode==='coming'){{
+    $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · pre-market / coming soon`;
   }}else{{
     const onCount=towns.size;
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · <strong>${{onCount}}</strong>/${{TOWNS.length}} locations on`;
@@ -819,43 +1150,65 @@ function go(){{
   }}else if(mode==='pool'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-pool">🏊</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}} · ${{e(p.pool_type)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No pool homes in the enabled locations.</div></div>';
   }}else if(mode==='land'){{
-    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-land">${{Math.round(p.acres||0)}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target)}} · ${{e(p.miles_from_lake_holiday)}} mi</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No large tracts within 40 mi of Lake Holiday.</div></div>';
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-land">${{Math.round(p.acres||0)}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target)}} · ${{e(p.miles_from_lake_holiday)}} mi</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No large tracts within the current mile filter.</div></div>';
   }}else if(mode==='caves'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-caves">${{p.drive_hours_from_60189!=null?p.drive_hours_from_60189:'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city)}} ${{e(p.state)}} · ${{e(p.feature_type)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No cave/bunker listings in the current drive-hour filter. Run <code>python scan.py --caves-only</code>.</div></div>';
   }}else if(mode==='wheaton'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-wheaton">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · listed ${{e(listDate(p)||'?')}} · ${{e(p.property_type||'')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No Wheaton listings yet. Run <code>python scan.py --wheaton-only</code>.</div></div>';
+  }}else if(mode==='soon'||mode==='coming'){{
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-soon">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target||'')}} · ${{e(listDate(p)||'?')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No coming-soon listings yet. Add <code>data/coming_soon.json</code>.</div></div>';
   }}else{{
     const homes=f.filter(p=>!isLandFarm(p));
     $('tpL').innerHTML=homes.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No home Top Picks in the current filters (land/farm excluded from this list).</div></div>';
   }}
-  $('grd').innerHTML=f.map(p=>{{
+  if(!f.length){{
+    $('grd').innerHTML=`<div class="empty-msg">No listings match. <button type="button" onclick="clearFilters()">Clear filters</button></div>`;
+    renderMap([]);
+    writeHash();
+    return;
+  }}
+  if(density==='list'&&viewMode!=='map'){{
+    $('grd').innerHTML=f.map((p,i)=>{{
+      const z=safeHttpUrl(zillowUrl(p));
+      const beds=p.beds!=null?p.beds+' bd':'';
+      return`<div class="cd" data-card-idx="${{i}}"><div class="cd-b">
+        <div class="cd-addr">${{e(p.address)}}</div>
+        <div class="cd-city">${{e(p.city||p.nearest_target||'')}}</div>
+        <div class="list-meta">${{fmt(p.list_price)}}${{beds?' · '+beds:''}}</div>
+        ${{z?`<a class="list-z vb vb-sm" href="${{e(z)}}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Zillow</a>`:''}}
+      </div></div>`;
+    }}).join('');
+    writeHash();
+    return;
+  }}
+  $('grd').innerHTML=f.map((p,i)=>{{
     if(mode==='new'){{
       const age=ageDays(p);
       const det=[];if(p.beds!=null)det.push(p.beds+' bd');if(p.baths!=null)det.push(p.baths+' ba');
       if(listDate(p))det.push('Listed '+listDate(p));
       if(age!=null)det.push(age+'d on market');
       const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
-      const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🏠</div>'">`:'<div class="cd-ph">🏠</div>';
-      return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-new">${{age??'N'}}</div>${{img}}<div class="cd-b">
+      const img=photoHtml(p,'🏠');
+      return`<div class="cd" data-card-idx="${{i}}" onclick="this.classList.toggle('open')"><div class="cd-s s-new">${{age??'N'}}</div>${{img}}<div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
         ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
-        <div class="cd-tags"><span class="t t-new">new listing</span><span class="t t-d">${{e(p.property_type||'')}}</span></div>
+        <div class="cd-tags"><span class="t t-new">new listing</span><span class="t t-d">${{e(p.property_type||'')}}</span>${{lakeBadges(p)}}</div>
         <div class="cd-ft">${{linkButtons(p)}}</div>
         <div class="cd-x"><div class="xg">
           <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
           <div class="xi"><span class="l">List date:</span> <span class="v">${{e(listDate(p)||'N/A')}}</span></div>
           <div class="xi"><span class="l">Sqft:</span> <span class="v">${{p.sqft||'N/A'}}</span></div>
           <div class="xi"><span class="l">Year:</span> <span class="v">${{p.year_built||'N/A'}}</span></div>
-        </div>${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+        </div>${{historyBlock(p)}}${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
       </div></div>`;
     }}
     if(mode==='pool'){{
       const det=[];if(p.beds!=null)det.push(p.beds+' bd');if(p.baths!=null)det.push(p.baths+' ba');if(p.dom!=null)det.push(p.dom+' DOM');
       const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
-      const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🏠</div>'">`:'<div class="cd-ph">🏠</div>';
+      const img=photoHtml(p,'🏠');
       const evidence=(p.pool_evidence||[]).map(x=>e(x)).join(' · ');
       const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
-      return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-pool">🏊</div>${{img}}<div class="cd-b">
+      return`<div class="cd" data-card-idx="${{i}}" onclick="this.classList.toggle('open')"><div class="cd-s s-pool">🏊</div>${{img}}<div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
         ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
         <div class="cd-tags"><span class="t t-pool">${{e(p.pool_type||'Pool')}}</span><span class="t t-d">${{e(p.property_type||'')}}</span></div>
@@ -866,7 +1219,7 @@ function go(){{
           <div class="xi"><span class="l">Checked:</span> <span class="v">${{e(verifiedAt)}}</span></div>
           <div class="xi"><span class="l">Pool:</span> <span class="v">${{e(p.pool_type||'Yes')}}</span></div>
         </div>${{evidence?`<div style="font-size:.65rem;color:var(--muted);margin-top:4px">${{evidence}}</div>`:''}}
-        ${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+        ${{historyBlock(p)}}${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
       </div></div>`;
     }}
     if(mode==='land'){{
@@ -875,21 +1228,21 @@ function go(){{
       if(p.miles_from_lake_holiday!=null)det.push(p.miles_from_lake_holiday+' mi from LH');
       if(p.dom!=null)det.push(p.dom+' DOM');
       const acrePrice=ppa(p);if(acrePrice!=null)det.push('$'+Math.round(acrePrice).toLocaleString('en-US')+'/acre');
-      const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🌾</div>'">`:'<div class="cd-ph">🌾</div>';
+      const img=photoHtml(p,'🌾');
       const evidence=(p.land_evidence||[]).map(x=>e(x)).join(' · ');
       const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
-      return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-land">${{Math.round(p.acres||0)}}</div>${{img}}<div class="cd-b">
+      return`<div class="cd" data-card-idx="${{i}}" onclick="this.classList.toggle('open')"><div class="cd-s s-land">${{Math.round(p.acres||0)}}</div>${{img}}<div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
         ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
-        <div class="cd-tags"><span class="t t-land">${{e(p.acres)}} acres</span><span class="t t-d">${{e(p.property_type||'Land')}}</span></div>
+        <div class="cd-tags"><span class="t t-land">${{e(p.acres)}} acres</span><span class="t t-d">${{e(p.property_type||'Land')}}</span>${{approxBadge(p)}}</div>
         <div class="cd-ft">${{linkButtons(p)}}</div>
         <div class="cd-x"><div class="xg">
           <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
           <div class="xi"><span class="l">Verified:</span> <span class="v v-ok">Live inventory</span></div>
           <div class="xi"><span class="l">Checked:</span> <span class="v">${{e(verifiedAt)}}</span></div>
           <div class="xi"><span class="l">From LH:</span> <span class="v">${{p.miles_from_lake_holiday!=null?p.miles_from_lake_holiday+' mi':'N/A'}}</span></div>
-        </div>        ${{evidence?`<div style="font-size:.65rem;color:var(--muted);margin-top:4px">${{evidence}}</div>`:''}}
-        ${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+        </div>${{evidence?`<div style="font-size:.65rem;color:var(--muted);margin-top:4px">${{evidence}}</div>`:''}}
+        ${{historyBlock(p)}}${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
       </div></div>`;
     }}
     if(mode==='caves'){{
@@ -898,14 +1251,14 @@ function go(){{
       if(p.miles_from_60189!=null)det.push(p.miles_from_60189+' mi');
       if(p.beds!=null)det.push(p.beds+' bd');
       if(p.baths!=null)det.push(p.baths+' ba');
-      const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>⛰</div>'">`:'<div class="cd-ph">⛰</div>';
+      const img=photoHtml(p,'⛰');
       const evidence=(p.cave_evidence||[]).map(x=>e(x)).join(' · ');
       const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
       const band=p.preferred_band?'preferred ≤4h':(p.evidence_strength==='strong'?'strong evidence':'');
-      return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-caves">${{p.drive_hours_from_60189!=null?p.drive_hours_from_60189:'—'}}</div>${{img}}<div class="cd-b">
+      return`<div class="cd" data-card-idx="${{i}}" onclick="this.classList.toggle('open')"><div class="cd-s s-caves">${{p.drive_hours_from_60189!=null?p.drive_hours_from_60189:'—'}}</div>${{img}}<div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city)}}, ${{e(p.state||'')}} · ${{e(p.feature_type||'Underground')}}</div>
         ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
-        <div class="cd-tags"><span class="t t-caves">${{e(p.feature_type||'Cave')}}</span>${{band?`<span class="t t-d">${{e(band)}}</span>`:''}}<span class="t t-d">${{e(p.property_type||'')}}</span></div>
+        <div class="cd-tags"><span class="t t-caves">${{e(p.feature_type||'Cave')}}</span>${{band?`<span class="t t-d">${{e(band)}}</span>`:''}}<span class="t t-d">${{e(p.property_type||'')}}</span>${{approxBadge(p)}}</div>
         <div class="cd-ft">${{linkButtons(p)}}</div>
         <div class="cd-x"><div class="xg">
           <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
@@ -913,7 +1266,7 @@ function go(){{
           <div class="xi"><span class="l">Checked:</span> <span class="v">${{e(verifiedAt)}}</span></div>
           <div class="xi"><span class="l">Strength:</span> <span class="v">${{e(p.evidence_strength||'N/A')}}</span></div>
         </div>${{evidence?`<div style="font-size:.65rem;color:var(--muted);margin-top:4px">${{evidence}}</div>`:''}}
-        ${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+        ${{historyBlock(p)}}${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
       </div></div>`;
     }}
     if(mode==='wheaton'){{
@@ -922,10 +1275,10 @@ function go(){{
       if(listDate(p))det.push('Listed '+listDate(p));
       if(age!=null)det.push(age+'d on market');
       const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
-      const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🏠</div>'">`:'<div class="cd-ph">🏠</div>';
+      const img=photoHtml(p,'🏠');
       const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
       const rev=(p.verification_source||'')==='realtor.com-reverified';
-      return`<div class="cd" onclick="this.classList.toggle('open')"><div class="cd-s s-wheaton">${{age??'W'}}</div>${{img}}<div class="cd-b">
+      return`<div class="cd" data-card-idx="${{i}}" onclick="this.classList.toggle('open')"><div class="cd-s s-wheaton">${{age??'W'}}</div>${{img}}<div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||'Wheaton')}}, IL · ${{e(p.zip||'')}}</div>
         ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
         <div class="cd-tags"><span class="t t-wheaton">Wheaton</span><span class="t t-d">${{e(p.property_type||'')}}</span>${{rev?`<span class="t t-d">re-verified</span>`:''}}</div>
@@ -935,21 +1288,41 @@ function go(){{
           <div class="xi"><span class="l">Verified:</span> <span class="v v-ok">${{rev?'Live re-verified':'Live inventory'}}</span></div>
           <div class="xi"><span class="l">Checked:</span> <span class="v">${{e(verifiedAt)}}</span></div>
           <div class="xi"><span class="l">Sqft:</span> <span class="v">${{p.sqft||'N/A'}}</span></div>
-        </div>${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+        </div>${{historyBlock(p)}}${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+      </div></div>`;
+    }}
+    if(mode==='soon'||mode==='coming'){{
+      const age=ageDays(p);
+      const det=[];if(p.beds!=null)det.push(p.beds+' bd');if(p.baths!=null)det.push(p.baths+' ba');
+      if(listDate(p))det.push('Listed '+listDate(p));
+      if(age!=null)det.push(age+'d');
+      const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
+      const img=photoHtml(p,'🏠');
+      return`<div class="cd" data-card-idx="${{i}}" onclick="this.classList.toggle('open')"><div class="cd-s s-soon">${{age??'CS'}}</div>${{img}}<div class="cd-b">
+        <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target||'')}}, IL</div>
+        ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
+        <div class="cd-tags"><span class="t t-soon">Coming soon</span><span class="t t-d">${{e(p.property_type||'')}}</span></div>
+        <div class="cd-ft">${{linkButtons(p)}}</div>
+        <div class="cd-x"><div class="xg">
+          <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status||'Coming soon')}}</span></div>
+          <div class="xi"><span class="l">List date:</span> <span class="v">${{e(listDate(p)||'N/A')}}</span></div>
+          <div class="xi"><span class="l">Sqft:</span> <span class="v">${{p.sqft||'N/A'}}</span></div>
+          <div class="xi"><span class="l">Year:</span> <span class="v">${{p.year_built||'N/A'}}</span></div>
+        </div>${{historyBlock(p)}}${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
       </div></div>`;
     }}
     const verified=(p.verification_source||'').includes('realtor.com');
     const rev=p.verification_source==='realtor.com-reverified';
-    const tags=(p.distress_types||[]).slice(0,5).map(x=>`<span class="t ${{TC[x.toLowerCase()]||'t-d'}}">${{x}}</span>`).join('');
+    const tags=(p.distress_types||[]).slice(0,5).map(x=>`<span class="t ${{TC[x.toLowerCase()]||'t-d'}}">${{e(x)}}</span>`).join('');
     const det=[];if(p.beds!=null)det.push(p.beds+' bd');if(p.baths!=null)det.push(p.baths+' ba');if(p.dom!=null)det.push(p.dom+' DOM');
     const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
     if(p.is_stale)det.push('STALE');
-    const img=p.photo_url?`<img class="cd-img" src="${{e(p.photo_url)}}" loading="lazy" onerror="this.outerHTML='<div class=cd-ph>🏠</div>'">`:'<div class="cd-ph">🏠</div>';
+    const img=photoHtml(p,'🏠');
     const vlabel=rev?'Re-verified':(verified?'Verified':'Legacy');
     const verifiedAt=p.verified_at?String(p.verified_at).replace('T',' ').slice(0,16):'N/A';
-    return`<div class="cd" data-stale="${{p.is_stale?1:0}}" onclick="this.classList.toggle('open')"><div class="cd-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div>${{img}}<div class="cd-b">
+    return`<div class="cd" data-card-idx="${{i}}" data-stale="${{p.is_stale?1:0}}" onclick="this.classList.toggle('open')"><div class="cd-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div>${{img}}<div class="cd-b">
       <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target)}}, IL · ${{e(p.nearest_target)}}</div>
-      ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div><div class="cd-tags">${{tags}}</div>
+      ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div><div class="cd-tags">${{tags}}${{lakeBadges(p)}}</div>
       <div class="cd-ft">${{linkButtons(p)}}</div>
       <div class="cd-x"><div class="xg">
         <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status)}}</span></div>
@@ -957,9 +1330,10 @@ function go(){{
         <div class="xi"><span class="l">Checked:</span> <span class="v">${{e(verifiedAt)}}</span></div>
         <div class="xi"><span class="l">DOM:</span> <span class="v">${{p.dom||'N/A'}}</span></div>
       </div>${{p.verification_note?`<div style="font-size:.65rem;color:var(--muted);margin-top:4px">${{e(String(p.verification_note).substring(0,200))}}</div>`:''}}
-      ${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+      ${{historyBlock(p)}}${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
     </div></div>`;
   }}).join('');
+  renderMap(f);
   writeHash();
 }}
 loadTownPrefs();
@@ -974,12 +1348,13 @@ window.addEventListener('hashchange',()=>{{if(!_hashQuiet)applyHash();}});
 </body></html>"""
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(html)
+    OUT.write_text(page)
     print(
         f"Wrote dashboard: {OUT} "
         f"({len(data)} distressed, {len(new_data)} new/{new_days}d, "
         f"{len(pool_data)} pool homes, {len(land_data)} large tracts, "
         f"{len(caves_data)} caves/bunkers, {len(wheaton_data)} Wheaton for sale, "
+        f"{len(soon_data)} coming soon, "
         f"{verified} verified, {reverified} re-checked)"
     )
 

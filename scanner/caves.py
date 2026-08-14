@@ -35,7 +35,8 @@ _MAN_CAVE = re.compile(r"\bman[\s-]?cave\b", re.I)
 _CAVEAT = re.compile(r"\bcaveat\b", re.I)
 _BUNKER_HILL = re.compile(r"\bbunker\s+hill\b", re.I)
 
-# Strong underground / cave property signals.
+# Strong underground / cave property signals (exceptional 8–12h band).
+# Storm shelter is intentionally weak-only (see below).
 _STRONG_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"\bcave\s+home\b", re.I), "Cave"),
     (re.compile(r"\bcave\s+house\b", re.I), "Cave"),
@@ -48,8 +49,6 @@ _STRONG_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"\bfallout\s+shelter\b", re.I), "Bunker"),
     (re.compile(r"\btornado\s+bunker\b", re.I), "Bunker"),
     (re.compile(r"\bstorm\s+bunker\b", re.I), "Bunker"),
-    (re.compile(r"\bunderground\s+storm\s+shelter\b", re.I), "Storm shelter"),
-    (re.compile(r"\bin[\s-]?ground\s+storm\s+shelter\b", re.I), "Storm shelter"),
     (re.compile(r"\bunderground\s+home\b", re.I), "Underground home"),
     (re.compile(r"\bearth[\s-]?sheltered\b", re.I), "Underground home"),
     (re.compile(r"\bberm\s+home\b", re.I), "Underground home"),
@@ -66,15 +65,32 @@ _CAVE_PLACE_NOISE = re.compile(
 )
 
 # Weak patterns that require a nearby underground cue (window match).
+# Root cellar / wine cellar / bare bunker need a co-signal in-window.
 _NEAR_UNDERGROUND = re.compile(
     r"(?:underground|subterranean|below[\s-]?ground|below\s+grade|"
-    r"earth[\s-]?sheltered).{0,48}(?:wine\s+cellar|bunker)|"
-    r"(?:wine\s+cellar|bunker).{0,48}(?:underground|subterranean|"
-    r"below[\s-]?ground|below\s+grade|earth[\s-]?sheltered)",
+    r"earth[\s-]?sheltered|cave|bunker).{0,48}"
+    r"(?:wine\s+cellar|root\s+cellar|bunker)|"
+    r"(?:wine\s+cellar|root\s+cellar|bunker).{0,48}"
+    r"(?:underground|subterranean|below[\s-]?ground|below\s+grade|"
+    r"earth[\s-]?sheltered|cave|bunker)",
     re.I,
 )
 
-_ROOT_CELLAR = re.compile(r"\broot\s+cellar\b", re.I)
+_STORM_SHELTER = re.compile(
+    r"\b(?:in[\s-]?ground\s+)?(?:underground\s+)?storm\s+shelter\b|"
+    r"\bunderground\s+storm\s+shelter\b|"
+    r"\bin[\s-]?ground\s+storm\s+shelter\b",
+    re.I,
+)
+_PRIVATE_STORM_CUE = re.compile(
+    r"\b(?:on\s+the\s+property|near\s+the\s+garage|private)\b",
+    re.I,
+)
+_COMMUNITY_AMENITY = re.compile(
+    r"\b(?:community|subdivision|amenities?\s+include|hoa)\b",
+    re.I,
+)
+
 _BARE_CAVE = re.compile(r"\bcave\b", re.I)
 
 # Cave property context (not street / tourism names).
@@ -206,30 +222,35 @@ def detect_cave_bunker_evidence(
             evidence.append(m.group(0))
 
     if not feature:
-        # Root cellar is inherently an underground structure.
-        m = _ROOT_CELLAR.search(cleaned)
+        # Wine cellar / root cellar / bare bunker only with a nearby
+        # underground / cave / earth-sheltered co-signal.
+        m = _NEAR_UNDERGROUND.search(cleaned)
         if m:
-            feature = "Cellar"
-            strength = "weak"
-            evidence.append(m.group(0))
-
-        # Wine cellar / bare bunker only with a nearby underground cue
-        # (avoids matching "in-ground pool" elsewhere in the listing).
-        if not feature:
-            m = _NEAR_UNDERGROUND.search(cleaned)
-            if m:
-                hit = m.group(0)
-                if re.search(r"wine\s+cellar", hit, re.I):
-                    feature = "Cellar"
-                    evidence.append("wine cellar")
+            hit = m.group(0)
+            if re.search(r"root\s+cellar", hit, re.I):
+                feature = "Cellar"
+                evidence.append("root cellar")
+            elif re.search(r"wine\s+cellar", hit, re.I):
+                feature = "Cellar"
+                evidence.append("wine cellar")
+            else:
+                if _BUNKER_HILL.search(cleaned) or _BUNKER_HILL.search(addr):
+                    pass
                 else:
-                    if _BUNKER_HILL.search(cleaned) or _BUNKER_HILL.search(addr):
-                        pass
-                    else:
-                        feature = "Bunker"
-                        evidence.append("bunker")
-                if feature:
-                    strength = "weak"
+                    feature = "Bunker"
+                    evidence.append("bunker")
+            if feature:
+                strength = "weak"
+
+        # Storm shelter is weak-only: private-property phrasing required,
+        # and community / subdivision / amenities mentions are rejected.
+        if not feature and _STORM_SHELTER.search(cleaned):
+            if _COMMUNITY_AMENITY.search(cleaned):
+                pass
+            elif _PRIVATE_STORM_CUE.search(cleaned):
+                feature = "Storm shelter"
+                strength = "weak"
+                evidence.append("storm shelter")
 
         # Bare "cave" only with explicit property-context phrasing.
         if not feature and _BARE_CAVE.search(cleaned):
@@ -238,9 +259,6 @@ def detect_cave_bunker_evidence(
                 feature = "Cave"
                 strength = "weak"
                 evidence.append("cave")
-
-        # Storm shelter alone is not enough — strong patterns already cover
-        # underground / in-ground storm shelters.
 
     evidence = list(dict.fromkeys(evidence))[:6]
     if not feature:
@@ -288,11 +306,29 @@ def fetch_caves_listings(config: dict) -> list[dict[str, Any]]:
             record["_caves_source"] = "realtor-hub"
         added = _merge_unique(all_records, seen, batch)
         log.info("  caves hub %s unique added: %d", hub, added)
+
+        # Land/farm pass — caves and bunkers often sit on acreage listings.
+        if not caves_cfg.get("include_land_pass", True):
+            time.sleep(0.2)
+            continue
+        land_batch = fetch_town_listings(
+            "_caves_hub",
+            hub,
+            radius=radius,
+            exclude_pending=exclude_pending,
+            listing_type="for_sale",
+            property_type=["land", "farm"],
+            pass_name=f"caves-hub-{hub}-land",
+        )
+        for record in land_batch:
+            record["_caves_source"] = "realtor-hub-land"
+        land_added = _merge_unique(all_records, seen, land_batch)
+        log.info("  caves hub %s land/farm unique added: %d", hub, land_added)
         time.sleep(0.2)
 
-    # Negative checks on a subset of hubs (rate-limit friendly).
+    # Negative checks on all configured hubs.
     if scan_cfg.get("include_sold_pending_checks", True):
-        check_hubs = list(caves_cfg["hubs"])[:8]
+        check_hubs = list(caves_cfg["hubs"])
         for hub in check_hubs:
             sold = fetch_town_listings(
                 "_caves_neg",

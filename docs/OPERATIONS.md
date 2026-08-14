@@ -28,23 +28,30 @@ What it does:
 
 1. Parallel distress discovery by town groups (optional towns forced on)
 2. Merge → compile → full reverify + URL checks (+ public CSV when enabled)
-3. Compile pools from that inventory
+3. Dedicated pool listings fetch/compile (city + ZIP)
 4. Dedicated large-land fetch/compile
 5. Dedicated caves/bunkers fetch/compile (ZIP 60189 ring)
 6. Dedicated Wheaton for-sale fetch/compile (all active; live reverify)
 7. Parallel new-listings fetch/compile (city + ZIP; counties when enabled)
-8. Rebuild markdown + dashboard
+8. Coming-soon fetch/compile (quarantined; not merged into for-sale modes)
+9. Rebuild markdown + dashboard
 
 Flags:
 
 - `--workers N` — parallel town-group workers (default 3)
 - `--enable-counties` — turn on county sweeps for this run
 - `--include-public-records` — merge `data/public_records/*.csv`
-- `--skip-new-listings` / `--skip-large-land` / `--skip-pool-listings` / `--skip-caves` / `--skip-wheaton`
+- `--skip-new-listings` / `--skip-large-land` / `--skip-pool-listings` / `--skip-caves` / `--skip-wheaton` / `--skip-coming-soon` (coming soon: to be wired by parent)
 - `--no-markdown` — skip rebuild
 - `--new-days N` — new-listings window
 
 Then publish: [PUBLISHING.md](PUBLISHING.md).
+
+## Coverage notes
+
+- **Optional towns:** Leland, Earlville, Waterman, Sheridan, Yorkville (60560), Plano (60545), Hinckley (60520) — rural 6 mi when `include_optional_towns` is on.
+- **Oswego ZIPs:** 60543 + 60538.
+- **County sweeps:** DeKalb, LaSalle, Kendall, Grundy, Lee (when `--enable-counties` / full profile).
 
 ## Public-record CSV import
 
@@ -67,7 +74,7 @@ python scan.py --verify-only
 python scan.py --towns Sheridan,Leland
 ```
 
-Skip flags on a full run: `--no-new-listings`, `--no-pool-listings`, `--no-large-land`, `--no-caves`, `--no-wheaton`, `--no-reverify`, `--no-markdown`, `--no-optional`.
+Skip flags on a full run: `--no-new-listings`, `--no-pool-listings`, `--no-large-land`, `--no-caves`, `--no-wheaton`, `--skip-coming-soon` (parent wiring), `--no-reverify`, `--no-markdown`, `--no-optional`.
 
 **Legacy note:** Sequential and parallel paths exclude `v2-*.json` by default. Use `--include-legacy` only when needed.
 

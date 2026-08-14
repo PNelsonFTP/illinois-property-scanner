@@ -163,24 +163,51 @@ def has_as_is_signal(tags: set[str], text: str) -> bool:
     return any(t in text for t in ("as-is", "as is", "fixer", "needs work", "handyman"))
 
 
+def _meaningful_price_cut(
+    *,
+    reduction_pct: float | None,
+    price_reductions: int,
+    min_publish_reduction_pct: float = 0.10,
+) -> bool:
+    """Publish bar for DOM+cut: ≥10% cut or ≥2 recorded reductions."""
+    if reduction_pct is not None and reduction_pct >= min_publish_reduction_pct:
+        return True
+    if price_reductions >= 2:
+        return True
+    return False
+
+
 def meets_publish_composite(
     tags: list[str] | set[str],
     *,
     score: int,
     text: str = "",
     config: dict | None = None,
+    reduction_pct: float | None = None,
+    price_reductions: int = 0,
 ) -> bool:
     """Require stronger evidence than DOM-only or price-cut-only."""
     cfg = (config or {}).get("distress", {})
     min_score = int(cfg.get("min_publish_score", 3))
+    min_cut = float(
+        cfg.get("min_meaningful_reduction_pct")
+        or cfg.get("min_publish_reduction_pct", 0.10)
+    )
     tagset = {t.lower() for t in tags}
     text = text or ""
+    cuts = int(price_reductions or 0)
 
     if tagset & STRONG_TAGS or any(k in text for k in STRONG_DISTRESS_KEYWORDS):
         return True
-    if "high-dom" in tagset and (
-        "price-reduced" in tagset or has_as_is_signal(tagset, text)
-    ):
+    # high-dom + price-reduced only when the cut is meaningful (not a tiny trim).
+    if "high-dom" in tagset and "price-reduced" in tagset:
+        if _meaningful_price_cut(
+            reduction_pct=reduction_pct,
+            price_reductions=cuts,
+            min_publish_reduction_pct=min_cut,
+        ):
+            return True
+    if "high-dom" in tagset and has_as_is_signal(tagset, text):
         return True
     if score >= min_score and (
         "price-reduced" in tagset or has_as_is_signal(tagset, text) or "high-dom" in tagset
@@ -188,7 +215,12 @@ def meets_publish_composite(
         # Score alone with only weak tags still needs a second signal beyond
         # a single DOM or single cut — require combination or strong score+as-is.
         if "high-dom" in tagset and "price-reduced" in tagset:
-            return True
+            if _meaningful_price_cut(
+                reduction_pct=reduction_pct,
+                price_reductions=cuts,
+                min_publish_reduction_pct=min_cut,
+            ):
+                return True
         if score >= max(min_score, 5) and has_as_is_signal(tagset, text):
             return True
     return False
@@ -242,14 +274,15 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
         tags.add("high-dom")
         reasons.append(f"high DOM ({dom} days)")
 
-    # Price reduction
+    # Price reduction (2% tags for discovery; publish composite uses 10%)
     cuts = _safe_int(record.get("price_cuts", record.get("price_reductions", 0))) or 0
     total_reduced = _safe_float(record.get("total_reduced"))
+    reduction_pct: float | None = None
     if orig and list_price and orig > list_price:
-        pct = (orig - list_price) / orig
-        if pct >= cfg.get("min_price_reduction_pct", 0.02):
+        reduction_pct = (orig - list_price) / orig
+        if reduction_pct >= cfg.get("min_price_reduction_pct", 0.02):
             tags.add("price-reduced")
-            reasons.append(f"price reduced {pct:.0%}")
+            reasons.append(f"price reduced {reduction_pct:.0%}")
             cuts = max(cuts, 1)
     elif cuts >= 1 or (total_reduced and total_reduced > 0):
         tags.add("price-reduced")
@@ -271,13 +304,19 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
         tags.add("below-market")
         reasons.append(f"mobile under ${mobile_max:,} with DOM")
 
-    # Strong keyword override for flip exclusion
-    has_strong = any(k in text for k in STRONG_DISTRESS_KEYWORDS) or "foreclosure" in tags
+    # Strong keyword / legal-status override for flip exclusion
+    has_strong = (
+        any(k in text for k in STRONG_DISTRESS_KEYWORDS)
+        or bool(tags & STRONG_TAGS)
+        or "foreclosure" in tags
+        or "auction" in tags
+        or "probate" in tags
+    )
     is_flip = is_not_distressed_flip(text, config)
 
-    # Weak-only signals on renovated flips get excluded
-    weak_only_tags = {"price-reduced", "investor", "below-market", "cheap", "very low price", "affordable"}
-    if is_flip and not has_strong and tags.issubset(weak_only_tags | {"price-reduced"}):
+    # Renovated / turnkey / flip language: do not publish without a strong
+    # legal distress signal (blocks high-dom + tiny-cut on flip copy).
+    if is_flip and not has_strong:
         return {
             "tags": [],
             "reasons": [],
@@ -286,6 +325,8 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
             "acres": acres,
             "excluded_as_flip": True,
             "meets_publish_composite": False,
+            "reduction_pct": reduction_pct,
+            "price_reductions": cuts,
         }
 
     score_preview = calculate_score(
@@ -293,7 +334,12 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
         sorted(tags),
     )
     publish_ok = meets_publish_composite(
-        tags, score=score_preview, text=text, config=config,
+        tags,
+        score=score_preview,
+        text=text,
+        config=config,
+        reduction_pct=reduction_pct,
+        price_reductions=cuts,
     )
 
     has_signal = bool(tags) or bool(reasons)
@@ -307,6 +353,8 @@ def detect_distress_signals(record: dict[str, Any], config: dict | None = None) 
         "excluded_as_flip": False,
         "meets_publish_composite": publish_ok,
         "score_preview": score_preview,
+        "reduction_pct": reduction_pct,
+        "price_reductions": cuts,
     }
 
 
