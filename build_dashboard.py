@@ -309,7 +309,6 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .mode-btn.active{{background:var(--accent);border-color:var(--accent);color:#fff}}
 .loc-panel{{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}}
 body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-panel,body.mode-soon .loc-panel,body.mode-coming .loc-panel{{display:none}}
-body.mode-land .mob-loc,body.mode-caves .mob-loc,body.mode-wheaton .mob-loc,body.mode-soon .mob-loc,body.mode-coming .mob-loc{{display:none}}
 .loc-head{{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}}
 .loc-head h2{{font-size:.7rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}}
 .loc-actions{{display:flex;gap:6px;flex-wrap:wrap}}
@@ -456,22 +455,8 @@ body.mode-soon .soon-only,body.mode-coming .soon-only{{display:block}}
 body.mode-soon .soon-only-inline,body.mode-coming .soon-only-inline{{display:inline}}
 body.mode-soon .soon-only-flex,body.mode-coming .soon-only-flex{{display:flex}}
 .new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex,.land-only-inline,.land-only-flex,.caves-only-inline,.caves-only-flex,.wheaton-only-inline,.wheaton-only-flex,.soon-only-inline,.soon-only-flex{{display:none}}
-.mob-details{{display:contents}}
-.mob-details>summary{{display:none}}
 @media (max-width:800px){{
   .mode-btn{{padding:6px 10px;font-size:.7rem}}
-  .mob-details{{display:block;margin-bottom:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r)}}
-  .mob-details>summary{{display:block;padding:10px 12px;cursor:pointer;font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.03em;list-style:none}}
-  .mob-details>summary::-webkit-details-marker{{display:none}}
-  .mob-details .loc-panel,.mob-details .stats{{margin:0;border:0;border-radius:0;border-top:1px solid var(--border)}}
-  .wrap{{display:flex;flex-direction:column}}
-  .view-bar,#grd,#mapEl,.tp,.rc{{order:1}}
-  .mob-loc{{order:2}}
-  .ctrls{{order:0}}
-  .mob-stats{{order:3}}
-  .src-note{{order:0}}
-  .mode-bar{{order:0}}
-  .chg-strip{{order:0}}
 }}
 </style>
 </head>
@@ -513,20 +498,17 @@ body.mode-soon .soon-only-flex,body.mode-coming .soon-only-flex{{display:flex}}
   <div class="src-note wheaton-only">{WHEATON_NOTE}</div>
   <div class="src-note soon-only">{SOON_NOTE}</div>
   <div class="chg-strip" id="chgStrip"></div>
-  <details class="mob-details mob-loc">
-    <summary>Locations</summary>
-    <div class="loc-panel">
-      <div class="loc-head">
-        <h2>Locations</h2>
-        <div class="loc-actions">
-          <button type="button" onclick="setAllTowns(true)">All on</button>
-          <button type="button" onclick="setAllTowns(false)">All off</button>
-          <button type="button" onclick="invertTowns()">Invert</button>
-        </div>
+  <div class="loc-panel">
+    <div class="loc-head">
+      <h2>Locations</h2>
+      <div class="loc-actions">
+        <button type="button" onclick="setAllTowns(true)">All on</button>
+        <button type="button" onclick="setAllTowns(false)">All off</button>
+        <button type="button" onclick="invertTowns()">Invert</button>
       </div>
-      <div class="loc-grid" id="locGrid">{town_toggles}</div>
     </div>
-  </details>
+    <div class="loc-grid" id="locGrid">{town_toggles}</div>
+  </div>
   <div class="ctrls">
     <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Condo">Condo</option><option value="Manufactured">Manufactured</option><option value="Land">Large tracts only (rare in distress)</option><option value="Farm">Farm</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
     <div class="cg pool-only"><label>Pool</label><select id="fPool" onchange="go()"><option value="">Private + community</option><option value="private">Private pool</option><option value="community">Community pool</option></select></div>
@@ -569,14 +551,11 @@ body.mode-soon .soon-only-flex,body.mode-coming .soon-only-flex{{display:flex}}
     <button type="button" class="view-btn active" id="btnGridView" onclick="setView('cards')">Grid</button>
     <button type="button" class="view-btn" id="btnMap" onclick="setView('map')">Map</button>
   </div>
-  <details class="mob-details mob-stats">
-    <summary>Stats</summary>
-    <div class="stats">
-      <div class="sc"><h3 id="sATitle">By Town</h3><table class="st" id="sA"></table></div>
-      <div class="sc distress-only"><h3>Distress Types</h3><table class="st" id="sD"></table></div>
-      <div class="sc"><h3>Property Types</h3><table class="st" id="sT"></table></div>
-    </div>
-  </details>
+  <div class="stats">
+    <div class="sc"><h3 id="sATitle">By Town</h3><table class="st" id="sA"></table></div>
+    <div class="sc distress-only"><h3>Distress Types</h3><table class="st" id="sD"></table></div>
+    <div class="sc"><h3>Property Types</h3><table class="st" id="sT"></table></div>
+  </div>
   <div class="tp" id="tpBox"><h3 id="tpTitle">Top Picks</h3><div id="tpL"></div></div>
   <div id="mapEl"></div>
   <div class="grid" id="grd"></div>
