@@ -91,12 +91,15 @@ def test_compile_rejects_inactive_and_out_of_town():
     good = _raw(property_id="good-1", zip_code="60189")
     records, stats = compile_wheaton_listings([pending, other, good], config=config)
     assert stats.get("rejected_inactive", 0) >= 1
-    assert stats.get("rejected_out_of_wheaton", 0) >= 1
+    assert (
+        stats.get("rejected_out_of_wheaton", 0) + stats.get("rejected_zip_bleed", 0)
+        >= 1
+    )
     assert any(r.get("property_id") == "good-1" for r in records)
 
 
-def test_no_coords_rejects_non_wheaton_zip_bleed():
-    """City says Wheaton but ZIP is Carol Stream (60188) and no listing coords."""
+def test_rejects_non_wheaton_zip_even_with_listing_coords():
+    """City says Wheaton but ZIP is Carol Stream (60188) — reject even with coords."""
     config = {
         "wheaton_for_sale": {
             "cities": ["wheaton"],
@@ -115,11 +118,14 @@ def test_no_coords_rejects_non_wheaton_zip_bleed():
         "scan": {"radius_miles": 3},
     }
     bleed = _raw(city="Wheaton", zip_code="60188", property_id="bleed-60188")
-    del bleed["location"]["address"]["coordinate"]
     keep = _raw(city="Wheaton", zip_code="60189", property_id="keep-60189")
-    del keep["location"]["address"]["coordinate"]
+    no_coords = _raw(city="Wheaton", zip_code="60188", property_id="bleed-nocoords")
+    del no_coords["location"]["address"]["coordinate"]
 
-    records, stats = compile_wheaton_listings([bleed, keep], config=config)
-    assert stats.get("rejected_zip_bleed", 0) >= 1
+    records, stats = compile_wheaton_listings([bleed, keep, no_coords], config=config)
+    assert stats.get("rejected_zip_bleed", 0) >= 2
     assert not any(r.get("property_id") == "bleed-60188" for r in records)
+    assert not any(r.get("property_id") == "bleed-nocoords" for r in records)
     assert any(r.get("property_id") == "keep-60189" for r in records)
+    assert records[0].get("lat") is not None
+    assert records[0].get("lon") is not None

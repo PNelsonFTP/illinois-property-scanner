@@ -46,6 +46,9 @@ def _is_wheaton_listing(rec: dict[str, Any], cfg: dict[str, Any]) -> bool:
     zip_code = str(rec.get("zip") or "").strip()[:5]
     allowed_cities = {c.strip().lower() for c in cfg.get("cities") or _DEFAULT_CITIES}
     allowed_zips = {str(z).strip()[:5] for z in cfg.get("zips") or _DEFAULT_ZIPS}
+    # City labels bleed (Carol Stream 60188 often says "Wheaton"). ZIP wins.
+    if zip_code and zip_code not in allowed_zips:
+        return False
     if city in allowed_cities:
         return True
     if zip_code and zip_code in allowed_zips:
@@ -167,25 +170,21 @@ def compile_wheaton_listings(
         stats["normalized"] += 1
 
         if not _is_wheaton_listing(rec, wcfg):
-            stats["rejected_out_of_wheaton"] += 1
-            continue
-
-        # ZIP bleed guard: city-label "Wheaton" without listing coords can
-        # pull Carol Stream / Glen Ellyn ZIPs. Require a Wheaton ZIP when
-        # listing lat/lon are missing; otherwise keep the radius check.
-        coord_info = extract_coords_with_source(raw) or extract_coords_with_source(rec)
-        has_listing_coords = (
-            coord_info is not None and coord_info[2] == "listing"
-        )
-        if not has_listing_coords:
             zip_code = str(rec.get("zip") or "").strip()[:5]
             allowed_zips = {
                 str(z).strip()[:5] for z in (wcfg.get("zips") or _DEFAULT_ZIPS)
             }
-            if zip_code not in allowed_zips:
+            if zip_code and zip_code not in allowed_zips:
                 stats["rejected_zip_bleed"] += 1
-                continue
-        elif not within_town_radius(rec, "Wheaton", config):
+            else:
+                stats["rejected_out_of_wheaton"] += 1
+            continue
+
+        coord_info = extract_coords_with_source(raw) or extract_coords_with_source(rec)
+        has_listing_coords = (
+            coord_info is not None and coord_info[2] == "listing"
+        )
+        if has_listing_coords and not within_town_radius(rec, "Wheaton", config):
             stats["rejected_outside_radius"] += 1
             continue
 
@@ -226,6 +225,12 @@ def compile_wheaton_listings(
             "notes": (rec.get("notes") or "")[:500],
             "property_id": rec.get("property_id"),
             "listing_id": rec.get("listing_id"),
+            "lat": rec.get("lat") if rec.get("lat") is not None else (
+                coord_info[0] if coord_info else None
+            ),
+            "lon": rec.get("lon") if rec.get("lon") is not None else (
+                coord_info[1] if coord_info else None
+            ),
             "verified_at": now,
             "last_seen_active_at": now,
             "verification_source": "realtor.com-wheaton",

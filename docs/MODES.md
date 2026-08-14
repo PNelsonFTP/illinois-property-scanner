@@ -25,7 +25,7 @@ The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has s
 - **Geo:** Same town classification as distressed (location toggles apply).
 - **Output:** `data/pool_listings.json`.
 - **CLI:** `python scan.py --pool-listings-only`  
-  Full scans compile pools from the same live inventory (no second residential fetch).
+  Full / parallel refreshes use a dedicated city + ZIP pool fetch (`fetch_pool_listings`).
 
 ## Large land (20+ ac)
 
