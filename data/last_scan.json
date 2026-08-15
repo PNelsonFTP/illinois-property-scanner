@@ -1,32 +1,54 @@
 {
-  "scan_date": "August 14, 2026",
-  "scan_time": "2:53 PM CDT",
-  "total_properties": 35,
+  "scan_date": "August 15, 2026",
+  "scan_time": "5:49 PM CDT",
+  "total_properties": 37,
   "stats": {
-    "live_normalized": 2012,
-    "negative_check_inventory": 902,
-    "rejected_weak_composite": 80,
-    "accepted_pre_dedup": 35,
-    "rejected_no_distress": 229,
-    "rejected_renovated_flip": 86,
-    "rejected_small_vacant_lot": 79,
+    "live_normalized": 2005,
+    "negative_check_inventory": 914,
+    "rejected_weak_composite": 82,
+    "accepted_pre_dedup": 37,
+    "rejected_no_distress": 226,
+    "rejected_renovated_flip": 82,
+    "rejected_small_vacant_lot": 80,
     "rejected_outside_radius": 97,
     "rejected_missing_address": 12,
-    "rejected_out_of_zone": 1394,
+    "rejected_out_of_zone": 1389,
     "duplicates_merged": 0,
-    "final_count": 35,
-    "reverify_kept": 35,
+    "final_count": 37,
+    "reverify_kept": 37,
     "reverify_rejected": 0,
-    "pool_listings": 85,
+    "pool_listings": 86,
     "large_land": 29,
     "caves_listings": 6,
-    "wheaton_listings": 57,
+    "wheaton_listings": 56,
     "coming_soon": 0,
-    "new_listings_7d": 78
+    "new_listings_7d": 82
   },
-  "live_fetched": 2914,
+  "live_fetched": 2919,
+  "parallel_groups": [
+    [
+      "Wheaton",
+      "Oswego"
+    ],
+    [
+      "Sandwich",
+      "Somonauk",
+      "Lake Holiday"
+    ],
+    [
+      "Leland",
+      "Earlville",
+      "Waterman",
+      "Sheridan"
+    ],
+    [
+      "Yorkville",
+      "Plano",
+      "Hinckley"
+    ]
+  ],
   "changes": {
-    "newly_active": 9,
+    "newly_active": 2,
     "removed": 0,
     "price_cuts": 0
   }

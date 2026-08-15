@@ -1,77 +1,21 @@
 {
-  "generated_at": "2026-08-14T19:51:49.227643+00:00",
+  "generated_at": "2026-08-15T22:51:27.482142+00:00",
   "newly_active": [
     {
-      "address": "852 Timber Oak Ln",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 614990,
-      "distress_score": 3,
-      "property_id": "8247283978"
+      "address": "4141 E 2603rd Rd",
+      "city": "Sheridan",
+      "nearest_target": "Sheridan",
+      "list_price": 1408950,
+      "distress_score": 4,
+      "property_id": "7203124886"
     },
     {
-      "address": "608 Bender St",
-      "city": "Sandwich",
-      "nearest_target": "Sandwich",
-      "list_price": 445000,
-      "distress_score": 3,
-      "property_id": "7339254686"
-    },
-    {
-      "address": "146 Piper Glen Ave",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 489990,
-      "distress_score": 3,
-      "property_id": "9400408398"
-    },
-    {
-      "address": "574 Sudbury Cir",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 379000,
+      "address": "415 N Depot St",
+      "city": "Somonauk",
+      "nearest_target": "Somonauk",
+      "list_price": 249900,
       "distress_score": 2,
-      "property_id": "7059298405"
-    },
-    {
-      "address": "2530 Shauna Dr",
-      "city": "Montgomery",
-      "nearest_target": "Oswego",
-      "list_price": 339000,
-      "distress_score": 2,
-      "property_id": "7299218469"
-    },
-    {
-      "address": "1045 Linda Ln",
-      "city": "Lake Holiday",
-      "nearest_target": "Lake Holiday",
-      "list_price": 439900,
-      "distress_score": 2,
-      "property_id": "7003206342"
-    },
-    {
-      "address": "123 Eisenhower Dr",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 419900,
-      "distress_score": 2,
-      "property_id": "7758783661"
-    },
-    {
-      "address": "1520 Stonebridge Trl Apt 2-1",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 314900,
-      "distress_score": 1,
-      "property_id": "9262665731"
-    },
-    {
-      "address": "1129 Hawk Hollow Dr",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 299990,
-      "distress_score": 1,
-      "property_id": "9080275590"
+      "property_id": "7513760426"
     }
   ],
   "removed": [],
