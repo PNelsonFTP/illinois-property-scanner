@@ -1,23 +1,41 @@
 {
-  "generated_at": "2026-08-15T22:51:27.482142+00:00",
+  "generated_at": "2026-08-17T19:54:39.537280+00:00",
   "newly_active": [
     {
-      "address": "4141 E 2603rd Rd",
-      "city": "Sheridan",
-      "nearest_target": "Sheridan",
-      "list_price": 1408950,
+      "address": "213 N Main St",
+      "city": "Sandwich",
+      "nearest_target": "Sandwich",
+      "list_price": 339900,
       "distress_score": 4,
-      "property_id": "7203124886"
+      "property_id": "8669218089"
     },
     {
-      "address": "415 N Depot St",
-      "city": "Somonauk",
-      "nearest_target": "Somonauk",
-      "list_price": 249900,
-      "distress_score": 2,
-      "property_id": "7513760426"
+      "address": "281 Fox Chase Dr N",
+      "city": "Oswego",
+      "nearest_target": "Oswego",
+      "list_price": 479000,
+      "distress_score": 4,
+      "property_id": "7802715989"
     }
   ],
-  "removed": [],
-  "price_cuts": []
+  "removed": [
+    {
+      "address": "1239 Sandhurst Dr",
+      "city": "Sandwich",
+      "nearest_target": "Sandwich",
+      "list_price": 440000,
+      "distress_score": 5,
+      "property_id": "8081760218"
+    }
+  ],
+  "price_cuts": [
+    {
+      "address": "20 Cedar Ln",
+      "city": "Sandwich",
+      "nearest_target": "Lake Holiday",
+      "list_price": 32000,
+      "distress_score": 4,
+      "property_id": "9133722845"
+    }
+  ]
 }
