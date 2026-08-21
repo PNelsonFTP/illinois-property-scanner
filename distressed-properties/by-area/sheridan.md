@@ -1,6 +1,6 @@
 # Distressed Properties — Sheridan, IL
 
-**Scan Date:** August 17, 2026 at 2:52 PM CDT  
+**Scan Date:** August 21, 2026 at 6:32 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
 **Properties:** 2
 
