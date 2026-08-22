@@ -1,6 +1,24 @@
 {
-  "generated_at": "2026-08-21T11:34:01.811840+00:00",
+  "generated_at": "2026-08-22T13:42:05.555361+00:00",
   "newly_active": [
+    {
+      "address": "1575 Creek Rd",
+      "city": "Plano",
+      "nearest_target": "Plano",
+      "list_price": 699899,
+      "distress_score": 2,
+      "property_id": "8766152767"
+    },
+    {
+      "address": "285 E Legner St",
+      "city": "Leland",
+      "nearest_target": "Leland",
+      "list_price": 275000,
+      "distress_score": 2,
+      "property_id": "7083514448"
+    }
+  ],
+  "removed": [
     {
       "address": "520 S Wheaton Ave",
       "city": "Wheaton",
@@ -10,144 +28,22 @@
       "property_id": "8894316121"
     },
     {
-      "address": "421 E Church St",
-      "city": "Sandwich",
-      "nearest_target": "Sandwich",
-      "list_price": 365000,
-      "distress_score": 2,
-      "property_id": "9514058140"
-    },
-    {
       "address": "917 Sunset Ave",
       "city": "Earlville",
       "nearest_target": "Earlville",
       "list_price": 329000,
       "distress_score": 2,
       "property_id": "7100619516"
-    },
-    {
-      "address": "807 Alexandra Ln",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 374900,
-      "distress_score": 2,
-      "property_id": "9270199826"
-    },
-    {
-      "address": "310 N View St",
-      "city": "Hinckley",
-      "nearest_target": "Hinckley",
-      "list_price": 250000,
-      "distress_score": 2,
-      "property_id": "8164152771"
-    },
-    {
-      "address": "135 N Birch St",
-      "city": "Waterman",
-      "nearest_target": "Waterman",
-      "list_price": 119000,
-      "distress_score": 2,
-      "property_id": "7543462605"
-    },
-    {
-      "address": "32 Rocky Way Apt 7",
-      "city": "Montgomery",
-      "nearest_target": "Oswego",
-      "list_price": 75000,
-      "distress_score": 1,
-      "property_id": "7859127699"
-    }
-  ],
-  "removed": [
-    {
-      "address": "3919 Pratt St",
-      "city": "Plano",
-      "nearest_target": "Plano",
-      "list_price": 219000,
-      "distress_score": 4,
-      "property_id": "7610239871"
-    },
-    {
-      "address": "146 Piper Glen Ave",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 489990,
-      "distress_score": 3,
-      "property_id": "9400408398"
-    },
-    {
-      "address": "285 E Legner St",
-      "city": "Leland",
-      "nearest_target": "Leland",
-      "list_price": 275000,
-      "distress_score": 2,
-      "property_id": "7083514448"
-    },
-    {
-      "address": "1487 Castlewood Dr",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 450000,
-      "distress_score": 2,
-      "property_id": "7719794039"
-    },
-    {
-      "address": "136 Dolores St",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 319919,
-      "distress_score": 2,
-      "property_id": "7235867956"
-    },
-    {
-      "address": "415 N Depot St",
-      "city": "Somonauk",
-      "nearest_target": "Somonauk",
-      "list_price": 249900,
-      "distress_score": 2,
-      "property_id": "7513760426"
-    },
-    {
-      "address": "1129 Hawk Hollow Dr",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 299990,
-      "distress_score": 1,
-      "property_id": "9080275590"
     }
   ],
   "price_cuts": [
     {
-      "address": "495 Timber Oak Ln",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 599000,
-      "distress_score": 5,
-      "property_id": "8234017303"
-    },
-    {
-      "address": "753 Fir Ct",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 699900,
-      "distress_score": 3,
-      "property_id": "7733663604"
-    },
-    {
-      "address": "123 Eisenhower Dr",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 414000,
-      "distress_score": 2,
-      "property_id": "7758783661"
-    },
-    {
-      "address": "1520 Stonebridge Trl Apt 2-1",
+      "address": "1515 Hill Ave",
       "city": "Wheaton",
       "nearest_target": "Wheaton",
-      "list_price": 299900,
-      "distress_score": 2,
-      "property_id": "9262665731"
+      "list_price": 375000,
+      "distress_score": 3,
+      "property_id": "7782020643"
     }
   ]
 }
