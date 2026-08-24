@@ -25,6 +25,7 @@ Both rebuild markdown + dashboard unless `--no-markdown`.
 | `new_listings.py` | 7-day all-listings mode |
 | `pool_listings.py` | Pool evidence mode |
 | `large_land.py` | 20+ acre / 40 mi Lake Holiday mode |
+| `apartments_rent.py` | Apartments for rent (Wheaton + Somonauk / Lake Holiday) |
 | `links.py` | Zillow / Google / Redfin / LandWatch / LOA open URLs |
 | `config.py` | Paths + YAML loader |
 
@@ -32,7 +33,7 @@ Both rebuild markdown + dashboard unless `--no-markdown`.
 
 | Script | Input → Output |
 |--------|----------------|
-| `build_dashboard.py` | All four datasets → `dashboard/distressed-property-dashboard.html` |
+| `build_dashboard.py` | All mode datasets → `dashboard/distressed-property-dashboard.html` |
 | `build_markdown.py` | `v2_compiled.json` only → `distressed-properties/**` |
 
 ## Data files
@@ -43,6 +44,7 @@ Both rebuild markdown + dashboard unless `--no-markdown`.
 | `data/new_listings_7d.json` | `{ window_days, records }` |
 | `data/pool_listings.json` | `{ count, records }` |
 | `data/large_land.json` | `{ min_acres, radius_miles, records }` |
+| `data/apartments_rent.json` | Wheaton + Somonauk / Lake Holiday apartment rentals |
 | `data/last_scan.json` | Scan timestamp + counts |
 | `data/raw/*.json` | Raw fetches (gitignored) |
 | `data/history/` | Snapshots & change reports (gitignored) |

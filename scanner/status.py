@@ -15,6 +15,25 @@ ACTIVE_MLS_STATUSES = {
     "price changed",
 }
 
+ACTIVE_RENTAL_STATUSES = {
+    "active",
+    "for_rent",
+    "for rent",
+    "rental",
+    "available",
+    "new",
+    "back on market",
+    "price change",
+    "price changed",
+}
+
+INACTIVE_RENTAL_STATUSES = {
+    "leased",
+    "rented",
+    "for_sale",
+    "for sale",
+}
+
 INACTIVE_MLS_STATUSES = {
     "sold",
     "closed",
@@ -86,6 +105,52 @@ def is_verified_active(record: dict[str, Any], config: dict | None = None) -> tu
         return False, f"listing status: {status}"
 
     return True, "verified active for sale"
+
+
+def is_verified_active_rental(
+    record: dict[str, Any], config: dict | None = None
+) -> tuple[bool, str]:
+    """
+    Return (is_active, reason) for a for-rent listing.
+
+    Accepts for_rent / active / rental. Rejects leased, rented, sold, pending,
+    off-market, and leftover for-sale rows.
+    """
+    inactive = _inactive_set(config) | {
+        normalize_status(s) for s in INACTIVE_RENTAL_STATUSES
+    }
+    flags = record.get("flags") or {}
+
+    if flags.get("is_pending"):
+        return False, "pending flag set"
+    if flags.get("is_contingent"):
+        return False, "contingent flag set"
+    if flags.get("is_coming_soon"):
+        return False, "coming soon flag set"
+
+    status = normalize_status(record.get("status"))
+    mls_status = normalize_status(record.get("mls_status"))
+    listing_type = normalize_status(
+        record.get("_listing_type_query") or record.get("listing_type")
+    )
+
+    for field in (mls_status, status):
+        if field and field in inactive:
+            return False, f"status indicates inactive: {field}"
+
+    looks_rental = (
+        status in ACTIVE_RENTAL_STATUSES
+        or mls_status in ACTIVE_RENTAL_STATUSES
+        or listing_type == "for_rent"
+    )
+    if not looks_rental:
+        return False, f"not an active rental: {mls_status or status or listing_type}"
+
+    if mls_status and mls_status not in ACTIVE_RENTAL_STATUSES:
+        if status not in ACTIVE_RENTAL_STATUSES and listing_type != "for_rent":
+            return False, f"unverified rental mls status: {mls_status or status}"
+
+    return True, "verified active rental"
 
 
 def is_active_legacy(record: dict[str, Any], config: dict | None = None) -> tuple[bool, str]:

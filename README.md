@@ -22,8 +22,12 @@ Listings are discovered via Realtor.com MLS (HomeHarvest), then filtered for act
 | **New to market (7 days)** | All active for-sale listings listed in the last N days (geo only, no distress filter) | `data/new_listings_7d.json` |
 | **Homes with pools** | Active residential homes with MLS private or community pool evidence | `data/pool_listings.json` |
 | **Large land (20+ ac)** | Land/farm tracts ≥20 acres within 40 miles of Lake Holiday (all-or-nothing; no town toggles) | `data/large_land.json` |
+| **Caves & bunkers** | Listings with cave / bunker / underground evidence near ZIP 60189 (all-or-nothing) | `data/caves_listings.json` |
+| **Wheaton for sale** | All active Wheaton, IL for-sale listings (ZIPs 60187 / 60189) | `data/wheaton_listings.json` |
+| **Coming soon** | Quarantined pre-market listings (town toggles apply) | `data/coming_soon.json` |
+| **Apartments for Rent** | Apartment rentals in Wheaton and Somonauk / Lake Holiday only (all-or-nothing) | `data/apartments_rent.json` |
 
-Location toggles apply to Distressed, New, and Pools. Large land is a separate 40-mile ring search and hides town filters on purpose.
+Location toggles apply to Distressed, New, Pools, and Coming soon. Land, Caves, Wheaton, and Apartments for Rent hide town filters on purpose.
 
 ---
 
@@ -116,6 +120,7 @@ Walkthrough: [docs/CONFIGURATION.md](docs/CONFIGURATION.md)
 │   ├── new_listings_7d.json
 │   ├── pool_listings.json
 │   ├── large_land.json
+│   ├── apartments_rent.json
 │   ├── last_scan.json
 │   └── raw/                     # gitignored fetch snapshots
 ├── dashboard/                   # Generated HTML
@@ -130,7 +135,7 @@ Walkthrough: [docs/CONFIGURATION.md](docs/CONFIGURATION.md)
 
 | Doc | Topic |
 |-----|--------|
-| [docs/MODES.md](docs/MODES.md) | Four dashboard modes |
+| [docs/MODES.md](docs/MODES.md) | Dashboard modes |
 | [docs/PUBLISHING.md](docs/PUBLISHING.md) | GitHub Pages + dual remotes |
 | [docs/VERIFICATION.md](docs/VERIFICATION.md) | Active-status pipeline |
 | [docs/ACREAGE.md](docs/ACREAGE.md) | Large-land acreage rules |

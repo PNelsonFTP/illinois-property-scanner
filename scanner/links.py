@@ -67,6 +67,24 @@ def google_land_search_url(record: dict[str, Any]) -> str:
     return f"https://www.google.com/search?q={quote_plus(q)}"
 
 
+def google_rent_search_url(record: dict[str, Any]) -> str:
+    q = f"{_full_address(record)} apartment for rent"
+    return f"https://www.google.com/search?q={quote_plus(q)}"
+
+
+def zillow_rent_search_url(record: dict[str, Any]) -> str:
+    q = _full_address(record)
+    return f"https://www.zillow.com/homes/{quote_plus(q)}_rental/"
+
+
+def attach_rent_alt_links(record: dict[str, Any]) -> dict[str, Any]:
+    """Zillow/Google open URLs aimed at rentals, not for-sale search."""
+    attach_alt_links(record)
+    record["google_url"] = google_rent_search_url(record)
+    record["zillow_url"] = zillow_rent_search_url(record)
+    return record
+
+
 def attach_alt_links(record: dict[str, Any]) -> dict[str, Any]:
     """Mutate/return record with alt open URLs."""
     record["google_url"] = google_listing_search_url(record)

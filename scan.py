@@ -2,7 +2,7 @@
 """
 Illinois Property Scanner — sequential entry point.
 
-Modes: distressed, new listings (7d), pools, large land, caves/bunkers, Wheaton for sale, coming soon.
+Modes: distressed, new listings (7d), pools, large land, caves/bunkers, Wheaton for sale, coming soon, apartments for rent.
 For faster full refreshes prefer: scripts/parallel_full_refresh.py
 Publish viewing results to GitHub Pages (see docs/PUBLISHING.md).
 
@@ -21,7 +21,8 @@ Usage:
   python scan.py --caves-only         # Only refresh caves/bunkers near ZIP 60189
   python scan.py --wheaton-only       # Only refresh all Wheaton, IL for-sale listings
   python scan.py --coming-soon-only   # Only refresh quarantined coming-soon stream
-  python scan.py --no-new-listings|--no-pool-listings|--no-large-land|--no-caves|--no-wheaton|--no-coming-soon|--no-reverify
+  python scan.py --apartments-only    # Only refresh Wheaton + Somonauk/LH apartment rentals
+  python scan.py --no-new-listings|--no-pool-listings|--no-large-land|--no-caves|--no-wheaton|--no-coming-soon|--no-apartments|--no-reverify
 """
 
 from __future__ import annotations
@@ -87,6 +88,12 @@ from scanner.coming_soon import (
     fetch_coming_soon,
     print_coming_soon_summary,
     save_coming_soon,
+)
+from scanner.apartments_rent import (
+    compile_apartments_rent,
+    fetch_apartments_rent,
+    print_apartments_rent_summary,
+    save_apartments_rent,
 )
 from scanner.verify import reverify_properties
 
@@ -293,6 +300,26 @@ def _run_coming_soon(
     return records, stats
 
 
+def _run_apartments_rent(
+    config: dict,
+    *,
+    raw_records: list | None = None,
+) -> tuple[list, dict]:
+    """Fetch/compile apartment rentals in Wheaton and Somonauk / Lake Holiday."""
+    if raw_records is None:
+        log.info("Fetching apartments for rent (Wheaton + Somonauk / Lake Holiday)...")
+        raw_records = fetch_apartments_rent(config)
+        save_raw(raw_records, label="apartments-rent")
+
+    records, stats = compile_apartments_rent(raw_records, config=config)
+    # Rental inventory — skip for-sale reverify (that helper rejects for_rent).
+    for i, record in enumerate(records):
+        record["id"] = i + 1
+    save_apartments_rent(records, config=config)
+    print_apartments_rent_summary(records, stats)
+    return records, stats
+
+
 def _run_refresh_profile(profile: str, argv_rest: list[str]) -> int:
     """Dispatch named refresh profiles from config.yaml refresh_profiles."""
     config = load_config()
@@ -326,6 +353,8 @@ def _run_refresh_profile(profile: str, argv_rest: list[str]) -> int:
             cmd.append("--skip-wheaton")
         if not cfg.get("include_coming_soon", True):
             cmd.append("--skip-coming-soon")
+        if not cfg.get("include_apartments_rent", True):
+            cmd.append("--skip-apartments")
         cmd.extend(argv_rest)
         log.info("Delegating to parallel refresh: %s", " ".join(cmd))
         return subprocess.call(cmd, cwd=PROJECT_ROOT)
@@ -376,6 +405,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Only refresh all Wheaton, IL for-sale listings")
     parser.add_argument("--coming-soon-only", action="store_true",
                         help="Only refresh the quarantined coming-soon stream")
+    parser.add_argument("--apartments-only", action="store_true",
+                        help="Only refresh apartments for rent in Wheaton and Somonauk / Lake Holiday")
     parser.add_argument(
         "--no-legacy",
         action="store_true",
@@ -400,6 +431,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Skip the Wheaton for-sale pass")
     parser.add_argument("--no-coming-soon", action="store_true",
                         help="Skip the coming-soon pass")
+    parser.add_argument("--no-apartments", action="store_true",
+                        help="Skip the apartments-for-rent pass")
     parser.add_argument("--include-optional", action="store_true",
                         help="Include Leland, Earlville, Waterman, Sheridan")
     parser.add_argument("--no-optional", action="store_true", help="Force-exclude optional towns")
@@ -484,6 +517,13 @@ def main(argv: list[str] | None = None) -> int:
             include_optional=include_optional,
             towns_filter=towns_filter,
         )
+        if not args.no_markdown:
+            rebuild_outputs(scan_date, scan_time)
+        return 0
+
+    # --- Apartments for rent only ---
+    if args.apartments_only:
+        _run_apartments_rent(config)
         if not args.no_markdown:
             rebuild_outputs(scan_date, scan_time)
         return 0
@@ -671,6 +711,15 @@ def main(argv: list[str] | None = None) -> int:
             towns_filter=towns_filter,
         )
         stats["coming_soon"] = len(soon_records)
+
+    do_apartments = (
+        scan_cfg.get("include_apartments_rent", True)
+        and not args.no_apartments
+        and not args.verify_only
+    )
+    if do_apartments:
+        apt_records, _apt_stats = _run_apartments_rent(config)
+        stats["apartments_rent"] = len(apt_records)
 
     if not args.no_markdown and final:
         rebuild_outputs(scan_date, scan_time)

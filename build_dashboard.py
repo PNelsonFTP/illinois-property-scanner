@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate dashboard HTML from distressed, new, pool, land, caves, and Wheaton datasets."""
+"""Regenerate dashboard HTML from distressed, new, pool, land, caves, Wheaton, and rent datasets."""
 
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ LARGE_LAND = PROJECT_ROOT / "data" / "large_land.json"
 CAVES_LISTINGS = PROJECT_ROOT / "data" / "caves_listings.json"
 WHEATON_LISTINGS = PROJECT_ROOT / "data" / "wheaton_listings.json"
 COMING_SOON = PROJECT_ROOT / "data" / "coming_soon.json"
+APARTMENTS_RENT = PROJECT_ROOT / "data" / "apartments_rent.json"
 CHANGES_LATEST = PROJECT_ROOT / "data" / "changes_latest.json"
 OUT = PROJECT_ROOT / "dashboard" / "distressed-property-dashboard.html"
 
@@ -72,6 +73,14 @@ SOON_NOTE = (
     "Loaded from <code>data/coming_soon.json</code> when present. "
     "Use the Locations sliders to include or exclude towns; not mixed into other modes. "
     "Refresh with <code>python scan.py --coming-soon-only --include-optional</code>."
+)
+RENT_NOTE = (
+    "Apartments for rent in <strong>Wheaton</strong> (ZIPs 60187 / 60189) and "
+    "<strong>Somonauk / Lake Holiday</strong> only. "
+    "Apartment, condo, multi-family, and townhome rentals; houses and land are excluded. "
+    "Sandwich is omitted unless the listing is Lake Holiday. "
+    "Shown as one list (no town toggles). Prices are monthly rent. "
+    "Refresh with <code>python scan.py --apartments-only</code>."
 )
 
 
@@ -169,6 +178,16 @@ def load_coming_soon():
     return payload.get("records", [])
 
 
+def load_apartments_rent():
+    if not APARTMENTS_RENT.exists():
+        return []
+    with open(APARTMENTS_RENT) as f:
+        payload = json.load(f)
+    if isinstance(payload, list):
+        return payload
+    return payload.get("records", [])
+
+
 def load_changes_latest():
     """Slim change digest committed as data/changes_latest.json (optional)."""
     if not CHANGES_LATEST.exists():
@@ -209,6 +228,7 @@ def main():
     caves_data = load_caves_listings()
     wheaton_data = load_wheaton_listings()
     soon_data = load_coming_soon()
+    rent_data = load_apartments_rent()
     changes = load_changes_latest()
 
     verified = sum(1 for p in data if "realtor.com" in (p.get("verification_source") or ""))
@@ -223,6 +243,7 @@ def main():
     caves_area_stats = compute_area_stats(caves_data)
     wheaton_area_stats = compute_area_stats(wheaton_data)
     soon_area_stats = compute_area_stats(soon_data)
+    rent_area_stats = compute_area_stats(rent_data)
 
     # Land / caves / Wheaton-all must NOT add extra cities to location toggles.
     # Coming soon uses the same town sliders as distressed / new / pools.
@@ -251,6 +272,15 @@ def main():
         f'<option value="{html.escape(c, quote=True)}">{html.escape(c)}</option>'
         for c in land_cities
     )
+    rent_areas = sorted({
+        (p.get("rent_area") or p.get("nearest_target") or "").strip()
+        for p in rent_data
+        if (p.get("rent_area") or p.get("nearest_target") or "").strip()
+    })
+    rent_area_opts = "".join(
+        f'<option value="{html.escape(a, quote=True)}">{html.escape(a)}</option>'
+        for a in rent_areas
+    )
 
     props_json = embed_json(truncate_notes_for_embed(data))
     new_json = embed_json(truncate_notes_for_embed(new_data))
@@ -259,6 +289,7 @@ def main():
     caves_json = embed_json(truncate_notes_for_embed(caves_data))
     wheaton_json = embed_json(truncate_notes_for_embed(wheaton_data))
     soon_json = embed_json(truncate_notes_for_embed(soon_data))
+    rent_json = embed_json(truncate_notes_for_embed(rent_data))
     badges_json = embed_json(badges)
     area_json = embed_json(area_stats)
     new_area_json = embed_json(new_area_stats)
@@ -267,6 +298,7 @@ def main():
     caves_area_json = embed_json(caves_area_stats)
     wheaton_area_json = embed_json(wheaton_area_stats)
     soon_area_json = embed_json(soon_area_stats)
+    rent_area_json = embed_json(rent_area_stats)
     changes_json = embed_json(changes)
 
     page = f"""<!DOCTYPE html>
@@ -303,6 +335,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .caves-badge{{background:rgba(168,85,247,.14);color:#c084fc;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .wheaton-badge{{background:rgba(249,115,22,.14);color:#fb923c;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .soon-badge{{background:rgba(236,72,153,.14);color:#f472b6;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
+.rent-badge{{background:rgba(45,212,191,.14);color:#2dd4bf;padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:600}}
 .v-stale{{color:var(--orange)}}
 .cd[data-stale="1"]{{opacity:.85;border-style:dashed}}
 .wrap{{max-width:1200px;margin:0 auto;padding:14px 20px}}
@@ -311,7 +344,7 @@ a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}
 .mode-btn:hover{{border-color:var(--accent);color:var(--text)}}
 .mode-btn.active{{background:var(--accent);border-color:var(--accent);color:#fff}}
 .loc-panel{{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}}
-body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-panel{{display:none}}
+body.mode-land .loc-panel,body.mode-caves .loc-panel,body.mode-wheaton .loc-panel,body.mode-rent .loc-panel{{display:none}}
 .loc-head{{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}}
 .loc-head h2{{font-size:.7rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}}
 .loc-actions{{display:flex;gap:6px;flex-wrap:wrap}}
@@ -362,6 +395,7 @@ body.view-list .list-z{{flex-shrink:0}}
 .tp.caves-mode{{background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(99,102,241,.04));border-color:rgba(168,85,247,.28)}}
 .tp.wheaton-mode{{background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(234,179,8,.04));border-color:rgba(249,115,22,.28)}}
 .tp.soon-mode{{background:linear-gradient(135deg,rgba(236,72,153,.1),rgba(168,85,247,.04));border-color:rgba(236,72,153,.28)}}
+.tp.rent-mode{{background:linear-gradient(135deg,rgba(45,212,191,.1),rgba(14,165,233,.04));border-color:rgba(45,212,191,.28)}}
 .tp h3{{font-size:.8rem;font-weight:700;color:var(--red);margin-bottom:8px}}
 .tp.new-mode h3{{color:var(--purple)}}
 .tp.pool-mode h3{{color:#22d3ee}}
@@ -369,6 +403,7 @@ body.view-list .list-z{{flex-shrink:0}}
 .tp.caves-mode h3{{color:#c084fc}}
 .tp.wheaton-mode h3{{color:#fb923c}}
 .tp.soon-mode h3{{color:#f472b6}}
+.tp.rent-mode h3{{color:#2dd4bf}}
 .tpi{{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(239,68,68,.08);gap:10px}}
 .tp.new-mode .tpi{{border-bottom-color:rgba(168,85,247,.1)}}
 .tp.pool-mode .tpi{{border-bottom-color:rgba(6,182,212,.12)}}
@@ -376,6 +411,7 @@ body.view-list .list-z{{flex-shrink:0}}
 .tp.caves-mode .tpi{{border-bottom-color:rgba(168,85,247,.14)}}
 .tp.wheaton-mode .tpi{{border-bottom-color:rgba(249,115,22,.14)}}
 .tp.soon-mode .tpi{{border-bottom-color:rgba(236,72,153,.14)}}
+.tp.rent-mode .tpi{{border-bottom-color:rgba(45,212,191,.14)}}
 .tpi-a{{font-weight:600;font-size:.8rem;flex:1}}.tpi-p{{color:var(--green);font-weight:700;font-size:.8rem}}
 .tpi-s{{min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;font-size:.7rem;color:#fff}}
 .s-h{{background:var(--orange)}}.s-m{{background:var(--yellow);color:#000}}.s-l{{background:var(--green)}}
@@ -385,6 +421,7 @@ body.view-list .list-z{{flex-shrink:0}}
 .s-caves{{background:#7c3aed}}
 .s-wheaton{{background:#ea580c}}
 .s-soon{{background:#db2777}}
+.s-rent{{background:#0d9488}}
 .vb{{display:inline-flex;padding:5px 12px;background:var(--accent);color:#fff;border-radius:var(--rs);font-size:.7rem;font-weight:600}}
 .vb-sm{{padding:4px 8px;font-size:.65rem;background:var(--card);color:var(--text2);border:1px solid var(--border)}}
 .vb-sm:hover{{border-color:var(--accent);color:var(--text);text-decoration:none}}
@@ -412,7 +449,7 @@ body.mode-land .no-land,body.mode-caves .no-land{{display:none}}
 body:not(.mode-pool) .sort-pool{{display:none}}
 body:not(.mode-land) .sort-land{{display:none}}
 body:not(.mode-caves) .sort-caves{{display:none}}
-body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-distress,body.mode-caves .sort-distress,body.mode-wheaton .sort-distress,body.mode-soon .sort-distress,body.mode-coming .sort-distress{{display:none}}
+body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-distress,body.mode-caves .sort-distress,body.mode-wheaton .sort-distress,body.mode-soon .sort-distress,body.mode-coming .sort-distress,body.mode-rent .sort-distress{{display:none}}
 .cd-tags{{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}}
 .t{{padding:1px 7px;border-radius:10px;font-size:.6rem;font-weight:600}}
 .t-fc{{background:rgba(239,68,68,.1);color:var(--red)}}.t-pr{{background:rgba(59,130,246,.1);color:var(--accent)}}
@@ -424,6 +461,7 @@ body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-
 .t-caves{{background:rgba(168,85,247,.18);color:#c084fc}}
 .t-wheaton{{background:rgba(249,115,22,.18);color:#fb923c}}
 .t-soon{{background:rgba(236,72,153,.18);color:#f472b6}}
+.t-rent{{background:rgba(45,212,191,.18);color:#2dd4bf}}
 .t-wf{{background:rgba(14,165,233,.15);color:#38bdf8}}
 .t-hoa{{background:rgba(234,179,8,.12);color:var(--yellow)}}
 .t-mh{{background:rgba(249,115,22,.15);color:var(--orange)}}
@@ -437,8 +475,8 @@ body.mode-new .sort-distress,body.mode-pool .sort-distress,body.mode-land .sort-
 .badges{{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}}
 .bdg{{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:14px;font-size:.65rem;font-weight:600;background:var(--card);border:1px solid var(--border)}}
 .bdg .n{{background:var(--accent);color:#fff;padding:0 5px;border-radius:8px;font-size:.6rem}}
-.distress-only{{}}.new-only,.pool-only,.land-only,.caves-only,.wheaton-only,.soon-only{{display:none}}
-body.mode-new .distress-only,body.mode-pool .distress-only,body.mode-land .distress-only,body.mode-caves .distress-only,body.mode-wheaton .distress-only,body.mode-soon .distress-only,body.mode-coming .distress-only{{display:none}}
+.distress-only{{}}.new-only,.pool-only,.land-only,.caves-only,.wheaton-only,.soon-only,.rent-only{{display:none}}
+body.mode-new .distress-only,body.mode-pool .distress-only,body.mode-land .distress-only,body.mode-caves .distress-only,body.mode-wheaton .distress-only,body.mode-soon .distress-only,body.mode-coming .distress-only,body.mode-rent .distress-only{{display:none}}
 body.mode-new .new-only{{display:block}}
 body.mode-new .new-only-inline{{display:inline}}
 body.mode-new .new-only-flex{{display:flex}}
@@ -457,7 +495,10 @@ body.mode-wheaton .wheaton-only-flex{{display:flex}}
 body.mode-soon .soon-only,body.mode-coming .soon-only{{display:block}}
 body.mode-soon .soon-only-inline,body.mode-coming .soon-only-inline{{display:inline}}
 body.mode-soon .soon-only-flex,body.mode-coming .soon-only-flex{{display:flex}}
-.new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex,.land-only-inline,.land-only-flex,.caves-only-inline,.caves-only-flex,.wheaton-only-inline,.wheaton-only-flex,.soon-only-inline,.soon-only-flex{{display:none}}
+body.mode-rent .rent-only{{display:block}}
+body.mode-rent .rent-only-inline{{display:inline}}
+body.mode-rent .rent-only-flex{{display:flex}}
+.new-only-inline,.new-only-flex,.pool-only-inline,.pool-only-flex,.land-only-inline,.land-only-flex,.caves-only-inline,.caves-only-flex,.wheaton-only-inline,.wheaton-only-flex,.soon-only-inline,.soon-only-flex,.rent-only-inline,.rent-only-flex{{display:none}}
 @media (max-width:800px){{
   .mode-btn{{padding:6px 10px;font-size:.7rem}}
 }}
@@ -479,6 +520,7 @@ body.mode-soon .soon-only-flex,body.mode-coming .soon-only-flex{{display:flex}}
       <span class="caves-badge caves-only-inline">{len(caves_data)} caves/bunkers</span>
       <span class="wheaton-badge wheaton-only-inline">{len(wheaton_data)} Wheaton for sale</span>
       <span class="soon-badge soon-only-inline">{len(soon_data)} coming soon</span>
+      <span class="rent-badge rent-only-inline">{len(rent_data)} apartments for rent</span>
     </div>
   </div>
   <div class="badges distress-only" id="hBdg"></div>
@@ -492,6 +534,7 @@ body.mode-soon .soon-only-flex,body.mode-coming .soon-only-flex{{display:flex}}
     <button type="button" class="mode-btn" id="modeCaves" onclick="setMode('caves')">Caves &amp; bunkers</button>
     <button type="button" class="mode-btn" id="modeWheaton" onclick="setMode('wheaton')">Wheaton for sale</button>
     <button type="button" class="mode-btn" id="modeSoon" onclick="setMode('soon')">Coming soon</button>
+    <button type="button" class="mode-btn" id="modeRent" onclick="setMode('rent')">Apartments for Rent</button>
   </div>
   <div class="src-note distress-only">{VERIFIED_NOTE} Run <code>python scan.py --include-optional</code> to refresh. Use <code>--reverify-only</code> for a status-only pass.</div>
   <div class="src-note new-only">{NEW_NOTE}</div>
@@ -500,6 +543,7 @@ body.mode-soon .soon-only-flex,body.mode-coming .soon-only-flex{{display:flex}}
   <div class="src-note caves-only">{CAVES_NOTE}</div>
   <div class="src-note wheaton-only">{WHEATON_NOTE}</div>
   <div class="src-note soon-only">{SOON_NOTE}</div>
+  <div class="src-note rent-only">{RENT_NOTE}</div>
   <div class="chg-strip" id="chgStrip"></div>
   <div class="loc-panel">
     <div class="loc-head">
@@ -513,13 +557,14 @@ body.mode-soon .soon-only-flex,body.mode-coming .soon-only-flex{{display:flex}}
     <div class="loc-grid" id="locGrid">{town_toggles}</div>
   </div>
   <div class="ctrls">
-    <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Condo">Condo</option><option value="Manufactured">Manufactured</option><option value="Land">Large tracts only (rare in distress)</option><option value="Farm">Farm</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
+    <div class="cg"><label>Type</label><select id="fT" onchange="go()"><option value="">All</option><option value="SFH">Single Family</option><option value="Condo">Condo</option><option value="Apartment">Apartment</option><option value="Manufactured">Manufactured</option><option value="Land">Large tracts only (rare in distress)</option><option value="Farm">Farm</option><option value="Multi-Family">Multi-Family</option><option value="Townhome">Townhome</option></select></div>
     <div class="cg pool-only"><label>Pool</label><select id="fPool" onchange="go()"><option value="">Private + community</option><option value="private">Private pool</option><option value="community">Community pool</option></select></div>
     <div class="cg land-only"><label>Min acres</label><select id="fAcres" onchange="go()"><option value="20">20+</option><option value="40">40+</option><option value="80">80+</option><option value="160">160+</option></select></div>
     <div class="cg land-only"><label>Max miles from LH</label><select id="fMiles" onchange="go()"><option value="10">10 mi</option><option value="20">20 mi</option><option value="30">30 mi</option><option value="40" selected>40 mi</option></select></div>
     <div class="cg land-only"><label>City</label><select id="fLandCity" onchange="go()"><option value="">All cities</option>{land_city_opts}</select></div>
     <div class="cg caves-only"><label>Max drive hr</label><select id="fHours" onchange="go()"><option value="4">≤ 4 hr (preferred)</option><option value="8" selected>≤ 8 hr</option><option value="12">≤ 12 hr (exceptional)</option></select></div>
     <div class="cg caves-only"><label>Feature</label><select id="fFeat" onchange="go()"><option value="">All</option><option value="Cave">Cave</option><option value="Bunker">Bunker</option><option value="Underground home">Underground home</option><option value="Storm shelter">Storm shelter</option><option value="Cellar">Cellar</option></select></div>
+    <div class="cg rent-only"><label>Area</label><select id="fRentArea" onchange="go()"><option value="">All areas</option>{rent_area_opts}</select></div>
     <div class="cg distress-only"><label>Distress</label><select id="fD" onchange="go()"><option value="">All</option><option value="foreclosure">Foreclosure</option><option value="as-is">As-Is/Fixer</option><option value="price-reduced">Price Reduced</option><option value="high-dom">High DOM</option><option value="below-market">Below Market</option></select></div>
     <div class="cg distress-only"><label>Verified</label><select id="fV" onchange="go()"><option value="">All</option><option value="live">Verified Only</option><option value="reverified">Re-verified Only</option></select></div>
     <div class="cg distress-only"><label>Freshness</label><select id="fFresh" onchange="go()"><option value="">All</option><option value="fresh">Fresh only</option><option value="stale">Stale only</option></select></div>
@@ -571,6 +616,7 @@ const PL={land_json};
 const PC={caves_json};
 const PW={wheaton_json};
 const PS={soon_json};
+const PR={rent_json};
 const B={badges_json};
 const ASD={area_json};
 const ASN={new_area_json};
@@ -579,6 +625,7 @@ const ASL={land_area_json};
 const ASC={caves_area_json};
 const ASW={wheaton_area_json};
 const ASS={soon_area_json};
+const ASR={rent_area_json};
 const TOWNS={towns_json};
 const NEW_DAYS={new_days};
 const CHANGES={changes_json};
@@ -629,10 +676,14 @@ function priceCutAmount(p){{
   }}
   return null;
 }}
+function fmtPrice(p){{
+  const s=fmt(p.list_price);
+  return mode==='rent'&&p.list_price!=null?s+'/mo':s;
+}}
 function priceBlock(p){{
   const cut=priceCutAmount(p);
   const showOrig=p.original_list_price!=null&&p.list_price!=null&&p.original_list_price>p.list_price;
-  return `<div class="cd-price">${{fmt(p.list_price)}}${{showOrig?` <span class="cd-orig">${{fmt(p.original_list_price)}}</span>`:''}}${{cut?` <span class="cd-cut">−${{fmt(cut)}}</span>`:''}}</div>`;
+  return `<div class="cd-price">${{fmtPrice(p)}}${{showOrig?` <span class="cd-orig">${{fmt(p.original_list_price)}}</span>`:''}}${{cut?` <span class="cd-cut">−${{fmt(cut)}}</span>`:''}}</div>`;
 }}
 function historyBlock(p){{
   const ph=p.price_history||[];
@@ -673,11 +724,13 @@ function fullAddr(p){{
 }}
 function googleUrl(p){{
   if(p.google_url)return p.google_url;
-  return 'https://www.google.com/search?q='+encodeURIComponent(fullAddr(p)+' for sale');
+  const q=fullAddr(p)+(mode==='rent'?' apartment for rent':' for sale');
+  return 'https://www.google.com/search?q='+encodeURIComponent(q);
 }}
 function zillowUrl(p){{
   if(p.zillow_url)return p.zillow_url;
-  return 'https://www.zillow.com/homes/'+encodeURIComponent(fullAddr(p))+'_rb/';
+  const suffix=mode==='rent'?'_rental/':'_rb/';
+  return 'https://www.zillow.com/homes/'+encodeURIComponent(fullAddr(p))+suffix;
 }}
 function redfinUrl(p){{
   if(p.redfin_url)return p.redfin_url;
@@ -781,6 +834,7 @@ function currentData(){{
   if(mode==='caves')return PC;
   if(mode==='wheaton')return PW;
   if(mode==='soon'||mode==='coming')return PS;
+  if(mode==='rent')return PR;
   return PD;
 }}
 function currentAreaStats(){{
@@ -790,13 +844,14 @@ function currentAreaStats(){{
   if(mode==='caves')return ASC;
   if(mode==='wheaton')return ASW;
   if(mode==='soon'||mode==='coming')return ASS;
+  if(mode==='rent')return ASR;
   return ASD;
 }}
 function isAllOrNothingMode(){{
-  return mode==='land'||mode==='caves'||mode==='wheaton';
+  return mode==='land'||mode==='caves'||mode==='wheaton'||mode==='rent';
 }}
 function modeSupportsMap(){{
-  return mode==='distress'||mode==='new'||mode==='pool'||mode==='land'||mode==='caves';
+  return mode==='distress'||mode==='new'||mode==='pool'||mode==='land'||mode==='caves'||mode==='rent';
 }}
 function setDensity(d, fromHash){{
   density=d==='list'?'list':'cards';
@@ -841,7 +896,7 @@ function renderMap(list){{
     const m=L.marker([+lat,+lon]);
     const z=safeHttpUrl(zillowUrl(p));
     const label=e(p.address||'Listing');
-    m.bindPopup(`<strong>${{label}}</strong><br>${{fmt(p.list_price)}}${{z?`<br><a href="${{e(z)}}" target="_blank" rel="noopener noreferrer">Zillow</a>`:''}}`);
+    m.bindPopup(`<strong>${{label}}</strong><br>${{fmtPrice(p)}}${{z?`<br><a href="${{e(z)}}" target="_blank" rel="noopener noreferrer">Zillow</a>`:''}}`);
     m.on('click',()=>{{
       if(z){{window.open(z,'_blank','noopener,noreferrer');return;}}
       const el=document.querySelector('[data-card-idx="'+i+'"]');
@@ -863,8 +918,9 @@ function clearFilters(){{
   if($('fAcres'))$('fAcres').value='20';
   if($('fMiles'))$('fMiles').value='40';
   if($('fLandCity'))$('fLandCity').value='';
+  if($('fRentArea'))$('fRentArea').value='';
   if($('fHours'))$('fHours').value='8';
-  if($('fO'))$('fO').value=mode==='distress'?'score':mode==='pool'?'pool':mode==='land'?'acres':mode==='caves'?'hours':'listed';
+  if($('fO'))$('fO').value=mode==='distress'?'score':mode==='pool'?'pool':mode==='land'?'acres':mode==='caves'?'hours':mode==='rent'?'price-asc':'listed';
   if($('fWf'))$('fWf').checked=false;
   if($('fExMh'))$('fExMh').checked=false;
   setAllTowns(true);
@@ -902,7 +958,7 @@ function writeHash(){{
   if(viewMode==='map')p.set('view','map');
   const towns=[...enabledTowns()];
   if(towns.length&&towns.length<TOWNS.length)p.set('towns', towns.join(','));
-  const map=[['type','fT'],['distress','fD'],['verified','fV'],['fresh','fFresh'],['pool','fPool'],['acres','fAcres'],['miles','fMiles'],['landCity','fLandCity'],['hours','fHours'],['feat','fFeat'],['price','fP'],['score','fS'],['beds','fBeds'],['dom','fDom'],['hoa','fHoa'],['sort','fO'],['q','fQ']];
+  const map=[['type','fT'],['distress','fD'],['verified','fV'],['fresh','fFresh'],['pool','fPool'],['acres','fAcres'],['miles','fMiles'],['landCity','fLandCity'],['rentArea','fRentArea'],['hours','fHours'],['feat','fFeat'],['price','fP'],['score','fS'],['beds','fBeds'],['dom','fDom'],['hoa','fHoa'],['sort','fO'],['q','fQ']];
   map.forEach(([k,id])=>{{
     const el=$(id); if(!el)return;
     const v=(el.value||'').trim();
@@ -910,6 +966,7 @@ function writeHash(){{
     if(k==='acres'&&mode!=='land')return;
     if(k==='miles'&&(mode!=='land'||v==='40'))return;
     if(k==='landCity'&&mode!=='land')return;
+    if(k==='rentArea'&&mode!=='rent')return;
     if(k==='pool'&&mode!=='pool')return;
     if((k==='hours'||k==='feat')&&mode!=='caves')return;
     if(k==='hours'&&v==='8')return;
@@ -936,14 +993,14 @@ function applyHash(){{
     }}
     const setIf=(id,key)=>{{const el=$(id); if(el&&p.has(key))el.value=p.get(key);}};
     setIf('fT','type'); setIf('fD','distress'); setIf('fV','verified'); setIf('fFresh','fresh');
-    setIf('fPool','pool'); setIf('fAcres','acres'); setIf('fMiles','miles'); setIf('fLandCity','landCity');
+    setIf('fPool','pool'); setIf('fAcres','acres'); setIf('fMiles','miles'); setIf('fLandCity','landCity'); setIf('fRentArea','rentArea');
     setIf('fHours','hours'); setIf('fFeat','feat');
     setIf('fP','price'); setIf('fS','score'); setIf('fHoa','hoa');
     setIf('fBeds','beds'); setIf('fDom','dom'); setIf('fO','sort'); setIf('fQ','q');
     if($('fWf'))$('fWf').checked=p.get('wf')==='1';
     if($('fExMh'))$('fExMh').checked=p.get('exMh')==='1';
     if(p.get('density')==='list'){{density='list';document.body.classList.add('view-list');$('btnCards').classList.remove('active');$('btnList').classList.add('active');}}
-    if(m&&['distress','new','pool','land','caves','wheaton','soon','coming'].includes(m))setMode(m,true);
+    if(m&&['distress','new','pool','land','caves','wheaton','soon','coming','rent'].includes(m))setMode(m,true);
     if(p.get('view')==='map')setView('map',true);
   }}finally{{_hashQuiet=false;}}
   return true;
@@ -957,6 +1014,7 @@ function setMode(m, fromHash){{
   document.body.classList.toggle('mode-wheaton', mode==='wheaton');
   document.body.classList.toggle('mode-soon', mode==='soon');
   document.body.classList.toggle('mode-coming', mode==='soon');
+  document.body.classList.toggle('mode-rent', mode==='rent');
   $('modeDistress').classList.toggle('active', mode==='distress');
   $('modeNew').classList.toggle('active', mode==='new');
   $('modePool').classList.toggle('active', mode==='pool');
@@ -964,8 +1022,9 @@ function setMode(m, fromHash){{
   $('modeCaves').classList.toggle('active', mode==='caves');
   $('modeWheaton').classList.toggle('active', mode==='wheaton');
   $('modeSoon').classList.toggle('active', mode==='soon');
+  $('modeRent').classList.toggle('active', mode==='rent');
   const sort=$('fO');
-  $('tpBox').classList.remove('new-mode','pool-mode','land-mode','caves-mode','wheaton-mode','soon-mode');
+  $('tpBox').classList.remove('new-mode','pool-mode','land-mode','caves-mode','wheaton-mode','soon-mode','rent-mode');
   changeFilter=null;
   document.querySelectorAll('.chg-chip').forEach(c=>c.classList.remove('active'));
   if(!fromHash){{
@@ -1008,6 +1067,11 @@ function setMode(m, fromHash){{
     $('tpTitle').textContent='Coming soon';
     $('tpBox').classList.add('soon-mode');
     $('hdrCount').textContent=PS.length+' coming soon';
+  }}else if(mode==='rent'){{
+    if(!fromHash)sort.value='price-asc';
+    $('tpTitle').textContent='Apartments for rent';
+    $('tpBox').classList.add('rent-mode');
+    $('hdrCount').textContent=PR.length+' apartments for rent';
   }}else{{
     if(!fromHash&&(sort.value==='listed'||sort.value==='pool'||sort.value==='acres'||sort.value==='ppa-asc'||sort.value==='hours'))sort.value='score';
     $('tpTitle').textContent='Top Picks';
@@ -1048,6 +1112,7 @@ function go(){{
   const feat=($('fFeat')||{{}}).value||'';
   const maxMiles=parseFloat(($('fMiles')||{{}}).value)||40;
   const landCity=($('fLandCity')||{{}}).value||'';
+  const rentArea=($('fRentArea')||{{}}).value||'';
   const maxHoa=parseFloat(($('fHoa')||{{}}).value);
   const wfOnly=$('fWf')&&$('fWf').checked;
   const exMh=$('fExMh')&&$('fExMh').checked;
@@ -1080,6 +1145,9 @@ function go(){{
   if(mode==='caves'){{
     f=f.filter(p=>(p.drive_hours_from_60189??99)<=maxHours);
     if(feat)f=f.filter(p=>(p.feature_type||'')===feat);
+  }}
+  if(mode==='rent'&&rentArea){{
+    f=f.filter(p=>(p.rent_area||p.nearest_target||'')===rentArea);
   }}
   if(mode!=='land'&&mode!=='caves'&&!Number.isNaN(minBeds))f=f.filter(p=>p.beds!=null&&p.beds>=minBeds);
   if(mode!=='land'&&mode!=='caves'&&!Number.isNaN(maxDom))f=f.filter(p=>{{const a=ageDays(p);return a!=null&&a<=maxDom}});
@@ -1114,7 +1182,7 @@ function go(){{
     }}
   }});
   _lastFiltered=f;
-  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':mode==='land'?'large tracts':mode==='caves'?'caves/bunkers':mode==='wheaton'?'Wheaton for sale':(mode==='soon'||mode==='coming')?'coming soon':'properties';
+  const label=mode==='new'?`new (last ${{NEW_DAYS}}d)`:mode==='pool'?'pool homes':mode==='land'?'large tracts':mode==='caves'?'caves/bunkers':mode==='wheaton'?'Wheaton for sale':(mode==='soon'||mode==='coming')?'coming soon':mode==='rent'?'apartments for rent':'properties';
   if(mode==='land'){{
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · within ${{maxMiles}} mi of Lake Holiday`;
   }}else if(mode==='caves'){{
@@ -1123,6 +1191,8 @@ function go(){{
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · Wheaton, IL (60187 / 60189)`;
   }}else if(mode==='soon'||mode==='coming'){{
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · pre-market / coming soon`;
+  }}else if(mode==='rent'){{
+    $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · Wheaton + Somonauk / Lake Holiday · monthly rent`;
   }}else{{
     const onCount=towns.size;
     $('rc').innerHTML=`<strong>${{f.length}}</strong> of ${{P.length}} ${{label}} · <strong>${{onCount}}</strong>/${{TOWNS.length}} locations on`;
@@ -1139,6 +1209,8 @@ function go(){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-wheaton">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · listed ${{e(listDate(p)||'?')}} · ${{e(p.property_type||'')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No Wheaton listings yet. Run <code>python scan.py --wheaton-only</code>.</div></div>';
   }}else if(mode==='soon'||mode==='coming'){{
     $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-soon">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.city||p.nearest_target||'')}} · ${{e(listDate(p)||'?')}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No coming-soon listings in the enabled locations. Run <code>python scan.py --coming-soon-only --include-optional</code>.</div></div>';
+  }}else if(mode==='rent'){{
+    $('tpL').innerHTML=f.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s s-rent">${{ageDays(p)??'—'}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target||p.city||'')}} · ${{e(p.property_type||'')}}</div><div class="tpi-p">${{fmtPrice(p)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No apartment rentals yet. Run <code>python scan.py --apartments-only</code>.</div></div>';
   }}else{{
     const homes=f.filter(p=>!isLandFarm(p));
     $('tpL').innerHTML=homes.slice(0,8).map(p=>`<div class="tpi"><div class="tpi-s ${{tcl(p.distress_score)}}">${{p.distress_score}}</div><div class="tpi-a">${{e(p.address)}} · ${{e(p.nearest_target)}}</div><div class="tpi-p">${{fmt(p.list_price)}}</div>${{linkButtonsCompact(p)}}</div>`).join('')||'<div class="tpi"><div class="tpi-a">No home Top Picks in the current filters (land/farm excluded from this list).</div></div>';
@@ -1156,7 +1228,7 @@ function go(){{
       return`<div class="cd" data-card-idx="${{i}}"><div class="cd-b">
         <div class="cd-addr">${{e(p.address)}}</div>
         <div class="cd-city">${{e(p.city||p.nearest_target||'')}}</div>
-        <div class="list-meta">${{fmt(p.list_price)}}${{beds?' · '+beds:''}}</div>
+        <div class="list-meta">${{fmtPrice(p)}}${{beds?' · '+beds:''}}</div>
         ${{z?`<a class="list-z vb vb-sm" href="${{e(z)}}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Zillow</a>`:''}}
       </div></div>`;
     }}).join('');
@@ -1293,6 +1365,26 @@ function go(){{
         </div>${{historyBlock(p)}}${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
       </div></div>`;
     }}
+    if(mode==='rent'){{
+      const age=ageDays(p);
+      const det=[];if(p.beds!=null)det.push(p.beds+' bd');if(p.baths!=null)det.push(p.baths+' ba');
+      if(listDate(p))det.push('Listed '+listDate(p));
+      if(age!=null)det.push(age+'d on market');
+      const psf=ppsqft(p);if(psf!=null)det.push('$'+Math.round(psf)+'/sqft');
+      const img=photoHtml(p,'🏢');
+      return`<div class="cd" data-card-idx="${{i}}" onclick="this.classList.toggle('open')"><div class="cd-s s-rent">${{age??'R'}}</div>${{img}}<div class="cd-b">
+        <div class="cd-addr">${{e(p.address)}}</div><div class="cd-city">${{e(p.city||p.nearest_target||'')}}, IL · ${{e(p.nearest_target||'')}}</div>
+        ${{priceBlock(p)}}<div class="cd-det">${{det.map(d=>`<span>${{d}}</span>`).join('')}}</div>
+        <div class="cd-tags"><span class="t t-rent">For rent</span><span class="t t-d">${{e(p.property_type||'Apartment')}}</span><span class="t t-d">${{e(p.nearest_target||'')}}</span></div>
+        <div class="cd-ft">${{linkButtons(p)}}</div>
+        <div class="cd-x"><div class="xg">
+          <div class="xi"><span class="l">Status:</span> <span class="v">${{e(p.status||p.mls_status||'For rent')}}</span></div>
+          <div class="xi"><span class="l">Area:</span> <span class="v">${{e(p.nearest_target||'')}}</span></div>
+          <div class="xi"><span class="l">Sqft:</span> <span class="v">${{p.sqft||'N/A'}}</span></div>
+          <div class="xi"><span class="l">Year:</span> <span class="v">${{p.year_built||'N/A'}}</span></div>
+        </div>${{historyBlock(p)}}${{p.notes?`<div style="font-size:.7rem;color:var(--text2);margin-top:6px">${{e(String(p.notes).substring(0,300))}}</div>`:''}}</div>
+      </div></div>`;
+    }}
     const verified=(p.verification_source||'').includes('realtor.com');
     const rev=p.verification_source==='realtor.com-reverified';
     const tags=(p.distress_types||[]).slice(0,5).map(x=>`<span class="t ${{TC[x.toLowerCase()]||'t-d'}}">${{e(x)}}</span>`).join('');
@@ -1336,7 +1428,7 @@ window.addEventListener('hashchange',()=>{{if(!_hashQuiet)applyHash();}});
         f"({len(data)} distressed, {len(new_data)} new/{new_days}d, "
         f"{len(pool_data)} pool homes, {len(land_data)} large tracts, "
         f"{len(caves_data)} caves/bunkers, {len(wheaton_data)} Wheaton for sale, "
-        f"{len(soon_data)} coming soon, "
+        f"{len(soon_data)} coming soon, {len(rent_data)} apartments for rent, "
         f"{verified} verified, {reverified} re-checked)"
     )
 

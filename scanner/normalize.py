@@ -72,6 +72,8 @@ def _property_type(record: dict[str, Any]) -> str:
         "single family": "SFH",
         "single family residence": "SFH",
         "house": "SFH",
+        "apartment": "Apartment",
+        "apartments": "Apartment",
         "condo": "Condo",
         "condos": "Condo",
         "townhomes": "Townhome",

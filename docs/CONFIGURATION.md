@@ -20,6 +20,7 @@
 | `include_large_land` | Gate large-land mode on full scans |
 | `include_caves_listings` / `include_wheaton_listings` | Gate caves / Wheaton modes |
 | `include_coming_soon` | Gate quarantined coming-soon stream (`data/coming_soon.json`) |
+| `include_apartments_rent` | Gate apartments-for-rent mode (`data/apartments_rent.json`) |
 
 Note: `include_land` / `include_mobile` top-level-style flags are historical; typed passes are driven by `distress_passes`.
 
@@ -38,6 +39,10 @@ Acreage trust rules are code-side — see [ACREAGE.md](ACREAGE.md).
 ## `caves_bunkers`
 
 Regional hubs + drive-hour banding from ZIP 60189. `include_land_pass` enables a land/farm hub pass (implemented in `caves.py`).
+
+## `apartments_for_rent`
+
+Wheaton + Somonauk / Lake Holiday `for_rent` hubs. Sandwich is not a search hub; Lake Holiday Wildwood streets still classify in. See [MODES.md](MODES.md).
 
 ## `verification`
 
@@ -68,7 +73,7 @@ Thresholds for high DOM, cheap land/mobile signals, `min_price_reduction_pct` (t
 
 ## `refresh_profiles`
 
-`quick` / `daily` / `full` gate modes including `include_coming_soon` (false on quick; true on daily/full).
+`quick` / `daily` / `full` gate modes including `include_coming_soon` and `include_apartments_rent` (false on quick; true on daily/full).
 
 ## `inactive_statuses` / `not_distressed_phrases`
 

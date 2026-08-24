@@ -83,6 +83,12 @@ from scanner.coming_soon import (  # noqa: E402
     print_coming_soon_summary,
     save_coming_soon,
 )
+from scanner.apartments_rent import (  # noqa: E402
+    compile_apartments_rent,
+    fetch_apartments_rent,
+    print_apartments_rent_summary,
+    save_apartments_rent,
+)
 from scanner.verify import reverify_properties  # noqa: E402
 
 logging.basicConfig(
@@ -155,6 +161,7 @@ def main() -> int:
     parser.add_argument("--skip-caves", action="store_true")
     parser.add_argument("--skip-wheaton", action="store_true")
     parser.add_argument("--skip-coming-soon", action="store_true")
+    parser.add_argument("--skip-apartments", action="store_true")
     parser.add_argument("--no-markdown", action="store_true")
     parser.add_argument(
         "--enable-counties",
@@ -380,6 +387,20 @@ def main() -> int:
         save_coming_soon(soon_records)
         print_coming_soon_summary(soon_records, soon_stats)
         meta["stats"]["coming_soon"] = len(soon_records)
+        with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
+            json.dump(meta, f, indent=2)
+
+    # --- Apartments for rent (Wheaton + Somonauk / Lake Holiday) ---
+    if not args.skip_apartments and scan_cfg.get("include_apartments_rent", True):
+        log.info("Fetching apartments for rent (Wheaton + Somonauk / Lake Holiday)...")
+        apt_raw = fetch_apartments_rent(config)
+        save_raw(apt_raw, label="apartments-rent-parallel")
+        apt_records, apt_stats = compile_apartments_rent(apt_raw, config=config)
+        for i, record in enumerate(apt_records):
+            record["id"] = i + 1
+        save_apartments_rent(apt_records, config=config)
+        print_apartments_rent_summary(apt_records, apt_stats)
+        meta["stats"]["apartments_rent"] = len(apt_records)
         with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
             json.dump(meta, f, indent=2)
 

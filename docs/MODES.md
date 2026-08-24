@@ -1,6 +1,6 @@
 # Dashboard modes
 
-The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has six modes. Prefer opening it on GitHub Pages (see [PUBLISHING.md](PUBLISHING.md)).
+The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has eight modes. Prefer opening it on GitHub Pages (see [PUBLISHING.md](PUBLISHING.md)).
 
 ## Distressed
 
@@ -65,12 +65,21 @@ The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has s
 - **Output:** `data/coming_soon.json`.
 - **Gate:** `scan.include_coming_soon` (daily/full profiles on; quick off).
 
+## Apartments for Rent
+
+- **Purpose:** Apartment / condo / multi-family / townhome **rentals** in **Wheaton** and **Somonauk / Lake Holiday** only.
+- **UI:** Town location panel is **hidden** (all-or-nothing). Optional area filter: Wheaton vs Somonauk / Lake Holiday. Prices are monthly rent.
+- **Geo:** Wheaton ZIPs 60187 / 60189 (ZIP bleed rejected). Somonauk city/ZIP 60552 plus Lake Holiday (including Wildwood streets under Sandwich city). Sandwich that is not Lake Holiday is excluded.
+- **Discovery:** Dedicated `for_rent` city + ZIP fetches (`config.yaml` → `apartments_for_rent`).
+- **Output:** `data/apartments_rent.json`.
+- **CLI:** `python scan.py --apartments-only`.
+
 ## Mode comparison
 
-| Concern | Distressed | New 7d | Pools | Large land | Caves | Wheaton | Coming soon |
-|---------|------------|--------|-------|------------|-------|---------|-------------|
-| Distress filter | Yes | No | No | No | No | No | No |
-| Town toggles | Yes | Yes | Yes | No (40 mi ring) | No (60189 drive ring) | No (Wheaton only) | Yes (geo) |
-| Deep reverify fetch | Yes (full path) | Light | Negatives only | Negatives only | Negatives only | Yes (live reverify) | No |
-| Markdown export | Yes | No | No | No | No | No | No |
-| Merged into for-sale modes | — | — | — | — | — | — | **No (quarantined)** |
+| Concern | Distressed | New 7d | Pools | Large land | Caves | Wheaton | Coming soon | Apartments |
+|---------|------------|--------|-------|------------|-------|---------|-------------|------------|
+| Distress filter | Yes | No | No | No | No | No | No | No |
+| Town toggles | Yes | Yes | Yes | No (40 mi ring) | No (60189 drive ring) | No (Wheaton only) | Yes (geo) | No (2 rent areas) |
+| Deep reverify fetch | Yes (full path) | Light | Negatives only | Negatives only | Negatives only | Yes (live reverify) | No | No (rental status) |
+| Markdown export | Yes | No | No | No | No | No | No | No |
+| Merged into for-sale modes | — | — | — | — | — | — | **No (quarantined)** | **No (rentals)** |

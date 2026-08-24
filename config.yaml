@@ -8,6 +8,7 @@
 #   - Caves & bunkers     → data/caves_listings.json    (include_caves_listings)
 #   - Wheaton for sale    → data/wheaton_listings.json  (include_wheaton_listings)
 #   - Coming soon         → data/coming_soon.json       (include_coming_soon; quarantined)
+#   - Apartments for rent → data/apartments_rent.json   (include_apartments_rent)
 #
 # Optional towns default ON below (Leland, Earlville, Waterman, Sheridan).
 # CLI can force with --include-optional / --no-optional.
@@ -36,6 +37,25 @@ scan:
   include_caves_listings: true
   include_wheaton_listings: true
   include_coming_soon: true
+  include_apartments_rent: true
+
+# Apartments for rent in Wheaton and Somonauk / Lake Holiday only.
+# Dashboard mode is all-or-nothing (no town toggles). Sandwich is excluded
+# unless the listing is Lake Holiday (Wildwood streets / subdivision).
+apartments_for_rent:
+  radius_miles: 3
+  label: "Apartments for Rent"
+  areas:
+    - name: Wheaton
+      search_locations: ["Wheaton, IL"]
+      cities: [wheaton]
+      zips: ["60187", "60189"]
+      county: DuPage
+    - name: Somonauk / Lake Holiday
+      search_locations: ["Somonauk, IL", "Lake Holiday, IL"]
+      cities: [somonauk, lake holiday]
+      zips: ["60552", "60548"]
+      county: DeKalb
 
 # All active for-sale listings in Wheaton, IL (no distress / age filters).
 # Dashboard mode is all-or-nothing (no town toggles). Active status is
@@ -258,6 +278,7 @@ refresh_profiles:
     include_caves_listings: false
     include_wheaton_listings: false
     include_coming_soon: false
+    include_apartments_rent: false
     include_legacy: false
   daily:
     description: Parallel full discovery without county sweeps
@@ -270,6 +291,7 @@ refresh_profiles:
     include_caves_listings: true
     include_wheaton_listings: true
     include_coming_soon: true
+    include_apartments_rent: true
     include_public_records: false
   full:
     description: Parallel + counties + public-record CSV + all modes
@@ -282,6 +304,7 @@ refresh_profiles:
     include_caves_listings: true
     include_wheaton_listings: true
     include_coming_soon: true
+    include_apartments_rent: true
     include_public_records: true
 
 inactive_statuses:
