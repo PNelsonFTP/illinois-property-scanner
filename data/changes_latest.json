@@ -1,49 +1,15 @@
 {
-  "generated_at": "2026-08-22T13:42:05.555361+00:00",
-  "newly_active": [
-    {
-      "address": "1575 Creek Rd",
-      "city": "Plano",
-      "nearest_target": "Plano",
-      "list_price": 699899,
-      "distress_score": 2,
-      "property_id": "8766152767"
-    },
-    {
-      "address": "285 E Legner St",
-      "city": "Leland",
-      "nearest_target": "Leland",
-      "list_price": 275000,
-      "distress_score": 2,
-      "property_id": "7083514448"
-    }
-  ],
-  "removed": [
-    {
-      "address": "520 S Wheaton Ave",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 649999,
-      "distress_score": 2,
-      "property_id": "8894316121"
-    },
-    {
-      "address": "917 Sunset Ave",
-      "city": "Earlville",
-      "nearest_target": "Earlville",
-      "list_price": 329000,
-      "distress_score": 2,
-      "property_id": "7100619516"
-    }
-  ],
+  "generated_at": "2026-08-24T10:37:50.046057+00:00",
+  "newly_active": [],
+  "removed": [],
   "price_cuts": [
     {
-      "address": "1515 Hill Ave",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 375000,
-      "distress_score": 3,
-      "property_id": "7782020643"
+      "address": "2222 Lynn Ct",
+      "city": "Montgomery",
+      "nearest_target": "Oswego",
+      "list_price": 400000,
+      "distress_score": 2,
+      "property_id": "8981190890"
     }
   ]
 }
