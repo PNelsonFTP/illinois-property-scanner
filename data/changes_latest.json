@@ -1,8 +1,104 @@
 {
-  "generated_at": "2026-08-24T10:37:50.046057+00:00",
-  "newly_active": [],
-  "removed": [],
-  "price_cuts": [
+  "generated_at": "2026-08-27T00:38:21.752079+00:00",
+  "newly_active": [
+    {
+      "address": "3758 Bissel Dr",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 329000,
+      "distress_score": 3,
+      "property_id": "9052444634"
+    },
+    {
+      "address": "64 Birch Dr",
+      "city": "Sandwich",
+      "nearest_target": "Lake Holiday",
+      "list_price": 19500,
+      "distress_score": 3,
+      "property_id": "8153187444"
+    },
+    {
+      "address": "136 Dolores St",
+      "city": "Oswego",
+      "nearest_target": "Oswego",
+      "list_price": 309919,
+      "distress_score": 3,
+      "property_id": "7235867956"
+    },
+    {
+      "address": "525 Cheshire Ct",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 399900,
+      "distress_score": 2,
+      "property_id": "8845437726"
+    },
+    {
+      "address": "50 Maple Ln",
+      "city": "Sandwich",
+      "nearest_target": "Sandwich",
+      "list_price": 35000,
+      "distress_score": 1,
+      "property_id": "8292346450"
+    }
+  ],
+  "removed": [
+    {
+      "address": "16323 Griswold Springs Rd",
+      "city": "Plano",
+      "nearest_target": "Plano",
+      "list_price": 569900,
+      "distress_score": 6,
+      "property_id": "7177307936"
+    },
+    {
+      "address": "3747 Bailey Rd",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 297900,
+      "distress_score": 6,
+      "property_id": "9591382717"
+    },
+    {
+      "address": "2601 N 3653rd Rd",
+      "city": "Sheridan",
+      "nearest_target": "Sheridan",
+      "list_price": 744900,
+      "distress_score": 5,
+      "property_id": "9750922730"
+    },
+    {
+      "address": "608 Bender St",
+      "city": "Sandwich",
+      "nearest_target": "Sandwich",
+      "list_price": 445000,
+      "distress_score": 3,
+      "property_id": "7339254686"
+    },
+    {
+      "address": "1330 Gates St",
+      "city": "Montgomery",
+      "nearest_target": "Oswego",
+      "list_price": 164999,
+      "distress_score": 2,
+      "property_id": "8816293832"
+    },
+    {
+      "address": "1332 Douglas Ave Trlr 84",
+      "city": "Montgomery",
+      "nearest_target": "Oswego",
+      "list_price": 65000,
+      "distress_score": 2,
+      "property_id": "9899008468"
+    },
+    {
+      "address": "310 N View St",
+      "city": "Hinckley",
+      "nearest_target": "Hinckley",
+      "list_price": 250000,
+      "distress_score": 2,
+      "property_id": "8164152771"
+    },
     {
       "address": "2222 Lynn Ct",
       "city": "Montgomery",
@@ -11,5 +107,6 @@
       "distress_score": 2,
       "property_id": "8981190890"
     }
-  ]
+  ],
+  "price_cuts": []
 }
