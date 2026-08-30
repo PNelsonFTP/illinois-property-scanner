@@ -1,10 +1,10 @@
 # Distressed Properties Index — Illinois
 
-**Scan Date:** August 26, 2026 at 7:36 PM CDT  
+**Scan Date:** August 30, 2026 at 8:57 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Total Properties:** 35  
-**Live-Verified:** 35/35  
-**Re-verified:** 35/35  
+**Total Properties:** 39  
+**Live-Verified:** 39/39  
+**Re-verified:** 39/39  
 **Stale:** 0
 
 ## Summary Statistics
@@ -14,13 +14,13 @@
 | Town | Count |
 |------|-------|
 | Oswego | 9 |
-| Yorkville | 7 |
-| Lake Holiday | 6 |
+| Yorkville | 8 |
+| Lake Holiday | 7 |
 | Sandwich | 4 |
+| Wheaton | 3 |
+| Waterman | 2 |
 | Earlville | 2 |
-| Wheaton | 2 |
 | Sheridan | 1 |
-| Waterman | 1 |
 | Hinckley | 1 |
 | Plano | 1 |
 | Leland | 1 |
@@ -42,12 +42,12 @@
 
 ## Quick Links
 
-- [by-area/wheaton.md](by-area/wheaton.md) — Wheaton (2 properties)
+- [by-area/wheaton.md](by-area/wheaton.md) — Wheaton (3 properties)
 - [by-area/oswego.md](by-area/oswego.md) — Oswego (9 properties)
 - [by-area/sandwich.md](by-area/sandwich.md) — Sandwich (4 properties)
 - [by-area/somonauk.md](by-area/somonauk.md) — Somonauk (0 properties)
-- [by-area/lake-holiday.md](by-area/lake-holiday.md) — Lake Holiday (6 properties)
+- [by-area/lake-holiday.md](by-area/lake-holiday.md) — Lake Holiday (7 properties)
 - [by-area/leland.md](by-area/leland.md) — Leland (1 properties)
 - [by-area/earlville.md](by-area/earlville.md) — Earlville (2 properties)
-- [by-area/waterman.md](by-area/waterman.md) — Waterman (1 properties)
+- [by-area/waterman.md](by-area/waterman.md) — Waterman (2 properties)
 - [by-area/sheridan.md](by-area/sheridan.md) — Sheridan (1 properties)
