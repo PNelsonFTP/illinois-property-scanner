@@ -1,8 +1,8 @@
 # Distressed Properties — Lake Holiday, IL
 
-**Scan Date:** August 30, 2026 at 8:57 AM CDT  
+**Scan Date:** September 04, 2026 at 6:28 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Properties:** 7
+**Properties:** 6
 
 *Links prefer Zillow/Google — Realtor.com deep-links often block after scanning.*
 
@@ -10,8 +10,7 @@
 |---|---------|------|------|-------|------|---------------|-----|-------|--------|--------|--------|---------|
 | 1 | 120 Cardinal Ln Unit A | Sandwich | Lake Holiday | $38,900 | Manufactured | below-market, high-dom, price-reduced | 810 | 6 | Active | [Zillow](https://www.zillow.com/homes/120+Cardinal+Ln+Unit+A+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=120+Cardinal+Ln+Unit+A+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/120-Cardinal-Ln-A_Sandwich_IL_60548_M76829-52939) |
 | 2 | 20 Cedar Ln | Sandwich | Lake Holiday | $32,000 | Manufactured | below-market, high-dom, price-reduced | 175 | 4 | Active | [Zillow](https://www.zillow.com/homes/20+Cedar+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=20+Cedar+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/20-Cedar-Ln_Sandwich_IL_60548_M91337-22845) |
-| 3 | 64 Birch Dr | Sandwich | Lake Holiday | $19,500 | Manufactured | below-market, price-reduced | 87 | 3 | Active | [Zillow](https://www.zillow.com/homes/64+Birch+Dr+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=64+Birch+Dr+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/64-Birch-Dr_Sandwich_IL_60548_M81531-87444) |
+| 3 | 64 Birch Dr | Sandwich | Lake Holiday | $19,500 | Manufactured | below-market, high-dom, price-reduced | 93 | 4 | Active | [Zillow](https://www.zillow.com/homes/64+Birch+Dr+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=64+Birch+Dr+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/64-Birch-Dr_Sandwich_IL_60548_M81531-87444) |
 | 4 | 127 Cardinal Ln | Sandwich | Lake Holiday | $79,000 | Manufactured | as-is | 36 | 2 | Active | [Zillow](https://www.zillow.com/homes/127+Cardinal+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=127+Cardinal+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/127-Cardinal-Ln_Sandwich_IL_60548_M76639-47859) |
 | 5 | 98 Maple Ln | Sandwich | Lake Holiday | $43,000 | Manufactured | as-is | 8 | 2 | Active | [Zillow](https://www.zillow.com/homes/98+Maple+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=98+Maple+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/98-Maple-Ln_Sandwich_IL_60548_M89794-73324) |
-| 6 | 1684 Hilda Dr | Lake Holiday | Lake Holiday | $399,000 | SFH | as-is | 1 | 2 | Active | [Zillow](https://www.zillow.com/homes/1684+Hilda+Dr+Lake+Holiday+IL+60548_rb/) | [Google](https://www.google.com/search?q=1684+Hilda+Dr+Lake+Holiday+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1684-Hilda-Dr_Sandwich_IL_60548_M72275-10050) |
-| 7 | 1457 Nova Rd | Sandwich | Lake Holiday | $499,900 | SFH | price-reduced | 17 | 1 | Active | [Zillow](https://www.zillow.com/homes/1457+Nova+Rd+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=1457+Nova+Rd+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1457-Nova-Rd_Sandwich_IL_60548_M72182-68096) |
+| 6 | 1457 Nova Rd | Sandwich | Lake Holiday | $499,900 | SFH | price-reduced | 21 | 1 | Active | [Zillow](https://www.zillow.com/homes/1457+Nova+Rd+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=1457+Nova+Rd+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1457-Nova-Rd_Sandwich_IL_60548_M72182-68096) |
