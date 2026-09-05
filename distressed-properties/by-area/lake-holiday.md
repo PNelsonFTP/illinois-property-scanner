@@ -1,6 +1,6 @@
 # Distressed Properties — Lake Holiday, IL
 
-**Scan Date:** September 04, 2026 at 6:28 AM CDT  
+**Scan Date:** September 05, 2026 at 7:05 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
 **Properties:** 6
 
@@ -13,4 +13,4 @@
 | 3 | 64 Birch Dr | Sandwich | Lake Holiday | $19,500 | Manufactured | below-market, high-dom, price-reduced | 93 | 4 | Active | [Zillow](https://www.zillow.com/homes/64+Birch+Dr+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=64+Birch+Dr+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/64-Birch-Dr_Sandwich_IL_60548_M81531-87444) |
 | 4 | 127 Cardinal Ln | Sandwich | Lake Holiday | $79,000 | Manufactured | as-is | 36 | 2 | Active | [Zillow](https://www.zillow.com/homes/127+Cardinal+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=127+Cardinal+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/127-Cardinal-Ln_Sandwich_IL_60548_M76639-47859) |
 | 5 | 98 Maple Ln | Sandwich | Lake Holiday | $43,000 | Manufactured | as-is | 8 | 2 | Active | [Zillow](https://www.zillow.com/homes/98+Maple+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=98+Maple+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/98-Maple-Ln_Sandwich_IL_60548_M89794-73324) |
-| 6 | 1457 Nova Rd | Sandwich | Lake Holiday | $499,900 | SFH | price-reduced | 21 | 1 | Active | [Zillow](https://www.zillow.com/homes/1457+Nova+Rd+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=1457+Nova+Rd+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1457-Nova-Rd_Sandwich_IL_60548_M72182-68096) |
+| 6 | 1457 Nova Rd | Sandwich | Lake Holiday | $475,000 | SFH | price-reduced | 23 | 1 | Active | [Zillow](https://www.zillow.com/homes/1457+Nova+Rd+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=1457+Nova+Rd+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1457-Nova-Rd_Sandwich_IL_60548_M72182-68096) |

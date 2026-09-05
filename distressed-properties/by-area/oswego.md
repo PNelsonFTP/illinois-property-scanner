@@ -1,6 +1,6 @@
 # Distressed Properties — Oswego, IL
 
-**Scan Date:** September 04, 2026 at 6:28 AM CDT  
+**Scan Date:** September 05, 2026 at 7:05 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
 **Properties:** 9
 
@@ -8,8 +8,8 @@
 
 | # | Address | City | Area | Price | Type | Distress Tags | DOM | Score | Status | Zillow | Google | Realtor |
 |---|---------|------|------|-------|------|---------------|-----|-------|--------|--------|--------|---------|
-| 1 | 281 Fox Chase Dr N | Oswego | Oswego | $479,000 | SFH | high-dom, price-reduced | 385 | 4 | Active | [Zillow](https://www.zillow.com/homes/281+Fox+Chase+Dr+N+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=281+Fox+Chase+Dr+N+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/281-Fox-Chase-Dr-N_Oswego_IL_60543_M78027-15989) |
-| 2 | 8 Hawthorne Dr | Oswego | Oswego | $449,900 | SFH | as-is, motivated, price-reduced | 73 | 4 | Active | [Zillow](https://www.zillow.com/homes/8+Hawthorne+Dr+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=8+Hawthorne+Dr+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/8-Hawthorne-Dr_Oswego_IL_60543_M80193-74401) |
+| 1 | 8 Hawthorne Dr | Oswego | Oswego | $425,000 | SFH | as-is, high-dom, motivated, price-reduced | 121 | 5 | Active | [Zillow](https://www.zillow.com/homes/8+Hawthorne+Dr+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=8+Hawthorne+Dr+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/8-Hawthorne-Dr_Oswego_IL_60543_M80193-74401) |
+| 2 | 281 Fox Chase Dr N | Oswego | Oswego | $479,000 | SFH | high-dom, price-reduced | 385 | 4 | Active | [Zillow](https://www.zillow.com/homes/281+Fox+Chase+Dr+N+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=281+Fox+Chase+Dr+N+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/281-Fox-Chase-Dr-N_Oswego_IL_60543_M78027-15989) |
 | 3 | 444 Badger Ln | Oswego | Oswego | $310,000 | SFH | reo | 7 | 3 | Active | [Zillow](https://www.zillow.com/homes/444+Badger+Ln+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=444+Badger+Ln+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/444-Badger-Ln_Oswego_IL_60543_M76640-50823) |
 | 4 | 2530 Shauna Dr | Montgomery | Oswego | $334,000 | SFH | high-dom, price-reduced | 148 | 2 | Active | [Zillow](https://www.zillow.com/homes/2530+Shauna+Dr+Montgomery+IL+60538_rb/) | [Google](https://www.google.com/search?q=2530+Shauna+Dr+Montgomery+IL+60538+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/2530-Shauna-Dr_Montgomery_IL_60538_M72992-18469) |
 | 5 | 574 Sudbury Cir | Oswego | Oswego | $379,000 | Townhome | high-dom, price-reduced | 142 | 2 | Active | [Zillow](https://www.zillow.com/homes/574+Sudbury+Cir+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=574+Sudbury+Cir+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/574-Sudbury-Cir_Oswego_IL_60543_M70592-98405) |

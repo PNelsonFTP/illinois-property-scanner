@@ -1,22 +1,16 @@
 {
-  "generated_at": "2026-09-04T11:30:13.863420+00:00",
+  "generated_at": "2026-09-05T12:06:48.598713+00:00",
   "newly_active": [
     {
-      "address": "81 Lillian Ln",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 357000,
-      "distress_score": 7,
-      "property_id": "8158017525"
-    },
-    {
-      "address": "116 W Union St",
-      "city": "Earlville",
-      "nearest_target": "Earlville",
-      "list_price": 155900,
+      "address": "1006 Arbor Ave",
+      "city": "Wheaton",
+      "nearest_target": "Wheaton",
+      "list_price": 369900,
       "distress_score": 2,
-      "property_id": "8560683980"
-    },
+      "property_id": "7246416847"
+    }
+  ],
+  "removed": [
     {
       "address": "1214 Wilson Ave",
       "city": "Wheaton",
@@ -24,90 +18,24 @@
       "list_price": 460000,
       "distress_score": 2,
       "property_id": "8643544117"
-    },
-    {
-      "address": "116 N Hickory St",
-      "city": "Waterman",
-      "nearest_target": "Waterman",
-      "list_price": 219900,
-      "distress_score": 1,
-      "property_id": "7532460225"
-    }
-  ],
-  "removed": [
-    {
-      "address": "135 N Birch St",
-      "city": "Waterman",
-      "nearest_target": "Waterman",
-      "list_price": 119000,
-      "distress_score": 4,
-      "property_id": "7543462605"
-    },
-    {
-      "address": "753 Fir Ct",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 699900,
-      "distress_score": 3,
-      "property_id": "7733663604"
-    },
-    {
-      "address": "215 Buchanan Dr",
-      "city": "Waterman",
-      "nearest_target": "Waterman",
-      "list_price": 329040,
-      "distress_score": 2,
-      "property_id": "8223864000"
-    },
-    {
-      "address": "525 Cheshire Ct",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 399900,
-      "distress_score": 2,
-      "property_id": "8845437726"
-    },
-    {
-      "address": "519 Byron Ct",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 495000,
-      "distress_score": 2,
-      "property_id": "8701353071"
-    },
-    {
-      "address": "1684 Hilda Dr",
-      "city": "Lake Holiday",
-      "nearest_target": "Lake Holiday",
-      "list_price": 399000,
-      "distress_score": 2,
-      "property_id": "7227510050"
     }
   ],
   "price_cuts": [
     {
-      "address": "117 E Elm St",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 348000,
-      "distress_score": 4,
-      "property_id": "7560929326"
-    },
-    {
-      "address": "285 E Legner St",
-      "city": "Leland",
-      "nearest_target": "Leland",
-      "list_price": 269900,
-      "distress_score": 4,
-      "property_id": "7083514448"
-    },
-    {
-      "address": "2530 Shauna Dr",
-      "city": "Montgomery",
+      "address": "8 Hawthorne Dr",
+      "city": "Oswego",
       "nearest_target": "Oswego",
-      "list_price": 334000,
-      "distress_score": 2,
-      "property_id": "7299218469"
+      "list_price": 425000,
+      "distress_score": 5,
+      "property_id": "8019374401"
+    },
+    {
+      "address": "1457 Nova Rd",
+      "city": "Sandwich",
+      "nearest_target": "Lake Holiday",
+      "list_price": 475000,
+      "distress_score": 1,
+      "property_id": "7218268096"
     }
   ]
 }
