@@ -1,41 +1,41 @@
 {
-  "generated_at": "2026-09-05T12:06:48.598713+00:00",
+  "generated_at": "2026-09-09T13:39:54.024071+00:00",
   "newly_active": [
     {
-      "address": "1006 Arbor Ave",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 369900,
+      "address": "55 Dawn Ave",
+      "city": "Plano",
+      "nearest_target": "Plano",
+      "list_price": 415000,
       "distress_score": 2,
-      "property_id": "7246416847"
+      "property_id": "8949482311"
     }
   ],
   "removed": [
     {
-      "address": "1214 Wilson Ave",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 460000,
-      "distress_score": 2,
-      "property_id": "8643544117"
+      "address": "50 Maple Ln",
+      "city": "Sandwich",
+      "nearest_target": "Sandwich",
+      "list_price": 35000,
+      "distress_score": 1,
+      "property_id": "8292346450"
     }
   ],
   "price_cuts": [
     {
-      "address": "8 Hawthorne Dr",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 425000,
-      "distress_score": 5,
-      "property_id": "8019374401"
+      "address": "213 N Main St",
+      "city": "Sandwich",
+      "nearest_target": "Sandwich",
+      "list_price": 329900,
+      "distress_score": 4,
+      "property_id": "8669218089"
     },
     {
-      "address": "1457 Nova Rd",
-      "city": "Sandwich",
-      "nearest_target": "Lake Holiday",
-      "list_price": 475000,
-      "distress_score": 1,
-      "property_id": "7218268096"
+      "address": "1575 Creek Rd",
+      "city": "Plano",
+      "nearest_target": "Plano",
+      "list_price": 678988,
+      "distress_score": 2,
+      "property_id": "8766152767"
     }
   ]
 }
