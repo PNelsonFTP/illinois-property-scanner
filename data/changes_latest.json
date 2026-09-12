@@ -1,65 +1,64 @@
 {
-  "generated_at": "2026-09-10T20:09:37.100773+00:00",
+  "generated_at": "2026-09-12T12:06:11.558380+00:00",
   "newly_active": [
     {
-      "address": "746 Mallard Cir",
-      "city": "Sandwich",
-      "nearest_target": "Sandwich",
-      "list_price": 79900,
-      "distress_score": 2,
-      "property_id": "8757845547"
-    },
-    {
-      "address": "1000 S Lorraine Rd Apt 212",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 175000,
-      "distress_score": 2,
-      "property_id": "8084315120"
-    },
-    {
-      "address": "5337 Oak Meadow Ct",
-      "city": "Plano",
-      "nearest_target": "Plano",
-      "list_price": 799900,
-      "distress_score": 2,
-      "property_id": "7508437693"
-    },
-    {
-      "address": "481 Lasalle Dr",
+      "address": "1483 Nova Rd",
       "city": "Lake Holiday",
       "nearest_target": "Lake Holiday",
-      "list_price": 279000,
-      "distress_score": 1,
-      "property_id": "7107066524"
-    }
-  ],
-  "removed": [
-    {
-      "address": "8 Hawthorne Dr",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 425000,
-      "distress_score": 5,
-      "property_id": "8019374401"
-    }
-  ],
-  "price_cuts": [
-    {
-      "address": "495 Timber Oak Ln",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 525000,
-      "distress_score": 5,
-      "property_id": "8234017303"
+      "list_price": 399000,
+      "distress_score": 2,
+      "property_id": "7217522777"
     },
     {
-      "address": "407 S Ottawa St",
-      "city": "Earlville",
-      "nearest_target": "Earlville",
-      "list_price": 155000,
-      "distress_score": 3,
-      "property_id": "9452265503"
+      "address": "607 Mansfield Way",
+      "city": "Oswego",
+      "nearest_target": "Oswego",
+      "list_price": 585000,
+      "distress_score": 2,
+      "property_id": "7605497101"
+    },
+    {
+      "address": "105 Appletree Ct",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 395000,
+      "distress_score": 2,
+      "property_id": "7654445531"
+    },
+    {
+      "address": "2S015 Ironwood Ln",
+      "city": "Wheaton",
+      "nearest_target": "Wheaton",
+      "list_price": 779000,
+      "distress_score": 2,
+      "property_id": "8747793436"
+    },
+    {
+      "address": "320 E Railroad Ave",
+      "city": "Leland",
+      "nearest_target": "Leland",
+      "list_price": 146500,
+      "distress_score": 2,
+      "property_id": "8988821663"
+    }
+  ],
+  "removed": [],
+  "price_cuts": [
+    {
+      "address": "281 Fox Chase Dr N",
+      "city": "Oswego",
+      "nearest_target": "Oswego",
+      "list_price": 450000,
+      "distress_score": 4,
+      "property_id": "7802715989"
+    },
+    {
+      "address": "421 DE Kalb St",
+      "city": "Sandwich",
+      "nearest_target": "Sandwich",
+      "list_price": 319000,
+      "distress_score": 4,
+      "property_id": "8158453527"
     }
   ]
 }
