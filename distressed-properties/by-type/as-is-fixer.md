@@ -1,8 +1,8 @@
 # Distressed Properties — As-Is / Fixer / Investor Opportunities
 
-**Scan Date:** September 12, 2026 at 7:04 AM CDT  
+**Scan Date:** September 14, 2026 at 6:32 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Properties:** 16
+**Properties:** 15
 
 *Links prefer Zillow/Google — Realtor.com deep-links often block after scanning.*
 
@@ -20,7 +20,6 @@
 | 10 | 127 Cardinal Ln | Sandwich | Lake Holiday | $79,000 | Manufactured | as-is | 36 | 2 | Active | [Zillow](https://www.zillow.com/homes/127+Cardinal+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=127+Cardinal+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/127-Cardinal-Ln_Sandwich_IL_60548_M76639-47859) |
 | 11 | 98 Maple Ln | Sandwich | Lake Holiday | $43,000 | Manufactured | as-is | 8 | 2 | Active | [Zillow](https://www.zillow.com/homes/98+Maple+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=98+Maple+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/98-Maple-Ln_Sandwich_IL_60548_M89794-73324) |
 | 12 | 1006 Arbor Ave | Wheaton | Wheaton | $369,900 | SFH | as-is | 7 | 2 | Active | [Zillow](https://www.zillow.com/homes/1006+Arbor+Ave+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1006+Arbor+Ave+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1006-Arbor-Ave_Wheaton_IL_60189_M72464-16847) |
-| 13 | 5337 Oak Meadow Ct | Plano | Plano | $799,900 | SFH | as-is | 3 | 2 | Active | [Zillow](https://www.zillow.com/homes/5337+Oak+Meadow+Ct+Plano+IL+60545_rb/) | [Google](https://www.google.com/search?q=5337+Oak+Meadow+Ct+Plano+IL+60545+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/5337-Oak-Meadow-Ct_Plano_IL_60545_M75084-37693) |
-| 14 | 2S015 Ironwood Ln | Wheaton | Wheaton | $779,000 | SFH | as-is | 2 | 2 | Active | [Zillow](https://www.zillow.com/homes/2S015+Ironwood+Ln+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=2S015+Ironwood+Ln+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/2S015-Ironwood-Ln_Wheaton_IL_60189_M87477-93436) |
+| 13 | 2S015 Ironwood Ln | Wheaton | Wheaton | $779,000 | SFH | as-is | 5 | 2 | Active | [Zillow](https://www.zillow.com/homes/2S015+Ironwood+Ln+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=2S015+Ironwood+Ln+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/2S015-Ironwood-Ln_Wheaton_IL_60189_M87477-93436) |
+| 14 | 320 E Railroad Ave | Leland | Leland | $146,500 | SFH | as-is | 3 | 2 | Active | [Zillow](https://www.zillow.com/homes/320+E+Railroad+Ave+Leland+IL+60531_rb/) | [Google](https://www.google.com/search?q=320+E+Railroad+Ave+Leland+IL+60531+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/320-E-Railroad-Ave_Leland_IL_60531_M89888-21663) |
 | 15 | 1000 S Lorraine Rd Apt 212 | Wheaton | Wheaton | $175,000 | Condo | as-is | 2 | 2 | Active | [Zillow](https://www.zillow.com/homes/1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1000-S-Lorraine-Rd-Apt-212_Wheaton_IL_60189_M80843-15120) |
-| 16 | 320 E Railroad Ave | Leland | Leland | $146,500 | SFH | as-is | 1 | 2 | Active | [Zillow](https://www.zillow.com/homes/320+E+Railroad+Ave+Leland+IL+60531_rb/) | [Google](https://www.google.com/search?q=320+E+Railroad+Ave+Leland+IL+60531+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/320-E-Railroad-Ave_Leland_IL_60531_M89888-21663) |

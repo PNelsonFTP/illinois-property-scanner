@@ -1,64 +1,41 @@
 {
-  "generated_at": "2026-09-12T12:06:11.558380+00:00",
+  "generated_at": "2026-09-14T11:33:44.359319+00:00",
   "newly_active": [
     {
-      "address": "1483 Nova Rd",
-      "city": "Lake Holiday",
-      "nearest_target": "Lake Holiday",
-      "list_price": 399000,
-      "distress_score": 2,
-      "property_id": "7217522777"
-    },
-    {
-      "address": "607 Mansfield Way",
+      "address": "4520 Douglas Rd",
       "city": "Oswego",
       "nearest_target": "Oswego",
-      "list_price": 585000,
-      "distress_score": 2,
-      "property_id": "7605497101"
-    },
-    {
-      "address": "105 Appletree Ct",
-      "city": "Yorkville",
-      "nearest_target": "Yorkville",
-      "list_price": 395000,
-      "distress_score": 2,
-      "property_id": "7654445531"
-    },
-    {
-      "address": "2S015 Ironwood Ln",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 779000,
-      "distress_score": 2,
-      "property_id": "8747793436"
-    },
-    {
-      "address": "320 E Railroad Ave",
-      "city": "Leland",
-      "nearest_target": "Leland",
-      "list_price": 146500,
-      "distress_score": 2,
-      "property_id": "8988821663"
+      "list_price": 297000,
+      "distress_score": 1,
+      "property_id": "8344045289"
     }
   ],
-  "removed": [],
-  "price_cuts": [
+  "removed": [
     {
-      "address": "281 Fox Chase Dr N",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 450000,
+      "address": "64 Birch Dr",
+      "city": "Sandwich",
+      "nearest_target": "Lake Holiday",
+      "list_price": 19500,
       "distress_score": 4,
-      "property_id": "7802715989"
+      "property_id": "8153187444"
     },
     {
-      "address": "421 DE Kalb St",
+      "address": "5337 Oak Meadow Ct",
+      "city": "Plano",
+      "nearest_target": "Plano",
+      "list_price": 799900,
+      "distress_score": 2,
+      "property_id": "7508437693"
+    }
+  ],
+  "price_cuts": [
+    {
+      "address": "20 Cedar Ln",
       "city": "Sandwich",
-      "nearest_target": "Sandwich",
-      "list_price": 319000,
-      "distress_score": 4,
-      "property_id": "8158453527"
+      "nearest_target": "Lake Holiday",
+      "list_price": 24500,
+      "distress_score": 5,
+      "property_id": "9133722845"
     }
   ]
 }
