@@ -13,7 +13,8 @@ The interactive dashboard (`dashboard/distressed-property-dashboard.html`) has e
 ## New to market (7 days)
 
 - **Purpose:** Everything newly listed (geo only — no distress scoring).
-- **Window:** `scan.new_listings_days` (default 7); override with `--new-days`.
+- **Window:** `scan.new_listings_days` (default 7); override with `--new-days`. Applied locally from `list_date` or `last_status_change_date` (Realtor `past_days` is not used — it drops null list dates).
+- **Geo:** MLS city or configured town ZIP is enough. A 3-mile city-center circle no longer drops real Oswego 60543 / Montgomery 60538 / south Wheaton 60189 homes.
 - **Output:** `data/new_listings_7d.json`.
 - **CLI:** `python scan.py --new-listings-only --include-optional`  
   Parallel path refreshes this after distressed/pools/land unless `--skip-new-listings`.

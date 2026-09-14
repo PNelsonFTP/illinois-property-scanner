@@ -18,7 +18,7 @@ from typing import Any
 
 from scanner.config import PROJECT_ROOT
 from scanner.dedup import deduplicate
-from scanner.fetch import _merge_unique, fetch_town_listings, save_raw
+from scanner.fetch import _merge_unique, fetch_town_listings
 from scanner.geo import CITY_CENTER_COORDS, extract_coords_with_source, haversine_miles
 from scanner.links import attach_alt_links
 from scanner.normalize import normalize_realtor_record
@@ -576,6 +576,6 @@ def print_caves_summary(
 
 
 def run_caves_fetch_and_save(config: dict) -> list[dict[str, Any]]:
-    raw = fetch_caves_listings(config)
-    save_raw(raw, label="caves-listings")
-    return raw
+    # Do not persist the unfiltered caves hub dump (~1.5 GB). Compile writes
+    # the small published set to data/caves_listings.json.
+    return fetch_caves_listings(config)

@@ -941,13 +941,17 @@ function renderChanges(){{
   const neu=CHANGES.newly_active||[];
   const rem=CHANGES.removed||CHANGES.removed_or_inactive||[];
   const cuts=CHANGES.price_cuts||[];
-  if(!neu.length&&!rem.length&&!cuts.length){{box.style.display='none';return;}}
-  const samples=[...neu,...cuts].map(p=>p&&p.address).filter(Boolean).slice(0,5).map(e);
+  const nl=CHANGES.new_listings||{{}};
+  const nlNew=nl.newly_active||[];
+  const nlRem=nl.removed||[];
+  if(!neu.length&&!rem.length&&!cuts.length&&!nlNew.length&&!nlRem.length){{box.style.display='none';return;}}
+  const samples=[...neu,...cuts,...nlNew].map(p=>p&&p.address).filter(Boolean).slice(0,5).map(e);
   box.style.display='block';
   box.innerHTML=`<strong>Since last scan</strong> · `+
-    `<button type="button" class="chg-chip" data-kind="new" onclick="applyChangeFilter('new')">New (${{neu.length}})</button> · `+
-    `${{rem.length}} removed · `+
+    `<button type="button" class="chg-chip" data-kind="new" onclick="applyChangeFilter('new')">Distressed new (${{neu.length}})</button> · `+
+    `${{rem.length}} distressed removed · `+
     `<button type="button" class="chg-chip" data-kind="cuts" onclick="applyChangeFilter('cuts')">Cuts (${{cuts.length}})</button>`+
+    (nlNew.length||nlRem.length?` · New 7d +${{nlNew.length}} / −${{nlRem.length}}`:'')+
     (samples.length?` <span class="chg-samples">· e.g. ${{samples.join(', ')}}</span>`:'');
 }}
 function writeHash(){{

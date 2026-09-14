@@ -1,31 +1,30 @@
 {
   "scan_date": "September 14, 2026",
-  "scan_time": "6:32 AM CDT",
-  "total_properties": 44,
+  "scan_time": "9:27 AM CDT",
+  "total_properties": 48,
   "stats": {
-    "live_normalized": 2031,
-    "negative_check_inventory": 887,
-    "rejected_no_distress": 242,
-    "accepted_pre_dedup": 44,
-    "rejected_weak_composite": 83,
-    "rejected_renovated_flip": 93,
-    "rejected_outside_radius": 94,
-    "rejected_small_vacant_lot": 79,
-    "rejected_out_of_zone": 1386,
+    "live_normalized": 2033,
+    "negative_check_inventory": 888,
+    "accepted_pre_dedup": 48,
+    "rejected_weak_composite": 93,
+    "rejected_no_distress": 308,
+    "rejected_renovated_flip": 104,
+    "rejected_small_vacant_lot": 81,
     "rejected_missing_address": 10,
+    "rejected_out_of_zone": 1389,
     "duplicates_merged": 0,
-    "final_count": 44,
-    "reverify_kept": 44,
+    "final_count": 48,
+    "reverify_kept": 48,
     "reverify_rejected": 0,
-    "pool_listings": 89,
+    "pool_listings": 99,
     "large_land": 35,
     "caves_listings": 8,
-    "wheaton_listings": 86,
+    "wheaton_listings": 88,
     "coming_soon": 0,
     "apartments_rent": 194,
-    "new_listings_7d": 102
+    "new_listings_7d": 181
   },
-  "live_fetched": 2918,
+  "live_fetched": 2921,
   "parallel_groups": [
     [
       "Wheaton",
@@ -49,8 +48,8 @@
     ]
   ],
   "changes": {
-    "newly_active": 1,
-    "removed": 2,
-    "price_cuts": 1
+    "newly_active": 4,
+    "removed": 0,
+    "price_cuts": 0
   }
 }

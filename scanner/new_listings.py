@@ -55,11 +55,12 @@ def fetch_new_listings(
     include_optional: bool | None = None,
     towns_filter: list[str] | None = None,
 ) -> list[dict[str, Any]]:
-    """Fetch all for_sale listings listed in the last `days` days per town (geo radius only).
+    """Fetch current for_sale inventory per town; compile applies the N-day window.
 
-    Also queries each town's configured ZIP codes with the same ``past_days`` window
-    (mirrors the distress ZIP pass in ``fetch.py``). County-wide sweeps run when
-    ``scan.include_county_searches`` is true.
+    Do **not** pass ``past_days`` to Realtor — that API filter drops listings
+    with a null ``list_date`` (common on MRED). City + ZIP (+ county) matches
+    the distress discovery set; ``compile_new_listings`` keeps rows whose
+    list / status-change date or DOM falls in the window.
     """
     scan_cfg = config.get("scan", {})
     default_radius = scan_cfg.get("radius_miles", 3)
@@ -86,13 +87,11 @@ def fetch_new_listings(
             radius=radius,
             exclude_pending=exclude_pending,
             listing_type="for_sale",
-            past_days=days,
             pass_name=f"new-{days}d",
         )
         added = _merge_unique(all_records, seen, batch)
         log.info("  %s new-%dd unique added: %d", town_name, days, added)
 
-        # ZIP passes — same past_days window as the city search
         for zip_code in town_cfg.get("zips") or []:
             zip_batch = fetch_town_listings(
                 town_name,
@@ -100,7 +99,6 @@ def fetch_new_listings(
                 radius=radius,
                 exclude_pending=exclude_pending,
                 listing_type="for_sale",
-                past_days=days,
                 pass_name=f"new-{days}d-zip-{zip_code}",
             )
             zip_added = _merge_unique(all_records, seen, zip_batch)
@@ -108,7 +106,6 @@ def fetch_new_listings(
 
         time.sleep(0.25)
 
-    # Optional county-wide sweeps (geo filter applied later in compile)
     if include_counties:
         for county in config.get("counties") or []:
             county_batch = fetch_town_listings(
@@ -117,14 +114,13 @@ def fetch_new_listings(
                 radius=None,
                 exclude_pending=exclude_pending,
                 listing_type="for_sale",
-                past_days=days,
                 pass_name=f"new-{days}d-county-{county}",
             )
             county_added = _merge_unique(all_records, seen, county_batch)
             log.info("  county %s new-%dd unique added: %d", county, days, county_added)
             time.sleep(0.25)
 
-    log.info("New listings raw fetch: %d unique", len(all_records))
+    log.info("New listings raw fetch: %d unique (window=%sd applied at compile)", len(all_records), days)
     return all_records
 
 
@@ -171,23 +167,26 @@ def compile_new_listings(
             stats["rejected_inactive"] += 1
             continue
 
-        list_date = rec.get("list_date")
+        list_date = rec.get("list_date") or rec.get("last_status_change_date")
         dt = _parse_list_date(list_date)
         age_days = _days_on_market_from_list_date(list_date)
+        dom = rec.get("dom")
 
-        # Prefer explicit list_date window; fall back to DOM if present and <= days
+        # Prefer list_date / last_status_change. If those are missing, DOM or a
+        # dedicated new-* fetch pass can still qualify. Do not treat a stale
+        # list_date as new just because DOM looks low (stale MRED DOM).
         in_window = False
         if dt is not None:
             if dt.tzinfo is None:
                 dt = dt.replace(tzinfo=timezone.utc)
             in_window = dt >= cutoff
+        elif dom is not None:
+            in_window = dom <= days
         elif age_days is not None:
             in_window = age_days <= days
         elif raw.get("_fetch_pass", "").startswith("new-"):
-            # Came from past_days query — trust API filter
             in_window = True
         else:
-            # Unknown date — exclude from "new" view to avoid false positives
             stats["rejected_unknown_date"] += 1
             continue
 

@@ -39,6 +39,7 @@ from zoneinfo import ZoneInfo
 from scanner.audit import (
     annotate_staleness,
     archive_compiled_snapshot,
+    attach_mode_changes,
     detect_changes,
     load_previous_compiled,
     save_change_report,
@@ -74,6 +75,7 @@ from scanner.large_land import (
 from scanner.new_listings import (
     compile_new_listings,
     fetch_new_listings,
+    load_new_listings,
     print_new_listings_summary,
     save_new_listings,
 )
@@ -130,17 +132,34 @@ def _run_new_listings(
     include_optional: bool,
     towns_filter: list[str] | None,
     days: int,
+    extra_raw: list | None = None,
 ) -> tuple[list, dict]:
-    log.info("Fetching ALL new listings (last %d days, geo only)...", days)
-    raw = fetch_new_listings(
-        config,
-        days=days,
-        include_optional=include_optional,
-        towns_filter=towns_filter,
-    )
-    save_raw(raw, label=f"new-listings-{days}d")
+    usable_extra = [
+        r for r in (extra_raw or [])
+        if not r.get("_negative_check")
+    ]
+    # Full town+ZIP for_sale is already on the distress path — reuse it so we
+    # don't depend on Realtor past_days (drops null list_date rows).
+    if len(usable_extra) >= 50:
+        log.info(
+            "Compiling new listings from %d already-fetched for-sale records (last %d days)",
+            len(usable_extra),
+            days,
+        )
+        raw = usable_extra
+    else:
+        log.info("Fetching ALL new listings (last %d days, geo only)...", days)
+        raw = fetch_new_listings(
+            config,
+            days=days,
+            include_optional=include_optional,
+            towns_filter=towns_filter,
+        )
+        save_raw(raw, label=f"new-listings-{days}d")
+    previous_new = load_new_listings()
     records, stats = compile_new_listings(raw, config=config, days=days)
     save_new_listings(records)
+    attach_mode_changes("new_listings", records, previous_new)
     print_new_listings_summary(records, stats, days=days)
     return records, stats
 
@@ -225,7 +244,6 @@ def _run_caves_listings(
     if raw_records is None:
         log.info("Fetching caves/bunker inventory (hubs near ZIP 60189)...")
         raw_records = fetch_caves_listings(config)
-        save_raw(raw_records, label="caves-listings")
 
     records, stats = compile_caves_listings(raw_records, config=config)
     kept, rejected = reverify_properties(
@@ -652,6 +670,7 @@ def main(argv: list[str] | None = None) -> int:
             include_optional=include_optional,
             towns_filter=towns_filter,
             days=new_days,
+            extra_raw=live_records,
         )
         stats["new_listings_7d"] = len(new_records)
 

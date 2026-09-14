@@ -136,11 +136,61 @@ def _slim_change_item(p: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _load_changes_latest(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        with open(path) as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def attach_mode_changes(
+    mode: str,
+    current: list[dict[str, Any]],
+    previous: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Merge a non-distress mode delta into data/changes_latest.json."""
+    data_dir = PROJECT_ROOT / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    path = data_dir / "changes_latest.json"
+    changes = detect_changes(current, previous)
+    existing = _load_changes_latest(path)
+    existing[mode] = {
+        "newly_active": [
+            _slim_change_item(p) for p in (changes.get("newly_active") or [])
+        ],
+        "removed": [
+            _slim_change_item(p) for p in (changes.get("removed_or_inactive") or [])
+        ],
+        "price_cuts": [
+            _slim_change_item(p) for p in (changes.get("price_cuts") or [])
+        ],
+    }
+    existing["generated_at"] = changes.get("compared_at") or existing.get(
+        "generated_at"
+    ) or datetime.now(timezone.utc).isoformat()
+    with open(path, "w") as f:
+        json.dump(existing, f, indent=2, default=str)
+    log.info(
+        "Mode %s changes: +%d new, %d removed, %d price cuts → %s",
+        mode,
+        len(existing[mode]["newly_active"]),
+        len(existing[mode]["removed"]),
+        len(existing[mode]["price_cuts"]),
+        path,
+    )
+    return changes
+
+
 def save_changes_latest_public(changes: dict[str, Any]) -> Path:
     """Write slim change digest to data/changes_latest.json (not under history/)."""
     data_dir = PROJECT_ROOT / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     path = data_dir / "changes_latest.json"
+    existing = _load_changes_latest(path)
     payload = {
         "generated_at": changes.get("compared_at")
         or datetime.now(timezone.utc).isoformat(),
@@ -154,6 +204,9 @@ def save_changes_latest_public(changes: dict[str, Any]) -> Path:
             _slim_change_item(p) for p in (changes.get("price_cuts") or [])
         ],
     }
+    for key, value in existing.items():
+        if key not in payload:
+            payload[key] = value
     with open(path, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     log.info(

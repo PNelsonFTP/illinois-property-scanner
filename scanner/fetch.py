@@ -323,7 +323,17 @@ def fetch_all_towns(
     return all_records
 
 
-def save_raw(records: list[dict], label: str = "realtor-live") -> Path:
+def save_raw(records: list[dict], label: str = "realtor-live") -> Path | None:
+    # Caves hub + sold/pending pulls are ~90k records / ~1.5 GB pretty-printed.
+    # The published caves set is ~8 listings in data/caves_listings.json; do not
+    # persist the unfiltered dump (nothing reads it back).
+    if label.startswith("caves"):
+        log.info(
+            "Skipping raw dump for %s (%d records) — caves fetches are not archived",
+            label,
+            len(records),
+        )
+        return None
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
     path = RAW_DIR / f"{label}-{ts}.json"

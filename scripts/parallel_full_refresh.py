@@ -32,6 +32,7 @@ sys.path.insert(0, str(ROOT))
 from scanner.audit import (  # noqa: E402
     annotate_staleness,
     archive_compiled_snapshot,
+    attach_mode_changes,
     detect_changes,
     load_previous_compiled,
     save_change_report,
@@ -50,6 +51,7 @@ from scanner.fetch import (  # noqa: E402
 from scanner.new_listings import (  # noqa: E402
     compile_new_listings,
     fetch_new_listings,
+    load_new_listings,
     print_new_listings_summary,
     save_new_listings,
 )
@@ -328,7 +330,6 @@ def main() -> int:
     if not args.skip_caves and scan_cfg.get("include_caves_listings", True):
         log.info("Fetching caves/bunker inventory (hubs near ZIP 60189)...")
         caves_raw = fetch_caves_listings(config)
-        save_raw(caves_raw, label="caves-listings-parallel")
         caves_records, caves_stats = compile_caves_listings(caves_raw, config=config)
         caves_kept, caves_rejected = reverify_properties(
             caves_records,
@@ -404,28 +405,38 @@ def main() -> int:
         with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:
             json.dump(meta, f, indent=2)
 
-    # --- Parallel new-listings (geo only) ---
+    # --- New listings from the already-fetched for-sale inventory ---
     if not args.skip_new_listings:
-        log.info("Parallel new-listings fetch (last %d days)...", args.new_days)
-        new_batches: list[list[dict]] = []
-        with ThreadPoolExecutor(max_workers=workers) as pool:
-            futures = {
-                pool.submit(_fetch_group, config, group, new_listings=True, days=args.new_days): group
-                for group in TOWN_GROUPS
-            }
-            for fut in as_completed(futures):
-                group = futures[fut]
-                try:
-                    new_batches.append(fut.result())
-                except Exception as exc:
-                    log.error("New-listings worker failed for %s: %s", group, exc)
-                    raise
-        new_raw = _merge(new_batches)
-        save_raw(new_raw, label=f"new-listings-{args.new_days}d-parallel")
+        new_raw = [r for r in live_records if not r.get("_negative_check")]
+        if len(new_raw) < 50:
+            log.info("Sparse distress inventory (%d); fetching dedicated new-listings...", len(new_raw))
+            new_batches: list[list[dict]] = []
+            with ThreadPoolExecutor(max_workers=workers) as pool:
+                futures = {
+                    pool.submit(_fetch_group, config, group, new_listings=True, days=args.new_days): group
+                    for group in TOWN_GROUPS
+                }
+                for fut in as_completed(futures):
+                    group = futures[fut]
+                    try:
+                        new_batches.append(fut.result())
+                    except Exception as exc:
+                        log.error("New-listings worker failed for %s: %s", group, exc)
+                        raise
+            new_raw = _merge(new_batches)
+            save_raw(new_raw, label=f"new-listings-{args.new_days}d-parallel")
+        else:
+            log.info(
+                "Compiling new listings from %d distress for-sale records (last %d days)",
+                len(new_raw),
+                args.new_days,
+            )
+        previous_new = load_new_listings()
         new_records, new_stats = compile_new_listings(
             new_raw, config=config, days=args.new_days,
         )
         save_new_listings(new_records)
+        attach_mode_changes("new_listings", new_records, previous_new)
         print_new_listings_summary(new_records, new_stats, days=args.new_days)
         meta["stats"]["new_listings_7d"] = len(new_records)
         with open(PROJECT_ROOT / "data" / "last_scan.json", "w") as f:

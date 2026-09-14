@@ -242,16 +242,76 @@ def extract_coords(record: dict[str, Any]) -> tuple[float, float] | None:
     return result[0], result[1]
 
 
+def listing_zip(record: dict[str, Any]) -> str:
+    return str(record.get("zip") or "").strip()[:5]
+
+
+def town_zip_set(town_name: str, config: dict | None = None) -> set[str]:
+    """Configured USPS ZIPs for a scanner town (empty if none listed)."""
+    config = config or {}
+    towns = enabled_towns(config, include_optional=True)
+    zone = towns.get(town_name)
+    if not zone:
+        for name, candidate in towns.items():
+            if name.lower() == town_name.lower():
+                zone = candidate
+                break
+    if not zone:
+        return set()
+    return {str(z).strip()[:5] for z in (zone.get("zips") or []) if str(z).strip()}
+
+
+def _zip_to_towns(config: dict | None) -> dict[str, list[tuple[str, str]]]:
+    """Map ZIP → [(town, county), ...] from enabled town configs."""
+    mapping: dict[str, list[tuple[str, str]]] = {}
+    towns = enabled_towns(config or {}, include_optional=True)
+    for name, zone in towns.items():
+        county = zone.get("county", "")
+        for zip_code in zone.get("zips") or []:
+            key = str(zip_code).strip()[:5]
+            if key:
+                mapping.setdefault(key, []).append((name, county))
+    return mapping
+
+
+def _classify_by_zip(
+    zip_code: str,
+    zip_map: dict[str, list[tuple[str, str]]],
+) -> tuple[str | None, str | None]:
+    """Assign an unmapped MLS city via configured ZIP.
+
+    Shared ZIPs (60548 Sandwich/LH, 60552 Somonauk/LH) resolve to the non-LH
+    town — Lake Holiday is handled first via street/subdivision heuristics.
+    """
+    if not zip_code:
+        return None, None
+    candidates = zip_map.get(zip_code) or []
+    if not candidates:
+        return None, None
+    names = {town for town, _ in candidates}
+    if "Sandwich" in names and "Lake Holiday" in names:
+        for town, county in candidates:
+            if town == "Sandwich":
+                return town, county
+    if "Somonauk" in names and "Lake Holiday" in names:
+        for town, county in candidates:
+            if town == "Somonauk":
+                return town, county
+    return candidates[0]
+
+
 def within_town_radius(
     record: dict[str, Any],
     town_name: str,
     config: dict | None = None,
 ) -> bool:
     """
-    True if record coordinates fall within the town's configured radius_miles.
+    True if the listing belongs in the town's publish radius.
 
-    Uses CITY_CENTER_COORDS for the town's cities. Defaults: 3 mi core /
-    6 mi optional (from scan.radius_miles / scan.rural_radius_miles).
+    A configured town ZIP is sufficient — Oswego 60543 / Montgomery 60538
+    extend well past a 3-mile city-center circle. Haversine is only used
+    to reject city-name bleed (Carol Stream labeled Wheaton, Somonauk St
+    in Sycamore) when the ZIP is not one of the town's ZIPs.
     """
     config = config or {}
     towns = enabled_towns(config, include_optional=True)
@@ -265,6 +325,11 @@ def within_town_radius(
                 break
     if not zone:
         return False
+
+    zip_code = listing_zip(record)
+    allowed_zips = town_zip_set(resolved_name, config)
+    if zip_code and allowed_zips and zip_code in allowed_zips:
+        return True
 
     scan = config.get("scan") or {}
     optional_names = {(n or "").lower() for n in (config.get("optional_towns") or {})}
@@ -370,7 +435,16 @@ def classify_town(record: dict[str, Any], config: dict | None = None) -> tuple[s
             return None, None
         return town, county
 
-    # Address-embedded city (legacy / incomplete records)
+    zip_map = _zip_to_towns(config)
+    zip_code = listing_zip(record)
+
+    # MLS city is some other place (Sycamore, Lostant, Aurora). Do not treat
+    # "Somonauk St" / "Sheridan St" as the listing city. ZIP can still recover
+    # unincorporated / mislabeled rows in a configured town ZIP.
+    if city:
+        return _classify_by_zip(zip_code, zip_map)
+
+    # Address-embedded city only when MLS city is blank
     addr = (record.get("address") or "").lower()
     for key, (town, county) in city_map.items():
         if re.search(rf"\b{re.escape(key)}\b", addr):
@@ -384,4 +458,4 @@ def classify_town(record: dict[str, Any], config: dict | None = None) -> tuple[s
             if key != "lake holiday":
                 return town, county
 
-    return None, None
+    return _classify_by_zip(zip_code, zip_map)
