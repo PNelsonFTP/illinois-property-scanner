@@ -1,6 +1,40 @@
 {
-  "generated_at": "2026-09-24T12:11:49.304754+00:00",
+  "generated_at": "2026-09-25T15:25:29.895182+00:00",
   "newly_active": [
+    {
+      "address": "110 Naden Ct",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 365000,
+      "distress_score": 3,
+      "property_id": "8607564140"
+    },
+    {
+      "address": "404 Cascade Ln Unit 404",
+      "city": "Oswego",
+      "nearest_target": "Oswego",
+      "list_price": 300000,
+      "distress_score": 2,
+      "property_id": "8496093482"
+    },
+    {
+      "address": "1S670 Winfield Rd",
+      "city": "Wheaton",
+      "nearest_target": "Wheaton",
+      "list_price": 500000,
+      "distress_score": 2,
+      "property_id": "7125425001"
+    },
+    {
+      "address": "88 Crooked Creek Dr",
+      "city": "Yorkville",
+      "nearest_target": "Yorkville",
+      "list_price": 695000,
+      "distress_score": 1,
+      "property_id": "8602894524"
+    }
+  ],
+  "removed": [
     {
       "address": "520 N Oak St",
       "city": "Hinckley",
@@ -10,671 +44,275 @@
       "property_id": "8270579653"
     },
     {
-      "address": "402 Gloria Ln",
+      "address": "444 Badger Ln",
       "city": "Oswego",
       "nearest_target": "Oswego",
-      "list_price": 319000,
-      "distress_score": 2,
-      "property_id": "7425593944"
+      "list_price": 310000,
+      "distress_score": 3,
+      "property_id": "7664050823"
     },
     {
-      "address": "1437 Crimson Ln",
+      "address": "105 Appletree Ct",
       "city": "Yorkville",
       "nearest_target": "Yorkville",
-      "list_price": 270000,
-      "distress_score": 1,
-      "property_id": "9551506391"
-    }
-  ],
-  "removed": [
-    {
-      "address": "117 E Elm St",
-      "city": "Wheaton",
-      "nearest_target": "Wheaton",
-      "list_price": 348000,
-      "distress_score": 4,
-      "property_id": "7560929326"
-    },
-    {
-      "address": "574 Sudbury Cir",
-      "city": "Oswego",
-      "nearest_target": "Oswego",
-      "list_price": 379000,
+      "list_price": 395000,
       "distress_score": 2,
-      "property_id": "7059298405"
-    },
-    {
-      "address": "287 Holiday Dr",
-      "city": "Lake Holiday",
-      "nearest_target": "Lake Holiday",
-      "list_price": 775000,
-      "distress_score": 2,
-      "property_id": "7235596760"
-    },
-    {
-      "address": "504 Stilson St",
-      "city": "Earlville",
-      "nearest_target": "Earlville",
-      "list_price": 250000,
-      "distress_score": 2,
-      "property_id": "7296891654"
-    },
-    {
-      "address": "32 Rocky Way Apt 7",
-      "city": "Montgomery",
-      "nearest_target": "Oswego",
-      "list_price": 75000,
-      "distress_score": 1,
-      "property_id": "7859127699"
+      "property_id": "7654445531"
     }
   ],
   "price_cuts": [],
   "new_listings": {
     "newly_active": [
       {
-        "address": "541 Ashworth Ln",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 489900,
-        "distress_score": null,
-        "property_id": "7847202597"
-      },
-      {
-        "address": "1612 N Washington St",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 489900,
-        "distress_score": null,
-        "property_id": "8898083833"
-      },
-      {
-        "address": "101 Eisenhower Dr",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 325000,
-        "distress_score": null,
-        "property_id": "7139200101"
-      },
-      {
-        "address": "2304 Countryside Dr",
-        "city": "Montgomery",
-        "nearest_target": "Oswego",
-        "list_price": 294900,
-        "distress_score": null,
-        "property_id": "7544776726"
-      },
-      {
-        "address": "1805 Country Hills Dr",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 549900,
-        "distress_score": null,
-        "property_id": "8195657380"
-      },
-      {
-        "address": "605 Bluebird Cir",
+        "address": "1188 Cindy Ln",
         "city": "Sandwich",
         "nearest_target": "Sandwich",
-        "list_price": 95000,
+        "list_price": 479900,
         "distress_score": null,
-        "property_id": "7807479548"
+        "property_id": "8282408979"
       },
       {
-        "address": "65 Eastfield Rd",
-        "city": "Montgomery",
-        "nearest_target": "Oswego",
-        "list_price": 314900,
-        "distress_score": null,
-        "property_id": "8852134223"
-      },
-      {
-        "address": "1482 Stonebridge Cir Apt C10",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 229000,
-        "distress_score": null,
-        "property_id": "7946012984"
-      },
-      {
-        "address": "1152 Midnight Pl",
+        "address": "622 Birchwood Dr",
         "city": "Yorkville",
         "nearest_target": "Yorkville",
-        "list_price": 399999,
+        "list_price": 600000,
         "distress_score": null,
-        "property_id": "8833819279"
+        "property_id": "8988582141"
       },
       {
-        "address": "324 W Elm St",
+        "address": "321 Grape Vine Trl",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 318000,
+        "distress_score": null,
+        "property_id": "7778300925"
+      },
+      {
+        "address": "110 Naden Ct",
+        "city": "Yorkville",
+        "nearest_target": "Yorkville",
+        "list_price": 365000,
+        "distress_score": null,
+        "property_id": "8607564140"
+      },
+      {
+        "address": "1937 Nottingham Ln",
         "city": "Wheaton",
         "nearest_target": "Wheaton",
-        "list_price": 389000,
+        "list_price": 625000,
         "distress_score": null,
-        "property_id": "7740662967"
+        "property_id": "8479733214"
       },
       {
-        "address": "287 Holiday Dr",
+        "address": "28 Ashlawn Ave",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 449900,
+        "distress_score": null,
+        "property_id": "8332067697"
+      },
+      {
+        "address": "1969 Wexford Cir",
+        "city": "Wheaton",
+        "nearest_target": "Wheaton",
+        "list_price": 489000,
+        "distress_score": null,
+        "property_id": "7885381296"
+      },
+      {
+        "address": "508 Fridley Ave",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 596990,
+        "distress_score": null,
+        "property_id": "9591194095"
+      },
+      {
+        "address": "2174 Stirrup Ln",
+        "city": "Wheaton",
+        "nearest_target": "Wheaton",
+        "list_price": 425000,
+        "distress_score": null,
+        "property_id": "7126315012"
+      },
+      {
+        "address": "1035 Gillespie Ln",
+        "city": "Yorkville",
+        "nearest_target": "Yorkville",
+        "list_price": 297500,
+        "distress_score": null,
+        "property_id": "9938829910"
+      },
+      {
+        "address": "991 S Carly Cir",
+        "city": "Yorkville",
+        "nearest_target": "Yorkville",
+        "list_price": 475000,
+        "distress_score": null,
+        "property_id": "7140818433"
+      },
+      {
+        "address": "1905 Cheshire Ln",
+        "city": "Wheaton",
+        "nearest_target": "Wheaton",
+        "list_price": 575000,
+        "distress_score": null,
+        "property_id": "8508390723"
+      },
+      {
+        "address": "1304 Reva Ln",
         "city": "Lake Holiday",
         "nearest_target": "Lake Holiday",
-        "list_price": 775000,
+        "list_price": 379000,
         "distress_score": null,
-        "property_id": "7235596760"
+        "property_id": "7214653300"
       },
       {
-        "address": "303 Mallard Ln",
-        "city": "Sandwich",
-        "nearest_target": "Lake Holiday",
-        "list_price": 82900,
-        "distress_score": null,
-        "property_id": "9217652953"
-      },
-      {
-        "address": "4266 E 1553rd Rd",
-        "city": "Earlville",
-        "nearest_target": "Earlville",
-        "list_price": 1150000,
-        "distress_score": null,
-        "property_id": "9501897370"
-      },
-      {
-        "address": "660 Louise Dr",
-        "city": "Hinckley",
-        "nearest_target": "Hinckley",
-        "list_price": 385000,
-        "distress_score": null,
-        "property_id": "7256844463"
-      },
-      {
-        "address": "3385 Silver City Ct",
+        "address": "2425 Sir Barton Ln",
         "city": "Montgomery",
         "nearest_target": "Oswego",
         "list_price": 429900,
         "distress_score": null,
-        "property_id": "7170300349"
+        "property_id": "7372584960"
       },
       {
-        "address": "1097 Belter Dr",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 986000,
+        "address": "239 Bluegrass Pkwy",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 540000,
         "distress_score": null,
-        "property_id": "8510905211"
+        "property_id": "8277850978"
       },
       {
-        "address": "18 E Dearborn St",
+        "address": "224 Presidential Blvd",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 350000,
+        "distress_score": null,
+        "property_id": "7775441538"
+      },
+      {
+        "address": "3924 Kristen Ct",
         "city": "Plano",
         "nearest_target": "Plano",
-        "list_price": 250000,
+        "list_price": 450000,
         "distress_score": null,
-        "property_id": "7723019729"
+        "property_id": "8256357456"
       },
       {
-        "address": "402 Gloria Ln",
+        "address": "150 Wilson Pl",
         "city": "Oswego",
         "nearest_target": "Oswego",
-        "list_price": 319000,
+        "list_price": 329900,
         "distress_score": null,
-        "property_id": "7425593944"
+        "property_id": "9417786970"
       },
       {
-        "address": "867 Greenfield Turn",
+        "address": "2714 N 3853rd Rd",
+        "city": "Sheridan",
+        "nearest_target": "Sheridan",
+        "list_price": 350000,
+        "distress_score": null,
+        "property_id": "7737814887"
+      },
+      {
+        "address": "191 Lakeshore Dr",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 375000,
+        "distress_score": null,
+        "property_id": "9771202769"
+      },
+      {
+        "address": "196 Chapin Way",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 585000,
+        "distress_score": null,
+        "property_id": "7410645379"
+      },
+      {
+        "address": "2164 Tremont Ave",
         "city": "Yorkville",
         "nearest_target": "Yorkville",
-        "list_price": 565000,
+        "list_price": 520000,
         "distress_score": null,
-        "property_id": "7980388417"
+        "property_id": "8922041432"
       },
       {
-        "address": "362 Biscayne Ln",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 465000,
-        "distress_score": null,
-        "property_id": "9081629213"
-      },
-      {
-        "address": "1000 S Lorraine Rd Apt 110",
+        "address": "1623 Salisbury Ct Apt C",
         "city": "Wheaton",
         "nearest_target": "Wheaton",
-        "list_price": 225000,
+        "list_price": 255000,
         "distress_score": null,
-        "property_id": "7533184512"
+        "property_id": "8440535740"
       },
       {
-        "address": "304 Buchanan Dr",
-        "city": "Waterman",
-        "nearest_target": "Waterman",
-        "list_price": 349490,
+        "address": "309 E 3rd St",
+        "city": "Sandwich",
+        "nearest_target": "Sandwich",
+        "list_price": 285000,
         "distress_score": null,
-        "property_id": "7056238562"
+        "property_id": "8370273848"
       },
       {
-        "address": "703 Erwin St",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 549996,
+        "address": "1320 E Arnold St Unit 1320",
+        "city": "Sandwich",
+        "nearest_target": "Sandwich",
+        "list_price": 249700,
         "distress_score": null,
-        "property_id": "9893886980"
+        "property_id": "9211590590"
       },
       {
-        "address": "26W355 Blackhawk Dr",
+        "address": "1S670 Winfield Rd",
         "city": "Wheaton",
         "nearest_target": "Wheaton",
-        "list_price": 939900,
+        "list_price": 500000,
         "distress_score": null,
-        "property_id": "8907099042"
+        "property_id": "7125425001"
       },
       {
-        "address": "777 Dartmouth Ln",
+        "address": "938 Suzy St",
+        "city": "Lake Holiday",
+        "nearest_target": "Lake Holiday",
+        "list_price": 394900,
+        "distress_score": null,
+        "property_id": "7717688252"
+      },
+      {
+        "address": "418 Terrace Ln",
         "city": "Oswego",
         "nearest_target": "Oswego",
-        "list_price": 700000,
+        "list_price": 425000,
         "distress_score": null,
-        "property_id": "9742297223"
+        "property_id": "7873567839"
       },
       {
-        "address": "677 Cumberland Ln",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 745000,
+        "address": "1245 Yorkshire Woods Ct",
+        "city": "Wheaton",
+        "nearest_target": "Wheaton",
+        "list_price": 714000,
         "distress_score": null,
-        "property_id": "9461299640"
+        "property_id": "7108495594"
       },
       {
-        "address": "483 Deerfield Dr",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 791000,
+        "address": "1502 Johnstown Ct",
+        "city": "Wheaton",
+        "nearest_target": "Wheaton",
+        "list_price": 367900,
         "distress_score": null,
-        "property_id": "7294964190"
+        "property_id": "7018057449"
       },
       {
-        "address": "1577 Coral Dr",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 429000,
+        "address": "835 Farnham Ln Apt D",
+        "city": "Wheaton",
+        "nearest_target": "Wheaton",
+        "list_price": 262500,
         "distress_score": null,
-        "property_id": "8178800519"
+        "property_id": "8472513067"
       }
     ],
     "removed": [
-      {
-        "address": "2787 McMurtrie Way",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 519195,
-        "distress_score": null,
-        "property_id": "8369900302"
-      },
-      {
-        "address": "1025 Loughborough Ct",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 339000,
-        "distress_score": null,
-        "property_id": "7074478086"
-      },
-      {
-        "address": "712 Erwin St",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 488046,
-        "distress_score": null,
-        "property_id": "9620913551"
-      },
-      {
-        "address": "3011 Constitution Way",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 465000,
-        "distress_score": null,
-        "property_id": "8023436388"
-      },
-      {
-        "address": "2828 Rebecca Ct",
-        "city": "Montgomery",
-        "nearest_target": "Oswego",
-        "list_price": 210000,
-        "distress_score": null,
-        "property_id": "7507608916"
-      },
-      {
-        "address": "15655 S Memory Ln",
-        "city": "Sandwich",
-        "nearest_target": "Sandwich",
-        "list_price": 45000,
-        "distress_score": null,
-        "property_id": "7437733348"
-      },
-      {
-        "address": "994 Emerald Dr",
-        "city": "Montgomery",
-        "nearest_target": "Oswego",
-        "list_price": 484990,
-        "distress_score": null,
-        "property_id": "9142235760"
-      },
-      {
-        "address": "2424 Semillon St",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 444990,
-        "distress_score": null,
-        "property_id": "9832750129"
-      },
-      {
-        "address": "303 Buchanan Dr",
-        "city": "Waterman",
-        "nearest_target": "Waterman",
-        "list_price": 360490,
-        "distress_score": null,
-        "property_id": "8201839828"
-      },
-      {
-        "address": "2812 Troon Dr",
-        "city": "Montgomery",
-        "nearest_target": "Oswego",
-        "list_price": 295000,
-        "distress_score": null,
-        "property_id": "8511907173"
-      },
-      {
-        "address": "503 Sutton St",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 389900,
-        "distress_score": null,
-        "property_id": "7253519570"
-      },
-      {
-        "address": "4409 Klatt St",
-        "city": "Plano",
-        "nearest_target": "Plano",
-        "list_price": 265000,
-        "distress_score": null,
-        "property_id": "7900437959"
-      },
-      {
-        "address": "1416 Sandwich Dr",
-        "city": "Lake Holiday",
-        "nearest_target": "Lake Holiday",
-        "list_price": 364500,
-        "distress_score": null,
-        "property_id": "7219348809"
-      },
-      {
-        "address": "1S660 Winfield Rd",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 535000,
-        "distress_score": null,
-        "property_id": "8820066619"
-      },
-      {
-        "address": "404 Heatherwood Dr",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 664900,
-        "distress_score": null,
-        "property_id": "8476117347"
-      },
-      {
-        "address": "217 S Summit St",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 940000,
-        "distress_score": null,
-        "property_id": "8534252584"
-      },
-      {
-        "address": "1060 Prairie View Dr Lot 33",
-        "city": "Somonauk",
-        "nearest_target": "Somonauk",
-        "list_price": 25000,
-        "distress_score": null,
-        "property_id": "9681152985"
-      },
-      {
-        "address": "2051 Village View Dr",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 284900,
-        "distress_score": null,
-        "property_id": "7307546444"
-      },
-      {
-        "address": "3032 Grande Trl",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 480000,
-        "distress_score": null,
-        "property_id": "8388991837"
-      },
-      {
-        "address": "1000 S Lorraine Rd Apt 104",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 189900,
-        "distress_score": null,
-        "property_id": "8081520175"
-      },
-      {
-        "address": "319 Boulder Hill Pass",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 350000,
-        "distress_score": null,
-        "property_id": "7095294523"
-      },
-      {
-        "address": "1482 Pebblestone Cv",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 790000,
-        "distress_score": null,
-        "property_id": "7174120918"
-      },
-      {
-        "address": "161 Willoughby Ct Unit A",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 289900,
-        "distress_score": null,
-        "property_id": "7466548848"
-      },
-      {
-        "address": "103 Fernwood Rd",
-        "city": "Montgomery",
-        "nearest_target": "Oswego",
-        "list_price": 350000,
-        "distress_score": null,
-        "property_id": "8170843857"
-      },
-      {
-        "address": "146 Piper Glen Ave",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 479990,
-        "distress_score": null,
-        "property_id": "9400408398"
-      },
-      {
-        "address": "408 Tanya Ln",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 629990,
-        "distress_score": null,
-        "property_id": "9853226680"
-      },
-      {
-        "address": "2218 Davidson Way",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 359990,
-        "distress_score": null,
-        "property_id": "9137118374"
-      },
-      {
-        "address": "305 Buchanan Dr",
-        "city": "Waterman",
-        "nearest_target": "Waterman",
-        "list_price": 330490,
-        "distress_score": null,
-        "property_id": "7257692653"
-      },
-      {
-        "address": "205 Suzy Ct",
-        "city": "Plano",
-        "nearest_target": "Plano",
-        "list_price": 289900,
-        "distress_score": null,
-        "property_id": "8088850896"
-      },
-      {
-        "address": "141 Kathryn Ln",
-        "city": "Sandwich",
-        "nearest_target": "Sandwich",
-        "list_price": 99900,
-        "distress_score": null,
-        "property_id": "9514364417"
-      },
-      {
-        "address": "233 W Washington St",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 259900,
-        "distress_score": null,
-        "property_id": "7174149900"
-      },
-      {
-        "address": "1451 Johnson Rd",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 1350000,
-        "distress_score": null,
-        "property_id": "7869034691"
-      },
-      {
-        "address": "103 Arnold Ave",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 733085,
-        "distress_score": null,
-        "property_id": "9446507646"
-      },
-      {
-        "address": "2287 Durham Dr",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 449000,
-        "distress_score": null,
-        "property_id": "8182961066"
-      },
-      {
-        "address": "1464 Stonebridge Cir Apt E3",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 230000,
-        "distress_score": null,
-        "property_id": "7141009166"
-      },
-      {
-        "address": "Johnson Rd",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 650000,
-        "distress_score": null,
-        "property_id": "9899821451"
-      },
-      {
-        "address": "1122 Clearwater Dr",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 659900,
-        "distress_score": null,
-        "property_id": "8997361160"
-      },
-      {
-        "address": "609 W 3rd St",
-        "city": "Sandwich",
-        "nearest_target": "Sandwich",
-        "list_price": 275000,
-        "distress_score": null,
-        "property_id": "8638324622"
-      },
-      {
-        "address": "25W606 Jewell Rd",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 1009683,
-        "distress_score": null,
-        "property_id": "9277196448"
-      },
-      {
-        "address": "231 N West St Unit 0",
-        "city": "Wheaton",
-        "nearest_target": "Wheaton",
-        "list_price": 650000,
-        "distress_score": null,
-        "property_id": "7632432304"
-      },
-      {
-        "address": "1123 Goldfinch Ave",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 318900,
-        "distress_score": null,
-        "property_id": "9619712905"
-      },
-      {
-        "address": "309 E Somonauk St",
-        "city": "Yorkville",
-        "nearest_target": "Yorkville",
-        "list_price": 390000,
-        "distress_score": null,
-        "property_id": "8959918701"
-      },
-      {
-        "address": "92 Oak Ave",
-        "city": "Sandwich",
-        "nearest_target": "Sandwich",
-        "list_price": 29995,
-        "distress_score": null,
-        "property_id": "8099441179"
-      }
-    ],
-    "price_cuts": [
-      {
-        "address": "434 Hathaway Ln",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 489990,
-        "distress_score": null,
-        "property_id": "9438991739"
-      },
-      {
-        "address": "512 Fridley Ave",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 569820,
-        "distress_score": null,
-        "property_id": "9910832744"
-      },
-      {
-        "address": "1067 Vermillion St",
-        "city": "Plano",
-        "nearest_target": "Plano",
-        "list_price": 375000,
-        "distress_score": null,
-        "property_id": "8331141276"
-      },
-      {
-        "address": "747 Alberta Ave",
-        "city": "Oswego",
-        "nearest_target": "Oswego",
-        "list_price": 419990,
-        "distress_score": null,
-        "property_id": "9130943912"
-      },
       {
         "address": "704 Erwin St",
         "city": "Oswego",
@@ -684,12 +322,174 @@
         "property_id": "9807448472"
       },
       {
+        "address": "3758 Bissel Dr",
+        "city": "Yorkville",
+        "nearest_target": "Yorkville",
+        "list_price": 314990,
+        "distress_score": null,
+        "property_id": "9052444634"
+      },
+      {
+        "address": "191 Chapin Way",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 619900,
+        "distress_score": null,
+        "property_id": "7005114947"
+      },
+      {
+        "address": "5425 Route 71",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 799990,
+        "distress_score": null,
+        "property_id": "8849991844"
+      },
+      {
+        "address": "103 Mary St",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 300000,
+        "distress_score": null,
+        "property_id": "7209819062"
+      },
+      {
+        "address": "199 Willowwood Dr",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 559900,
+        "distress_score": null,
+        "property_id": "8784047420"
+      },
+      {
+        "address": "445 Kelly Ave",
+        "city": "Yorkville",
+        "nearest_target": "Yorkville",
+        "list_price": 468000,
+        "distress_score": null,
+        "property_id": "7444942122"
+      },
+      {
         "address": "3042 Shetland Ln",
         "city": "Montgomery",
         "nearest_target": "Oswego",
         "list_price": 434900,
         "distress_score": null,
         "property_id": "7955121802"
+      },
+      {
+        "address": "11286 Brighton Oaks Dr",
+        "city": "Yorkville",
+        "nearest_target": "Yorkville",
+        "list_price": 775000,
+        "distress_score": null,
+        "property_id": "7204448028"
+      },
+      {
+        "address": "4 River Bend Rd",
+        "city": "Montgomery",
+        "nearest_target": "Oswego",
+        "list_price": 739000,
+        "distress_score": null,
+        "property_id": "8075547322"
+      },
+      {
+        "address": "536 Warbler Ln",
+        "city": "Yorkville",
+        "nearest_target": "Yorkville",
+        "list_price": 494999,
+        "distress_score": null,
+        "property_id": "7787247290"
+      },
+      {
+        "address": "361 Grape Vine Trl",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 320000,
+        "distress_score": null,
+        "property_id": "7174431091"
+      },
+      {
+        "address": "1657 Dover Ct Apt C",
+        "city": "Wheaton",
+        "nearest_target": "Wheaton",
+        "list_price": 265000,
+        "distress_score": null,
+        "property_id": "7561886868"
+      },
+      {
+        "address": "114 Presidential Blvd",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 290000,
+        "distress_score": null,
+        "property_id": "8071198915"
+      },
+      {
+        "address": "3716 E 2653rd Rd",
+        "city": "Sheridan",
+        "nearest_target": "Sheridan",
+        "list_price": 360000,
+        "distress_score": null,
+        "property_id": "8671495223"
+      },
+      {
+        "address": "2109 Chad Ln",
+        "city": "Montgomery",
+        "nearest_target": "Oswego",
+        "list_price": 449900,
+        "distress_score": null,
+        "property_id": "7104169748"
+      },
+      {
+        "address": "2762 Cranston Cir",
+        "city": "Yorkville",
+        "nearest_target": "Yorkville",
+        "list_price": 424900,
+        "distress_score": null,
+        "property_id": "7521760528"
+      },
+      {
+        "address": "318 E Blackberry Ln",
+        "city": "Yorkville",
+        "nearest_target": "Yorkville",
+        "list_price": 350000,
+        "distress_score": null,
+        "property_id": "7983918593"
+      }
+    ],
+    "price_cuts": [
+      {
+        "address": "201 Cooney Way",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 409990,
+        "distress_score": null,
+        "property_id": "9670912717"
+      },
+      {
+        "address": "203 Cooney Way",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 389990,
+        "distress_score": null,
+        "property_id": "9246324437"
+      },
+      {
+        "address": "1453 Woodcutter Ln Unit A",
+        "city": "Wheaton",
+        "nearest_target": "Wheaton",
+        "list_price": 250000,
+        "distress_score": null,
+        "property_id": "7425430359"
+      },
+      {
+        "address": "116 Henderson St",
+        "city": "Oswego",
+        "nearest_target": "Oswego",
+        "list_price": 398990,
+        "distress_score": null,
+        "property_id": "9240451400"
       }
     ]
   }
