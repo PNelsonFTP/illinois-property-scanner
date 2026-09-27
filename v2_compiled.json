@@ -31,8 +31,8 @@
     "photo_url": "https://ap.rdcpix.com/c78e31677d57428a00707ce7a01831e5l-m1713882629s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -57,10 +57,6 @@
     "parcel_search_url": "https://www.google.com/search?q=81+Lillian+Ln+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 357000
-      },
-      {
         "t": "20260912-120611",
         "v": 357000
       },
@@ -86,15 +82,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 357000
+      },
+      {
+        "t": "20260925-151532",
         "v": 357000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 218
-      },
-      {
         "t": "20260912-120611",
         "v": 218
       },
@@ -120,6 +116,10 @@
       },
       {
         "t": "20260924-120254",
+        "v": 218
+      },
+      {
+        "t": "20260925-151532",
         "v": 218
       }
     ],
@@ -162,8 +162,8 @@
     "photo_url": "https://ap.rdcpix.com/f4ad8f4d6d9f1691ddf132ad8bd89c70l-m3897074301s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -188,10 +188,6 @@
     "parcel_search_url": "https://www.google.com/search?q=120+Cardinal+Ln+Unit+A+Sandwich+IL+60548+LaSalle+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 38900
-      },
-      {
         "t": "20260912-120611",
         "v": 38900
       },
@@ -217,15 +213,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 38900
+      },
+      {
+        "t": "20260925-151532",
         "v": 38900
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 810
-      },
-      {
         "t": "20260912-120611",
         "v": 810
       },
@@ -251,6 +247,10 @@
       },
       {
         "t": "20260924-120254",
+        "v": 810
+      },
+      {
+        "t": "20260925-151532",
         "v": 810
       }
     ],
@@ -293,8 +293,8 @@
     "photo_url": "https://ap.rdcpix.com/16ee3c67b961d6414b3057ee9a5875ael-m4113429258s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -319,10 +319,6 @@
     "parcel_search_url": "https://www.google.com/search?q=20+Cedar+Ln+Sandwich+IL+60548+LaSalle+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 32000
-      },
-      {
         "t": "20260912-120611",
         "v": 32000
       },
@@ -348,15 +344,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 24500
+      },
+      {
+        "t": "20260925-151532",
         "v": 24500
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 175
-      },
-      {
         "t": "20260912-120611",
         "v": 175
       },
@@ -382,6 +378,10 @@
       },
       {
         "t": "20260924-120254",
+        "v": 202
+      },
+      {
+        "t": "20260925-151532",
         "v": 202
       }
     ],
@@ -424,8 +424,8 @@
     "photo_url": "https://ap.rdcpix.com/ad55a430c4c456adef6f57acb76fb8e2l-m375148707s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -449,10 +449,6 @@
     "assessor_url": "https://www.google.com/search?q=495+Timber+Oak+Ln+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=495+Timber+Oak+Ln+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 525000
-      },
       {
         "t": "20260912-120611",
         "v": 525000
@@ -480,13 +476,13 @@
       {
         "t": "20260924-120254",
         "v": 525000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 525000
       }
     ],
     "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 52
-      },
       {
         "t": "20260912-120611",
         "v": 54
@@ -514,6 +510,10 @@
       {
         "t": "20260924-120254",
         "v": 61
+      },
+      {
+        "t": "20260925-151532",
+        "v": 61
       }
     ],
     "id": 4,
@@ -537,7 +537,7 @@
     "total_reduced": 2000.0,
     "price_per_sqft": null,
     "assessed_value": null,
-    "dom": 46,
+    "dom": 52,
     "beds": 3,
     "baths": 2.0,
     "sqft": null,
@@ -555,8 +555,8 @@
     "photo_url": "https://ap.rdcpix.com/2ac271b8f0c38339e6c8712abc6af0d3l-m4114748471s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -581,10 +581,6 @@
     "parcel_search_url": "https://www.google.com/search?q=98+Maple+Ln+Sandwich+IL+60548+LaSalle+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 43000
-      },
-      {
         "t": "20260912-120611",
         "v": 43000
       },
@@ -610,15 +606,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 41000
+      },
+      {
+        "t": "20260925-151532",
         "v": 41000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 8
-      },
-      {
         "t": "20260912-120611",
         "v": 8
       },
@@ -645,9 +641,77 @@
       {
         "t": "20260924-120254",
         "v": 46
+      },
+      {
+        "t": "20260925-151532",
+        "v": 46
       }
     ],
     "id": 5,
+    "reverify_note": "reverify active (Active)",
+    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
+    "consensus": "active",
+    "consensus_note": "single-source verified",
+    "stale_hours": 0.0
+  },
+  {
+    "address": "13090 River Rd",
+    "city": "Plano",
+    "state": "IL",
+    "zip": "60545",
+    "county": "Kendall",
+    "nearest_target": "Plano",
+    "property_type": "SFH",
+    "list_price": 419900,
+    "original_list_price": 419900.0,
+    "price_reductions": 0,
+    "total_reduced": null,
+    "price_per_sqft": 323.0,
+    "assessed_value": null,
+    "dom": 3,
+    "beds": 3,
+    "baths": 2.0,
+    "sqft": 1300,
+    "lot_size": "78,408 sq ft",
+    "acres": 1.8,
+    "year_built": 1970,
+    "distress_types": [
+      "as-is",
+      "reo"
+    ],
+    "distress_score": 5,
+    "listing_source": "Realtor.com",
+    "listing_url": "https://www.realtor.com/realestateandhomes-detail/13090-River-Rd_Plano_IL_60545_M78042-59484",
+    "photo_url": "https://ap.rdcpix.com/082368fa30ce21e41af89e018ed16ab2l-m3201649651s.jpg",
+    "status": "Active",
+    "mls_status": "Active",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
+    "verification_source": "realtor.com-reverified",
+    "verification_note": "reverify active (Active)",
+    "is_stale": false,
+    "needs_review": false,
+    "notes": "Welcome Home to 13090 River Road! This ranch-style home is situated on approximately 1.8 acres and features 3 Bedrooms/2 Bathrooms, a 2 car attached garage, AND an oversized, detached outbuilding! Property is SOLD AS-IS. Equal Housing Opportunity.",
+    "all_sources": [],
+    "all_urls": [],
+    "property_id": "7804259484",
+    "listing_id": "3001120364",
+    "lat": 41.640548,
+    "lon": -88.50847,
+    "waterfront": false,
+    "hoa_fee": null,
+    "manufactured": false,
+    "lot_rent_monthly": null,
+    "subdivision": "Plano",
+    "list_date": "2026-09-25T17:47:54.000000Z",
+    "google_url": "https://www.google.com/search?q=13090+River+Rd+Plano+IL+60545+for+sale",
+    "zillow_url": "https://www.zillow.com/homes/13090+River+Rd+Plano+IL+60545_rb/",
+    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=13090+River+Rd+Plano+IL+60545",
+    "assessor_url": "https://www.google.com/search?q=13090+River+Rd+Plano+IL+60545+Kendall+County+IL+assessor+parcel",
+    "parcel_search_url": "https://www.google.com/search?q=13090+River+Rd+Plano+IL+60545+Kendall+County+IL+assessor+parcel",
+    "price_history": [],
+    "dom_history": [],
+    "id": 6,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -685,8 +749,8 @@
     "photo_url": "https://ap.rdcpix.com/e087e17ef7c135b85b2524b02a1d3438l-m2816301527s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -710,10 +774,6 @@
     "assessor_url": "https://www.google.com/search?q=213+N+Main+St+Sandwich+IL+60548+DeKalb+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=213+N+Main+St+Sandwich+IL+60548+DeKalb+County+IL+assessor+parcel",
     "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 329900
-      },
       {
         "t": "20260912-120611",
         "v": 329900
@@ -741,13 +801,13 @@
       {
         "t": "20260924-120254",
         "v": 324900
+      },
+      {
+        "t": "20260925-151532",
+        "v": 324900
       }
     ],
     "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 768
-      },
       {
         "t": "20260912-120611",
         "v": 768
@@ -775,9 +835,13 @@
       {
         "t": "20260924-120254",
         "v": 785
+      },
+      {
+        "t": "20260925-151532",
+        "v": 785
       }
     ],
-    "id": 6,
+    "id": 7,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -815,8 +879,8 @@
     "photo_url": "https://ap.rdcpix.com/e6e0eaca9e0e681d38e969930f6eee9fl-m279312849s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -840,10 +904,6 @@
     "assessor_url": "https://www.google.com/search?q=281+Fox+Chase+Dr+N+Oswego+IL+60543+Kendall+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=281+Fox+Chase+Dr+N+Oswego+IL+60543+Kendall+County+IL+assessor+parcel",
     "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 479000
-      },
       {
         "t": "20260912-120611",
         "v": 450000
@@ -871,13 +931,13 @@
       {
         "t": "20260924-120254",
         "v": 450000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 450000
       }
     ],
     "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 385
-      },
       {
         "t": "20260912-120611",
         "v": 403
@@ -905,9 +965,13 @@
       {
         "t": "20260924-120254",
         "v": 409
+      },
+      {
+        "t": "20260925-151532",
+        "v": 409
       }
     ],
-    "id": 7,
+    "id": 8,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -945,8 +1009,8 @@
     "photo_url": "https://ap.rdcpix.com/a28bfe4478f58ca8166f4ed1a4ef5ff5l-m449118687s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -971,10 +1035,6 @@
     "parcel_search_url": "https://www.google.com/search?q=4141+E+2603rd+Rd+Sheridan+IL+60551+LaSalle+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 1408950
-      },
-      {
         "t": "20260912-120611",
         "v": 1408950
       },
@@ -1000,15 +1060,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 1408950
+      },
+      {
+        "t": "20260925-151532",
         "v": 1408950
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 359
-      },
-      {
         "t": "20260912-120611",
         "v": 359
       },
@@ -1035,9 +1095,13 @@
       {
         "t": "20260924-120254",
         "v": 359
+      },
+      {
+        "t": "20260925-151532",
+        "v": 359
       }
     ],
-    "id": 8,
+    "id": 9,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -1076,8 +1140,8 @@
     "photo_url": "https://ap.rdcpix.com/304f2226b1b948c554b34d6032013498l-m2510823884s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -1101,10 +1165,6 @@
     "assessor_url": "https://www.google.com/search?q=421+DE+Kalb+St+Sandwich+IL+60548+DeKalb+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=421+DE+Kalb+St+Sandwich+IL+60548+DeKalb+County+IL+assessor+parcel",
     "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 324000
-      },
       {
         "t": "20260912-120611",
         "v": 319000
@@ -1132,13 +1192,13 @@
       {
         "t": "20260924-120254",
         "v": 315000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 315000
       }
     ],
     "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 99
-      },
       {
         "t": "20260912-120611",
         "v": 124
@@ -1166,9 +1226,13 @@
       {
         "t": "20260924-120254",
         "v": 132
+      },
+      {
+        "t": "20260925-151532",
+        "v": 138
       }
     ],
-    "id": 9,
+    "id": 10,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -1207,8 +1271,8 @@
     "photo_url": "https://ap.rdcpix.com/e968fc8414721286ea78402e629d45c4l-m2020005732s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -1232,10 +1296,6 @@
     "assessor_url": "https://www.google.com/search?q=285+E+Legner+St+Leland+IL+60531+LaSalle+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=285+E+Legner+St+Leland+IL+60531+LaSalle+County+IL+assessor+parcel",
     "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 269900
-      },
       {
         "t": "20260912-120611",
         "v": 269900
@@ -1263,13 +1323,13 @@
       {
         "t": "20260924-120254",
         "v": 264000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 264000
       }
     ],
     "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 99
-      },
       {
         "t": "20260912-120611",
         "v": 99
@@ -1297,9 +1357,13 @@
       {
         "t": "20260924-120254",
         "v": 111
+      },
+      {
+        "t": "20260925-151532",
+        "v": 111
       }
     ],
-    "id": 10,
+    "id": 11,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -1337,8 +1401,8 @@
     "photo_url": "https://ap.rdcpix.com/a051fbc48b3e58785ae13f0ed52690cal-m634409081s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -1363,10 +1427,6 @@
     "parcel_search_url": "https://www.google.com/search?q=407+S+Ottawa+St+Earlville+IL+60518+LaSalle+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 155000
-      },
-      {
         "t": "20260912-120611",
         "v": 155000
       },
@@ -1392,15 +1452,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 155000
+      },
+      {
+        "t": "20260925-151532",
         "v": 155000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 343
-      },
-      {
         "t": "20260912-120611",
         "v": 343
       },
@@ -1427,9 +1487,13 @@
       {
         "t": "20260924-120254",
         "v": 349
+      },
+      {
+        "t": "20260925-151532",
+        "v": 349
       }
     ],
-    "id": 11,
+    "id": 12,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -1467,8 +1531,8 @@
     "photo_url": "https://ap.rdcpix.com/ac51226e06313f14df111b7ed1f8d95el-m1984332817s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -1493,10 +1557,6 @@
     "parcel_search_url": "https://www.google.com/search?q=852+Timber+Oak+Ln+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 614990
-      },
-      {
         "t": "20260912-120611",
         "v": 614990
       },
@@ -1522,15 +1582,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 614990
+      },
+      {
+        "t": "20260925-151532",
         "v": 614990
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 330
-      },
-      {
         "t": "20260912-120611",
         "v": 330
       },
@@ -1557,9 +1617,13 @@
       {
         "t": "20260924-120254",
         "v": 330
+      },
+      {
+        "t": "20260925-151532",
+        "v": 330
       }
     ],
-    "id": 12,
+    "id": 13,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -1597,8 +1661,8 @@
     "photo_url": "https://ap.rdcpix.com/6ab0de9dbee199f8b6fb74dc1badd7b4l-m3344815316s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -1623,10 +1687,6 @@
     "parcel_search_url": "https://www.google.com/search?q=97+Crooked+Creek+Dr+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 629000
-      },
-      {
         "t": "20260912-120611",
         "v": 629000
       },
@@ -1652,15 +1712,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 629000
+      },
+      {
+        "t": "20260925-151532",
         "v": 629000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 310
-      },
-      {
         "t": "20260912-120611",
         "v": 310
       },
@@ -1687,9 +1747,13 @@
       {
         "t": "20260924-120254",
         "v": 324
+      },
+      {
+        "t": "20260925-151532",
+        "v": 324
       }
     ],
-    "id": 13,
+    "id": 14,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -1727,8 +1791,8 @@
     "photo_url": "https://ap.rdcpix.com/96654e510deac4933d7b19359d428ac9l-m3984534610s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -1771,6 +1835,10 @@
       {
         "t": "20260924-120254",
         "v": 439990
+      },
+      {
+        "t": "20260925-151532",
+        "v": 439990
       }
     ],
     "dom_history": [
@@ -1793,9 +1861,13 @@
       {
         "t": "20260924-120254",
         "v": 204
+      },
+      {
+        "t": "20260925-151532",
+        "v": 204
       }
     ],
-    "id": 14,
+    "id": 15,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -1833,8 +1905,8 @@
     "photo_url": "https://ap.rdcpix.com/b911ba6bc660a1913e11a7c46157f708l-m3187266643s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -1877,6 +1949,10 @@
       {
         "t": "20260924-120254",
         "v": 474990
+      },
+      {
+        "t": "20260925-151532",
+        "v": 474990
       }
     ],
     "dom_history": [
@@ -1899,9 +1975,13 @@
       {
         "t": "20260924-120254",
         "v": 199
+      },
+      {
+        "t": "20260925-151532",
+        "v": 199
       }
     ],
-    "id": 15,
+    "id": 16,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -1939,8 +2019,8 @@
     "photo_url": "https://ap.rdcpix.com/8f17e1fb4d3dad60b3f7c0f177c914del-m3934945516s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -1965,10 +2045,6 @@
     "parcel_search_url": "https://www.google.com/search?q=15555+McGirr+Rd+Hinckley+IL+60520+DeKalb+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 749500
-      },
-      {
         "t": "20260912-120611",
         "v": 749500
       },
@@ -1994,15 +2070,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 749500
+      },
+      {
+        "t": "20260925-151532",
         "v": 749500
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 152
-      },
-      {
         "t": "20260912-120611",
         "v": 152
       },
@@ -2029,9 +2105,13 @@
       {
         "t": "20260924-120254",
         "v": 152
+      },
+      {
+        "t": "20260925-151532",
+        "v": 152
       }
     ],
-    "id": 16,
+    "id": 17,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -2052,7 +2132,7 @@
     "total_reduced": null,
     "price_per_sqft": null,
     "assessed_value": null,
-    "dom": 5,
+    "dom": 7,
     "beds": 2,
     "baths": 2.0,
     "sqft": null,
@@ -2069,8 +2149,8 @@
     "photo_url": "https://ap.rdcpix.com/31fb3f0cda2700449fa6be1b31a002b5l-m782324369s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -2101,6 +2181,10 @@
       {
         "t": "20260924-120254",
         "v": 26000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 26000
       }
     ],
     "dom_history": [
@@ -2111,9 +2195,76 @@
       {
         "t": "20260924-120254",
         "v": 3
+      },
+      {
+        "t": "20260925-151532",
+        "v": 5
       }
     ],
-    "id": 17,
+    "id": 18,
+    "reverify_note": "reverify active (Active)",
+    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
+    "consensus": "active",
+    "consensus_note": "single-source verified",
+    "stale_hours": 0.0
+  },
+  {
+    "address": "21 Partridge Sq",
+    "city": "Oswego",
+    "state": "IL",
+    "zip": "60543",
+    "county": "Kendall",
+    "nearest_target": "Oswego",
+    "property_type": "SFH",
+    "list_price": 425000,
+    "original_list_price": 425000.0,
+    "price_reductions": 0,
+    "total_reduced": null,
+    "price_per_sqft": 214.86,
+    "assessed_value": null,
+    "dom": 2,
+    "beds": 4,
+    "baths": 2.5,
+    "sqft": 1978,
+    "lot_size": "17,860 sq ft",
+    "acres": 0.4100091827364555,
+    "year_built": 1968,
+    "distress_types": [
+      "foreclosure"
+    ],
+    "distress_score": 3,
+    "listing_source": "Realtor.com",
+    "listing_url": "https://www.realtor.com/realestateandhomes-detail/21-Partridge-Sq_Oswego_IL_60543_M76992-00494",
+    "photo_url": "https://ap.rdcpix.com/5109a7bc28a0599fda3d6972a4f2e530l-m83889815s.jpg",
+    "status": "Active",
+    "mls_status": "Active",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
+    "verification_source": "realtor.com-reverified",
+    "verification_note": "reverify active (Active)",
+    "is_stale": false,
+    "needs_review": false,
+    "notes": "Welcome to sought-after Windcrest of Oswego, where mature tree-lined streets, distinctive homes and spacious lots create a neighborhood that feels established and special - all just 1 mile from the Fox River Trail and 2 miles from downtown Oswego! Set on an impressive .41-acre lot with gorgeous mature trees, this 4-bedroom, 2.1-bath home offers something increasingly hard to find: space, privacy & peace -inside and out. Freshly painted and light-filled, the home features hardwood floors throughout the spacious bedrooms, brand new luxury vinyl in the family room and NO carpet anywhere! Eat-in kitchen with breakfast area, island with seating, abundant cabinetry & pantry! Cozy wood-burning fireplace in the family room, charming built-ins, 1st floor laundry, mudroom and a fabulous 3-season sunroom. Enjoy your own private retreat with an in-ground pool, huge fenced yard, fire pit, beautiful mature trees - plenty of room to swim, entertain, play or simply relax and enjoy the outdoors. Newer windows, attached 2-car garage & unfinished basement offering plenty of storage and future possibilities. Nearly 2,000 square feet PLUS a basement, oversized lot, private in-ground pool, an incredible Oswego location and NO HOA! So much space, character, potential and value in one of Oswego's most established neighborhoods! Don't delay - schedule your showing today!",
+    "all_sources": [],
+    "all_urls": [],
+    "property_id": "7699200494",
+    "listing_id": "2999663252",
+    "lat": 41.69218,
+    "lon": -88.338625,
+    "waterfront": false,
+    "hoa_fee": 0.0,
+    "manufactured": false,
+    "lot_rent_monthly": null,
+    "subdivision": "Windcrest",
+    "list_date": "2026-09-25T17:51:23Z",
+    "google_url": "https://www.google.com/search?q=21+Partridge+Sq+Oswego+IL+60543+for+sale",
+    "zillow_url": "https://www.zillow.com/homes/21+Partridge+Sq+Oswego+IL+60543_rb/",
+    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=21+Partridge+Sq+Oswego+IL+60543",
+    "assessor_url": "https://www.google.com/search?q=21+Partridge+Sq+Oswego+IL+60543+Kendall+County+IL+assessor+parcel",
+    "parcel_search_url": "https://www.google.com/search?q=21+Partridge+Sq+Oswego+IL+60543+Kendall+County+IL+assessor+parcel",
+    "price_history": [],
+    "dom_history": [],
+    "id": 19,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -2151,8 +2302,8 @@
     "photo_url": "https://ap.rdcpix.com/e274889a567b9fe2b5ecc6cd76c1e46cl-m1351969563s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -2175,9 +2326,19 @@
     "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=110+Naden+Ct+Yorkville+IL+60560",
     "assessor_url": "https://www.google.com/search?q=110+Naden+Ct+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=110+Naden+Ct+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
-    "price_history": [],
-    "dom_history": [],
-    "id": 18,
+    "price_history": [
+      {
+        "t": "20260925-151532",
+        "v": 365000
+      }
+    ],
+    "dom_history": [
+      {
+        "t": "20260925-151532",
+        "v": 1
+      }
+    ],
+    "id": 20,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -2215,8 +2376,8 @@
     "photo_url": "https://ap.rdcpix.com/2968e238cde4740db834d0fd86811721l-m694950217s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -2241,10 +2402,6 @@
     "parcel_search_url": "https://www.google.com/search?q=8539+E+Highpoint+Rd+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 775000
-      },
-      {
         "t": "20260912-120611",
         "v": 775000
       },
@@ -2270,15 +2427,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 775000
+      },
+      {
+        "t": "20260925-151532",
         "v": 775000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 162
-      },
-      {
         "t": "20260912-120611",
         "v": 162
       },
@@ -2305,9 +2462,13 @@
       {
         "t": "20260924-120254",
         "v": 174
+      },
+      {
+        "t": "20260925-151532",
+        "v": 174
       }
     ],
-    "id": 19,
+    "id": 21,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -2345,8 +2506,8 @@
     "photo_url": "https://ap.rdcpix.com/6952deffa5e32787044fd2c8f498e166l-m2456275973s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -2370,10 +2531,6 @@
     "assessor_url": "https://www.google.com/search?q=807+Alexandra+Ln+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=807+Alexandra+Ln+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 374900
-      },
       {
         "t": "20260912-120611",
         "v": 374900
@@ -2401,13 +2558,13 @@
       {
         "t": "20260924-120254",
         "v": 350000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 350000
       }
     ],
     "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 152
-      },
       {
         "t": "20260912-120611",
         "v": 153
@@ -2435,9 +2592,13 @@
       {
         "t": "20260924-120254",
         "v": 165
+      },
+      {
+        "t": "20260925-151532",
+        "v": 165
       }
     ],
-    "id": 20,
+    "id": 22,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -2475,8 +2636,8 @@
     "photo_url": "https://ap.rdcpix.com/7b8a1baf9afcd263c816226eee5a4328l-m3253035431s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -2501,10 +2662,6 @@
     "parcel_search_url": "https://www.google.com/search?q=2530+Shauna+Dr+Montgomery+IL+60538+Kendall+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 334000
-      },
-      {
         "t": "20260912-120611",
         "v": 334000
       },
@@ -2530,15 +2687,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 334000
+      },
+      {
+        "t": "20260925-151532",
         "v": 334000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 154
-      },
-      {
         "t": "20260912-120611",
         "v": 154
       },
@@ -2565,9 +2722,13 @@
       {
         "t": "20260924-120254",
         "v": 154
+      },
+      {
+        "t": "20260925-151532",
+        "v": 154
       }
     ],
-    "id": 21,
+    "id": 23,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -2605,8 +2766,8 @@
     "photo_url": "https://ap.rdcpix.com/424b721657ae63652f5a2438ae954b08l-m1112363831s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -2631,10 +2792,6 @@
     "parcel_search_url": "https://www.google.com/search?q=421+E+Church+St+Sandwich+IL+60548+DeKalb+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 365000
-      },
-      {
         "t": "20260912-120611",
         "v": 365000
       },
@@ -2660,15 +2817,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 365000
+      },
+      {
+        "t": "20260925-151532",
         "v": 365000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 148
-      },
-      {
         "t": "20260912-120611",
         "v": 148
       },
@@ -2695,9 +2852,13 @@
       {
         "t": "20260924-120254",
         "v": 148
+      },
+      {
+        "t": "20260925-151532",
+        "v": 148
       }
     ],
-    "id": 22,
+    "id": 24,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -2735,8 +2896,8 @@
     "photo_url": "https://ap.rdcpix.com/1796dfa3c1aad9eaf336205335572234l-m2027458139s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -2760,10 +2921,6 @@
     "assessor_url": "https://www.google.com/search?q=1520+Stonebridge+Trl+Apt+2-1+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
     "parcel_search_url": "https://www.google.com/search?q=1520+Stonebridge+Trl+Apt+2-1+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
     "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 299900
-      },
       {
         "t": "20260912-120611",
         "v": 299900
@@ -2791,13 +2948,13 @@
       {
         "t": "20260924-120254",
         "v": 279900
+      },
+      {
+        "t": "20260925-151532",
+        "v": 279900
       }
     ],
     "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 104
-      },
       {
         "t": "20260912-120611",
         "v": 104
@@ -2825,9 +2982,13 @@
       {
         "t": "20260924-120254",
         "v": 131
+      },
+      {
+        "t": "20260925-151532",
+        "v": 131
       }
     ],
-    "id": 23,
+    "id": 25,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -2865,8 +3026,8 @@
     "photo_url": "https://ap.rdcpix.com/c5af598422329379df3e6f8b1957f998l-m3520610039s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -2891,10 +3052,6 @@
     "parcel_search_url": "https://www.google.com/search?q=123+Eisenhower+Dr+Oswego+IL+60543+Kendall+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 414000
-      },
-      {
         "t": "20260912-120611",
         "v": 414000
       },
@@ -2920,15 +3077,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 414000
+      },
+      {
+        "t": "20260925-151532",
         "v": 414000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 128
-      },
-      {
         "t": "20260912-120611",
         "v": 128
       },
@@ -2955,9 +3112,13 @@
       {
         "t": "20260924-120254",
         "v": 128
+      },
+      {
+        "t": "20260925-151532",
+        "v": 128
       }
     ],
-    "id": 24,
+    "id": 26,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -2995,8 +3156,8 @@
     "photo_url": "https://ap.rdcpix.com/b3e402c624cea1e1f27ff2d9f3257d3cl-m977406296s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -3020,10 +3181,6 @@
     "assessor_url": "https://www.google.com/search?q=1575+Creek+Rd+Plano+IL+60545+Kendall+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=1575+Creek+Rd+Plano+IL+60545+Kendall+County+IL+assessor+parcel",
     "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 678988
-      },
       {
         "t": "20260912-120611",
         "v": 678988
@@ -3051,13 +3208,13 @@
       {
         "t": "20260924-120254",
         "v": 678988
+      },
+      {
+        "t": "20260925-151532",
+        "v": 678988
       }
     ],
     "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 116
-      },
       {
         "t": "20260912-120611",
         "v": 120
@@ -3085,9 +3242,13 @@
       {
         "t": "20260924-120254",
         "v": 122
+      },
+      {
+        "t": "20260925-151532",
+        "v": 122
       }
     ],
-    "id": 25,
+    "id": 27,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -3125,8 +3286,8 @@
     "photo_url": "https://ap.rdcpix.com/376fc3ae83d976c4ab5b91094cfe37a1l-m1958973900s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -3177,6 +3338,10 @@
       {
         "t": "20260924-120254",
         "v": 399000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 399000
       }
     ],
     "dom_history": [
@@ -3207,9 +3372,207 @@
       {
         "t": "20260924-120254",
         "v": 120
+      },
+      {
+        "t": "20260925-151532",
+        "v": 120
       }
     ],
-    "id": 26,
+    "id": 28,
+    "reverify_note": "reverify active (Active)",
+    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
+    "consensus": "active",
+    "consensus_note": "single-source verified",
+    "stale_hours": 0.0
+  },
+  {
+    "address": "116 W Union St",
+    "city": "Earlville",
+    "state": "IL",
+    "zip": "60518",
+    "county": "LaSalle",
+    "nearest_target": "Earlville",
+    "property_type": "SFH",
+    "list_price": 155900,
+    "original_list_price": 169000.0,
+    "price_reductions": 1,
+    "total_reduced": 13100.0,
+    "price_per_sqft": 97.01,
+    "assessed_value": null,
+    "dom": 120,
+    "beds": 5,
+    "baths": 2.0,
+    "sqft": 1607,
+    "lot_size": "",
+    "acres": null,
+    "year_built": null,
+    "distress_types": [
+      "high-dom",
+      "price-reduced"
+    ],
+    "distress_score": 2,
+    "listing_source": "Realtor.com",
+    "listing_url": "https://www.realtor.com/realestateandhomes-detail/116-W-Union-St_Earlville_IL_60518_M85606-83980",
+    "photo_url": "https://ap.rdcpix.com/690030433a2430aec8ee287d9e941d08l-m616752257s.jpg",
+    "status": "Active",
+    "mls_status": "Active",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
+    "verification_source": "realtor.com-reverified",
+    "verification_note": "reverify active (Active)",
+    "is_stale": false,
+    "needs_review": false,
+    "notes": "4- 5 Bedroom,2 Bath 2 story Hardwood floors, Updated electric in much of house, newer style windows. Roof and gutters 2yrs. Siding 1-2 yrs Wrap around front porch-partially screened 1 car garage and older Block garage for storage. Great home with lots of room front & back stairs Play set in back can stay",
+    "all_sources": [],
+    "all_urls": [],
+    "property_id": "8560683980",
+    "listing_id": "2996243981",
+    "lat": 41.585378,
+    "lon": -88.922062,
+    "waterfront": false,
+    "hoa_fee": null,
+    "manufactured": false,
+    "lot_rent_monthly": null,
+    "subdivision": "Earlville / Harding",
+    "list_date": "2026-05-30T13:43:08.000000Z",
+    "google_url": "https://www.google.com/search?q=116+W+Union+St+Earlville+IL+60518+for+sale",
+    "zillow_url": "https://www.zillow.com/homes/116+W+Union+St+Earlville+IL+60518_rb/",
+    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=116+W+Union+St+Earlville+IL+60518",
+    "assessor_url": "https://www.google.com/search?q=116+W+Union+St+Earlville+IL+60518+LaSalle+County+IL+assessor+parcel",
+    "parcel_search_url": "https://www.google.com/search?q=116+W+Union+St+Earlville+IL+60518+LaSalle+County+IL+assessor+parcel",
+    "price_history": [
+      {
+        "t": "20260912-120611",
+        "v": 155900
+      },
+      {
+        "t": "20260914-113344",
+        "v": 155900
+      },
+      {
+        "t": "20260914-142844",
+        "v": 155900
+      },
+      {
+        "t": "20260917-232401",
+        "v": 155900
+      },
+      {
+        "t": "20260921-115848",
+        "v": 155900
+      },
+      {
+        "t": "20260921-171651",
+        "v": 155900
+      },
+      {
+        "t": "20260924-120254",
+        "v": 155900
+      },
+      {
+        "t": "20260925-151532",
+        "v": 155900
+      }
+    ],
+    "dom_history": [
+      {
+        "t": "20260912-120611",
+        "v": 103
+      },
+      {
+        "t": "20260914-113344",
+        "v": 103
+      },
+      {
+        "t": "20260914-142844",
+        "v": 103
+      },
+      {
+        "t": "20260917-232401",
+        "v": 103
+      },
+      {
+        "t": "20260921-115848",
+        "v": 103
+      },
+      {
+        "t": "20260921-171651",
+        "v": 103
+      },
+      {
+        "t": "20260924-120254",
+        "v": 103
+      },
+      {
+        "t": "20260925-151532",
+        "v": 103
+      }
+    ],
+    "id": 29,
+    "reverify_note": "reverify active (Active)",
+    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
+    "consensus": "active",
+    "consensus_note": "single-source verified",
+    "stale_hours": 0.0
+  },
+  {
+    "address": "210 S Ben St",
+    "city": "Plano",
+    "state": "IL",
+    "zip": "60545",
+    "county": "Kendall",
+    "nearest_target": "Plano",
+    "property_type": "SFH",
+    "list_price": 368500,
+    "original_list_price": 389900.0,
+    "price_reductions": 1,
+    "total_reduced": 21400.0,
+    "price_per_sqft": 184.25,
+    "assessed_value": null,
+    "dom": 109,
+    "beds": 4,
+    "baths": 3.0,
+    "sqft": 2000,
+    "lot_size": "23,087 sq ft",
+    "acres": 0.5300045913682278,
+    "year_built": 1960,
+    "distress_types": [
+      "high-dom",
+      "price-reduced"
+    ],
+    "distress_score": 2,
+    "listing_source": "Realtor.com",
+    "listing_url": "https://www.realtor.com/realestateandhomes-detail/210-S-Ben-St_Plano_IL_60545_M71303-15583",
+    "photo_url": "https://ap.rdcpix.com/2c29deaf2b1dd650690c559dbaf0d09fl-m2743941064s.jpg",
+    "status": "Active",
+    "mls_status": "Active",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
+    "verification_source": "realtor.com-reverified",
+    "verification_note": "reverify active (Active)",
+    "is_stale": false,
+    "needs_review": false,
+    "notes": "Large Bi-level home with 2854 square foot total living space, on a HALF ACRE LOT, in town, walking distance to school and restaurants. The unique craftsmanship that went into the build of this home is a MUST SEE! The kitchen is in lower level, perfect for entertaining and keeping the home cool upstairs. BRAND NEW BOILER (2026), BRAND NEW ROOF, (2026), warranties carry over, radiant heated flooring thru the lower level. Step into what feels like a HOME in the Northwoods, with the wood ceilings and the wood beams and all natural hardwood flooring. This Home could easily be converted for a multifamily home or someone with aging parents. One photo is virtually staged to show what it would look like to change on do the first bedroom upstairs into an upstairs kitchen! NEW REFRIGERATOR, Newer DISHWASHER And Newer WASHING MACHINE. Enjoy GORGEOUS landscapes, massive backyard with a garden area with TWO sheds. Lifetime Warranty on the Leafguard Gutter System transfers to new owners! Large horseshoe driveway, attached to another 4 car driveway, along with a two car attached garage. PERFECT GARAGE SALE SPOT. (They are known for having great garage sales). Large Attic/Loft above the entire home, could be easily finished off. FOUR BEDROOMS, with French doors to den off of the master bedroom, THREE BATHROOMS, whit a whirlpool size soaking tub with the Spa showered in ceiling! Enjoy Two outdoor sitting areas with a deck and porch in the backyard along with 220 wired (High end energy saving system) if you had a Hot Tub on the other concrete patio, and a nice deck in the front of the home as well. Conveniently located near the schools in town, two parks just down the street, one minute from shopping, the Library, plenty of dining, and the beautiful Silver Springs State park just down the road. Pop in for a tour at the Farnsworth House right down the street, pick some Apples at Woody's Apple Orchard and Farm close by, or enjoy the abundance of apples from the large apple tree in the f",
+    "all_sources": [],
+    "all_urls": [],
+    "property_id": "7130315583",
+    "listing_id": "2996862995",
+    "lat": 41.659208,
+    "lon": -88.541911,
+    "waterfront": false,
+    "hoa_fee": 0.0,
+    "manufactured": false,
+    "lot_rent_monthly": null,
+    "subdivision": "Plano",
+    "list_date": "2026-09-25T15:34:04Z",
+    "google_url": "https://www.google.com/search?q=210+S+Ben+St+Plano+IL+60545+for+sale",
+    "zillow_url": "https://www.zillow.com/homes/210+S+Ben+St+Plano+IL+60545_rb/",
+    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=210+S+Ben+St+Plano+IL+60545",
+    "assessor_url": "https://www.google.com/search?q=210+S+Ben+St+Plano+IL+60545+Kendall+County+IL+assessor+parcel",
+    "parcel_search_url": "https://www.google.com/search?q=210+S+Ben+St+Plano+IL+60545+Kendall+County+IL+assessor+parcel",
+    "price_history": [],
+    "dom_history": [],
+    "id": 30,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -3247,8 +3610,8 @@
     "photo_url": "https://ap.rdcpix.com/d12e07d5707bc733eaf1898cc242e9b8l-m1530679562s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -3299,6 +3662,10 @@
       {
         "t": "20260924-120254",
         "v": 585000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 585000
       }
     ],
     "dom_history": [
@@ -3329,139 +3696,13 @@
       {
         "t": "20260924-120254",
         "v": 107
+      },
+      {
+        "t": "20260925-151532",
+        "v": 107
       }
     ],
-    "id": 27,
-    "reverify_note": "reverify active (Active)",
-    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
-    "consensus": "active",
-    "consensus_note": "single-source verified",
-    "stale_hours": 0.0
-  },
-  {
-    "address": "116 W Union St",
-    "city": "Earlville",
-    "state": "IL",
-    "zip": "60518",
-    "county": "LaSalle",
-    "nearest_target": "Earlville",
-    "property_type": "SFH",
-    "list_price": 155900,
-    "original_list_price": 169000.0,
-    "price_reductions": 1,
-    "total_reduced": 13100.0,
-    "price_per_sqft": 97.01,
-    "assessed_value": null,
-    "dom": 103,
-    "beds": 5,
-    "baths": 2.0,
-    "sqft": 1607,
-    "lot_size": "",
-    "acres": null,
-    "year_built": null,
-    "distress_types": [
-      "high-dom",
-      "price-reduced"
-    ],
-    "distress_score": 2,
-    "listing_source": "Realtor.com",
-    "listing_url": "https://www.realtor.com/realestateandhomes-detail/116-W-Union-St_Earlville_IL_60518_M85606-83980",
-    "photo_url": "https://ap.rdcpix.com/690030433a2430aec8ee287d9e941d08l-m616752257s.jpg",
-    "status": "Active",
-    "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
-    "verification_source": "realtor.com-reverified",
-    "verification_note": "reverify active (Active)",
-    "is_stale": false,
-    "needs_review": false,
-    "notes": "4- 5 Bedroom,2 Bath 2 story Hardwood floors, Updated electric in much of house, newer style windows. Roof and gutters 2yrs. Siding 1-2 yrs Wrap around front porch-partially screened 1 car garage and older Block garage for storage. Great home with lots of room front & back stairs Play set in back can stay",
-    "all_sources": [],
-    "all_urls": [],
-    "property_id": "8560683980",
-    "listing_id": "2996243981",
-    "lat": 41.585378,
-    "lon": -88.922062,
-    "waterfront": false,
-    "hoa_fee": null,
-    "manufactured": false,
-    "lot_rent_monthly": null,
-    "subdivision": "Earlville / Harding",
-    "list_date": "2026-05-30T13:43:08.000000Z",
-    "google_url": "https://www.google.com/search?q=116+W+Union+St+Earlville+IL+60518+for+sale",
-    "zillow_url": "https://www.zillow.com/homes/116+W+Union+St+Earlville+IL+60518_rb/",
-    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=116+W+Union+St+Earlville+IL+60518",
-    "assessor_url": "https://www.google.com/search?q=116+W+Union+St+Earlville+IL+60518+LaSalle+County+IL+assessor+parcel",
-    "parcel_search_url": "https://www.google.com/search?q=116+W+Union+St+Earlville+IL+60518+LaSalle+County+IL+assessor+parcel",
-    "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 155900
-      },
-      {
-        "t": "20260912-120611",
-        "v": 155900
-      },
-      {
-        "t": "20260914-113344",
-        "v": 155900
-      },
-      {
-        "t": "20260914-142844",
-        "v": 155900
-      },
-      {
-        "t": "20260917-232401",
-        "v": 155900
-      },
-      {
-        "t": "20260921-115848",
-        "v": 155900
-      },
-      {
-        "t": "20260921-171651",
-        "v": 155900
-      },
-      {
-        "t": "20260924-120254",
-        "v": 155900
-      }
-    ],
-    "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 103
-      },
-      {
-        "t": "20260912-120611",
-        "v": 103
-      },
-      {
-        "t": "20260914-113344",
-        "v": 103
-      },
-      {
-        "t": "20260914-142844",
-        "v": 103
-      },
-      {
-        "t": "20260917-232401",
-        "v": 103
-      },
-      {
-        "t": "20260921-115848",
-        "v": 103
-      },
-      {
-        "t": "20260921-171651",
-        "v": 103
-      },
-      {
-        "t": "20260924-120254",
-        "v": 103
-      }
-    ],
-    "id": 28,
+    "id": 31,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -3499,8 +3740,8 @@
     "photo_url": "https://ap.rdcpix.com/97f231c68d638b6738ba431761fd4c7bl-m609129773s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -3525,10 +3766,6 @@
     "parcel_search_url": "https://www.google.com/search?q=55+Dawn+Ave+Plano+IL+60545+Kendall+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 415000
-      },
-      {
         "t": "20260912-120611",
         "v": 415000
       },
@@ -3554,15 +3791,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 415000
+      },
+      {
+        "t": "20260925-151532",
         "v": 415000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 92
-      },
-      {
         "t": "20260912-120611",
         "v": 92
       },
@@ -3589,9 +3826,13 @@
       {
         "t": "20260924-120254",
         "v": 99
+      },
+      {
+        "t": "20260925-151532",
+        "v": 99
       }
     ],
-    "id": 29,
+    "id": 32,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -3629,8 +3870,8 @@
     "photo_url": "https://ap.rdcpix.com/c59ba0cc6ac88f589d35025e82dbb781l-m2895004926s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -3669,6 +3910,10 @@
       {
         "t": "20260924-120254",
         "v": 625000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 625000
       }
     ],
     "dom_history": [
@@ -3687,9 +3932,13 @@
       {
         "t": "20260924-120254",
         "v": 98
+      },
+      {
+        "t": "20260925-151532",
+        "v": 98
       }
     ],
-    "id": 30,
+    "id": 33,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -3727,8 +3976,8 @@
     "photo_url": "https://ap.rdcpix.com/f075eda91024922f074c24df6d37a702l-m2876637725s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -3767,6 +4016,10 @@
       {
         "t": "20260924-120254",
         "v": 199900
+      },
+      {
+        "t": "20260925-151532",
+        "v": 199900
       }
     ],
     "dom_history": [
@@ -3785,9 +4038,13 @@
       {
         "t": "20260924-120254",
         "v": 97
+      },
+      {
+        "t": "20260925-151532",
+        "v": 97
       }
     ],
-    "id": 31,
+    "id": 34,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -3825,8 +4082,8 @@
     "photo_url": "https://ap.rdcpix.com/b71da90026e6f6d320cba3ddafa69933l-m1774163876s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -3849,9 +4106,19 @@
     "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=404+Cascade+Ln+Unit+404+Oswego+IL+60543",
     "assessor_url": "https://www.google.com/search?q=404+Cascade+Ln+Unit+404+Oswego+IL+60543+Kendall+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=404+Cascade+Ln+Unit+404+Oswego+IL+60543+Kendall+County+IL+assessor+parcel",
-    "price_history": [],
-    "dom_history": [],
-    "id": 32,
+    "price_history": [
+      {
+        "t": "20260925-151532",
+        "v": 300000
+      }
+    ],
+    "dom_history": [
+      {
+        "t": "20260925-151532",
+        "v": 90
+      }
+    ],
+    "id": 35,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -3888,8 +4155,8 @@
     "photo_url": "https://ap.rdcpix.com/f261f3fe973386ebc2d17dc922ef8f16l-m3218520924s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -3914,10 +4181,6 @@
     "parcel_search_url": "https://www.google.com/search?q=32+E+Rickard+Dr+Oswego+IL+60543+Kendall+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 449999
-      },
-      {
         "t": "20260912-120611",
         "v": 449999
       },
@@ -3943,15 +4206,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 449999
+      },
+      {
+        "t": "20260925-151532",
         "v": 449999
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 48
-      },
-      {
         "t": "20260912-120611",
         "v": 48
       },
@@ -3978,9 +4241,13 @@
       {
         "t": "20260924-120254",
         "v": 48
+      },
+      {
+        "t": "20260925-151532",
+        "v": 48
       }
     ],
-    "id": 33,
+    "id": 36,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -4017,8 +4284,8 @@
     "photo_url": "https://ap.rdcpix.com/5c973e4ce3a61cfbc52f40d2e51627e6l-m2158213290s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -4043,10 +4310,6 @@
     "parcel_search_url": "https://www.google.com/search?q=119+Garden+Dr+Montgomery+IL+60538+Kendall+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 239900
-      },
-      {
         "t": "20260912-120611",
         "v": 239900
       },
@@ -4072,15 +4335,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 239900
+      },
+      {
+        "t": "20260925-151532",
         "v": 239900
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 44
-      },
-      {
         "t": "20260912-120611",
         "v": 44
       },
@@ -4107,9 +4370,13 @@
       {
         "t": "20260924-120254",
         "v": 44
+      },
+      {
+        "t": "20260925-151532",
+        "v": 44
       }
     ],
-    "id": 34,
+    "id": 37,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -4146,8 +4413,8 @@
     "photo_url": "https://ap.rdcpix.com/afe27ccd981cf16451c84bd5fce8ae82l-m3777175899s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -4172,10 +4439,6 @@
     "parcel_search_url": "https://www.google.com/search?q=127+Cardinal+Ln+Sandwich+IL+60548+LaSalle+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 79000
-      },
-      {
         "t": "20260912-120611",
         "v": 79000
       },
@@ -4201,15 +4464,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 79000
+      },
+      {
+        "t": "20260925-151532",
         "v": 79000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 36
-      },
-      {
         "t": "20260912-120611",
         "v": 36
       },
@@ -4236,9 +4499,13 @@
       {
         "t": "20260924-120254",
         "v": 36
+      },
+      {
+        "t": "20260925-151532",
+        "v": 36
       }
     ],
-    "id": 35,
+    "id": 38,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -4275,8 +4542,8 @@
     "photo_url": "https://ap.rdcpix.com/997185e760c71fc37fbabba7f4002512l-m2731222019s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -4319,6 +4586,10 @@
       {
         "t": "20260924-120254",
         "v": 429000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 429000
       }
     ],
     "dom_history": [
@@ -4341,138 +4612,13 @@
       {
         "t": "20260924-120254",
         "v": 24
+      },
+      {
+        "t": "20260925-151532",
+        "v": 24
       }
     ],
-    "id": 36,
-    "reverify_note": "reverify active (Active)",
-    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
-    "consensus": "active",
-    "consensus_note": "single-source verified",
-    "stale_hours": 0.0
-  },
-  {
-    "address": "1000 S Lorraine Rd Apt 212",
-    "city": "Wheaton",
-    "state": "IL",
-    "zip": "60189",
-    "county": "DuPage",
-    "nearest_target": "Wheaton",
-    "property_type": "Condo",
-    "list_price": 175000,
-    "original_list_price": 175000.0,
-    "price_reductions": 0,
-    "total_reduced": null,
-    "price_per_sqft": 318.18,
-    "assessed_value": null,
-    "dom": 13,
-    "beds": 1,
-    "baths": 1.0,
-    "sqft": 550,
-    "lot_size": "",
-    "acres": null,
-    "year_built": 1971,
-    "distress_types": [
-      "as-is"
-    ],
-    "distress_score": 2,
-    "listing_source": "Realtor.com",
-    "listing_url": "https://www.realtor.com/realestateandhomes-detail/1000-S-Lorraine-Rd-Apt-212_Wheaton_IL_60189_M80843-15120",
-    "photo_url": "https://ap.rdcpix.com/ddaff04cd7f78ca59542c11eddfe16cfl-m3916546521s.jpg",
-    "status": "Active",
-    "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
-    "verification_source": "realtor.com-reverified",
-    "verification_note": "reverify active (Active)",
-    "is_stale": false,
-    "needs_review": false,
-    "notes": "Check out this amazing condo with low HOA AND just few a minutes away from the vibrant downtown Wheaton district, packed with restaurants, shops, and market, plus Metra service to downtown Chicago and in close proximity to Wheaton college. The property is sold as is.",
-    "all_sources": [],
-    "all_urls": [],
-    "property_id": "8084315120",
-    "listing_id": "3000557597",
-    "lat": 41.856334,
-    "lon": -88.082646,
-    "waterfront": false,
-    "hoa_fee": 291.0,
-    "manufactured": false,
-    "lot_rent_monthly": null,
-    "subdivision": "Wheaton",
-    "list_date": "2026-09-09T16:30:00Z",
-    "google_url": "https://www.google.com/search?q=1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189+for+sale",
-    "zillow_url": "https://www.zillow.com/homes/1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189_rb/",
-    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189",
-    "assessor_url": "https://www.google.com/search?q=1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
-    "parcel_search_url": "https://www.google.com/search?q=1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
-    "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 175000
-      },
-      {
-        "t": "20260912-120611",
-        "v": 175000
-      },
-      {
-        "t": "20260914-113344",
-        "v": 175000
-      },
-      {
-        "t": "20260914-142844",
-        "v": 175000
-      },
-      {
-        "t": "20260917-232401",
-        "v": 175000
-      },
-      {
-        "t": "20260921-115848",
-        "v": 175000
-      },
-      {
-        "t": "20260921-171651",
-        "v": 175000
-      },
-      {
-        "t": "20260924-120254",
-        "v": 175000
-      }
-    ],
-    "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 2
-      },
-      {
-        "t": "20260912-120611",
-        "v": 2
-      },
-      {
-        "t": "20260914-113344",
-        "v": 2
-      },
-      {
-        "t": "20260914-142844",
-        "v": 2
-      },
-      {
-        "t": "20260917-232401",
-        "v": 7
-      },
-      {
-        "t": "20260921-115848",
-        "v": 7
-      },
-      {
-        "t": "20260921-171651",
-        "v": 13
-      },
-      {
-        "t": "20260924-120254",
-        "v": 13
-      }
-    ],
-    "id": 37,
+    "id": 39,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -4509,8 +4655,8 @@
     "photo_url": "https://ap.rdcpix.com/2192d931c195cfd5b3c686fadb24c3cfl-m1276392123s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -4549,6 +4695,10 @@
       {
         "t": "20260924-120254",
         "v": 699000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 699000
       }
     ],
     "dom_history": [
@@ -4567,9 +4717,13 @@
       {
         "t": "20260924-120254",
         "v": 11
+      },
+      {
+        "t": "20260925-151532",
+        "v": 11
       }
     ],
-    "id": 38,
+    "id": 40,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -4606,8 +4760,8 @@
     "photo_url": "https://ap.rdcpix.com/36ea1d3bd74223b5458dfe41246b446cl-m290452678s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -4658,6 +4812,10 @@
       {
         "t": "20260924-120254",
         "v": 146500
+      },
+      {
+        "t": "20260925-151532",
+        "v": 146500
       }
     ],
     "dom_history": [
@@ -4688,9 +4846,86 @@
       {
         "t": "20260924-120254",
         "v": 8
+      },
+      {
+        "t": "20260925-151532",
+        "v": 8
       }
     ],
-    "id": 39,
+    "id": 41,
+    "reverify_note": "reverify active (Active)",
+    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
+    "consensus": "active",
+    "consensus_note": "single-source verified",
+    "stale_hours": 0.0
+  },
+  {
+    "address": "1S670 Winfield Rd",
+    "city": "Wheaton",
+    "state": "IL",
+    "zip": "60189",
+    "county": "DuPage",
+    "nearest_target": "Wheaton",
+    "property_type": "SFH",
+    "list_price": 500000,
+    "original_list_price": 500000.0,
+    "price_reductions": 0,
+    "total_reduced": null,
+    "price_per_sqft": 262.33,
+    "assessed_value": null,
+    "dom": 3,
+    "beds": 3,
+    "baths": 1.5,
+    "sqft": 1906,
+    "lot_size": "50,965 sq ft",
+    "acres": 1.1699954086317723,
+    "year_built": 1961,
+    "distress_types": [
+      "as-is"
+    ],
+    "distress_score": 2,
+    "listing_source": "Realtor.com",
+    "listing_url": "https://www.realtor.com/realestateandhomes-detail/1S670-Winfield-Rd_Wheaton_IL_60189_M71254-25001",
+    "photo_url": "https://ap.rdcpix.com/498ad116f0a4cede6419a54dc4a9204dl-m3525042817s.jpg",
+    "status": "Active",
+    "mls_status": "Active",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
+    "verification_source": "realtor.com-reverified",
+    "verification_note": "reverify active (Active)",
+    "is_stale": false,
+    "needs_review": false,
+    "notes": "Set on a wooded, fully fenced 1.17-acre lot, this distinctive mid-century ranch offers exceptional space, privacy and character. The approximately 1,906-square-foot main level features exposed beams, hardwood floors, and an open great room and dining area filled with natural light. A center-island kitchen provides generous workspace and awaits the next owner's personal touch. Three bedrooms and 1 and 1/2 baths offer convenient single-level living. The full basement adds a finished recreation area with a wood-burning fireplace, abundant storage, and additional space with plenty of possibilities. Outside, enjoy an expansive backyard, mature trees, a deck, patio, and storage shed. Additional features include an attached two-car garage, central air, private well and septic, sump pump, and radon-mitigation system. Conveniently located near Cantigny, forest preserves, Metra, shopping, dining, and major routes. Offered as-is-a rare opportunity to update a unique home on a substantial parcel.",
+    "all_sources": [],
+    "all_urls": [],
+    "property_id": "7125425001",
+    "listing_id": "3000885343",
+    "lat": 41.844672,
+    "lon": -88.170173,
+    "waterfront": false,
+    "hoa_fee": null,
+    "manufactured": false,
+    "lot_rent_monthly": null,
+    "subdivision": "Wheaton",
+    "list_date": "2026-09-24T15:32:02.000000Z",
+    "google_url": "https://www.google.com/search?q=1S670+Winfield+Rd+Wheaton+IL+60189+for+sale",
+    "zillow_url": "https://www.zillow.com/homes/1S670+Winfield+Rd+Wheaton+IL+60189_rb/",
+    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=1S670+Winfield+Rd+Wheaton+IL+60189",
+    "assessor_url": "https://www.google.com/search?q=1S670+Winfield+Rd+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
+    "parcel_search_url": "https://www.google.com/search?q=1S670+Winfield+Rd+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
+    "price_history": [
+      {
+        "t": "20260925-151532",
+        "v": 500000
+      }
+    ],
+    "dom_history": [
+      {
+        "t": "20260925-151532",
+        "v": 2
+      }
+    ],
+    "id": 42,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -4727,8 +4962,8 @@
     "photo_url": "https://ap.rdcpix.com/6d5fe643f7d3872aff1e80a23b18e646l-m1601706232s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -4755,15 +4990,23 @@
       {
         "t": "20260924-120254",
         "v": 319000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 319000
       }
     ],
     "dom_history": [
       {
         "t": "20260924-120254",
         "v": 2
+      },
+      {
+        "t": "20260925-151532",
+        "v": 2
       }
     ],
-    "id": 40,
+    "id": 43,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -4771,62 +5014,257 @@
     "stale_hours": 0.0
   },
   {
-    "address": "1S670 Winfield Rd",
+    "address": "117 E Elm St",
     "city": "Wheaton",
     "state": "IL",
     "zip": "60189",
     "county": "DuPage",
     "nearest_target": "Wheaton",
     "property_type": "SFH",
-    "list_price": 500000,
-    "original_list_price": 500000.0,
+    "list_price": 338900,
+    "original_list_price": 338900.0,
     "price_reductions": 0,
     "total_reduced": null,
-    "price_per_sqft": 262.33,
+    "price_per_sqft": 164.91,
     "assessed_value": null,
-    "dom": 2,
-    "beds": 3,
-    "baths": 1.5,
-    "sqft": 1906,
-    "lot_size": "50,965 sq ft",
-    "acres": 1.1699954086317723,
-    "year_built": 1961,
+    "dom": 1,
+    "beds": 4,
+    "baths": 2.5,
+    "sqft": 2055,
+    "lot_size": "10,890 sq ft",
+    "acres": 0.25,
+    "year_built": 1954,
     "distress_types": [
       "as-is"
     ],
     "distress_score": 2,
     "listing_source": "Realtor.com",
-    "listing_url": "https://www.realtor.com/realestateandhomes-detail/1S670-Winfield-Rd_Wheaton_IL_60189_M71254-25001",
-    "photo_url": "https://ap.rdcpix.com/498ad116f0a4cede6419a54dc4a9204dl-m3525042817s.jpg",
+    "listing_url": "https://www.realtor.com/realestateandhomes-detail/117-E-Elm-St_Wheaton_IL_60189_M75609-29326",
+    "photo_url": "https://ap.rdcpix.com/b156df729dd3a109cfde84c47845afd5l-m2754445288s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
     "needs_review": false,
-    "notes": "Set on a wooded, fully fenced 1.17-acre lot, this distinctive mid-century ranch offers exceptional space, privacy and character. The approximately 1,906-square-foot main level features exposed beams, hardwood floors, and an open great room and dining area filled with natural light. A center-island kitchen provides generous workspace and awaits the next owner's personal touch. Three bedrooms and 1 and 1/2 baths offer convenient single-level living. The full basement adds a finished recreation area with a wood-burning fireplace, abundant storage, and additional space with plenty of possibilities. Outside, enjoy an expansive backyard, mature trees, a deck, patio, and storage shed. Additional features include an attached two-car garage, central air, private well and septic, sump pump, and radon-mitigation system. Conveniently located near Cantigny, forest preserves, Metra, shopping, dining, and major routes. Offered as-is-a rare opportunity to update a unique home on a substantial parcel.",
+    "notes": "ATTENTION BUILDERS AND REMODELERS looking for a Great Location! Rare opportunity to get a premier, highly walkable downtown Wheaton location. This property sits on an expansive, approximate 90 x 122 lot-offering the perfect canvas to either execute a luxury custom build or do some updates. LOCATION IS UNBEATABLE! This prime parcel sits steps from Kelly Park and the Illinois Prairie Path. Enjoy true walkability to Mariano's, local elementary and middle schools, and the vibrant dining, shopping, and Metra train access of downtown Wheaton. Enjoy the highly acclaimed, top-rated Wheaton District 200 school system. THE OPPORTUNITY & DETAILS: Whether you choose to build new, or do some updates to the home, the location ensures incredible equity potential. The home is being sold \"As-Is\". Needs some TLC. See attached assessments on settling that the seller received when the property was purchased. Seller thinks the furnace is 2017/ HWH 2019.",
     "all_sources": [],
     "all_urls": [],
-    "property_id": "7125425001",
-    "listing_id": "3000885343",
-    "lat": 41.844672,
-    "lon": -88.170173,
+    "property_id": "7560929326",
+    "listing_id": "3001150721",
+    "lat": 41.855348,
+    "lon": -88.104713,
     "waterfront": false,
     "hoa_fee": null,
     "manufactured": false,
     "lot_rent_monthly": null,
+    "subdivision": "Fairway Estates",
+    "list_date": "2026-09-26T15:24:45.000000Z",
+    "google_url": "https://www.google.com/search?q=117+E+Elm+St+Wheaton+IL+60189+for+sale",
+    "zillow_url": "https://www.zillow.com/homes/117+E+Elm+St+Wheaton+IL+60189_rb/",
+    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=117+E+Elm+St+Wheaton+IL+60189",
+    "assessor_url": "https://www.google.com/search?q=117+E+Elm+St+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
+    "parcel_search_url": "https://www.google.com/search?q=117+E+Elm+St+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
+    "price_history": [
+      {
+        "t": "20260909-133954",
+        "v": 348000
+      },
+      {
+        "t": "20260910-200937",
+        "v": 348000
+      },
+      {
+        "t": "20260912-120611",
+        "v": 348000
+      },
+      {
+        "t": "20260914-113344",
+        "v": 348000
+      },
+      {
+        "t": "20260914-142844",
+        "v": 348000
+      },
+      {
+        "t": "20260917-232401",
+        "v": 348000
+      },
+      {
+        "t": "20260921-115848",
+        "v": 348000
+      },
+      {
+        "t": "20260921-171651",
+        "v": 348000
+      }
+    ],
+    "dom_history": [
+      {
+        "t": "20260909-133954",
+        "v": 101
+      },
+      {
+        "t": "20260910-200937",
+        "v": 101
+      },
+      {
+        "t": "20260912-120611",
+        "v": 101
+      },
+      {
+        "t": "20260914-113344",
+        "v": 101
+      },
+      {
+        "t": "20260914-142844",
+        "v": 101
+      },
+      {
+        "t": "20260917-232401",
+        "v": 101
+      },
+      {
+        "t": "20260921-115848",
+        "v": 102
+      },
+      {
+        "t": "20260921-171651",
+        "v": 102
+      }
+    ],
+    "id": 44,
+    "reverify_note": "reverify active (Active)",
+    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
+    "consensus": "active",
+    "consensus_note": "single-source verified",
+    "stale_hours": 0.0
+  },
+  {
+    "address": "1000 S Lorraine Rd Apt 212",
+    "city": "Wheaton",
+    "state": "IL",
+    "zip": "60189",
+    "county": "DuPage",
+    "nearest_target": "Wheaton",
+    "property_type": "Condo",
+    "list_price": 165000,
+    "original_list_price": 165000.0,
+    "price_reductions": 0,
+    "total_reduced": null,
+    "price_per_sqft": 300.0,
+    "assessed_value": null,
+    "dom": 1,
+    "beds": 1,
+    "baths": 1.0,
+    "sqft": 550,
+    "lot_size": "",
+    "acres": null,
+    "year_built": 1971,
+    "distress_types": [
+      "as-is"
+    ],
+    "distress_score": 2,
+    "listing_source": "Realtor.com",
+    "listing_url": "https://www.realtor.com/realestateandhomes-detail/1000-S-Lorraine-Rd-Apt-212_Wheaton_IL_60189_M80843-15120",
+    "photo_url": "https://ap.rdcpix.com/6ef31ea12223804c7f82139ad9f06803l-m3916546521s.jpg",
+    "status": "Active",
+    "mls_status": "Active",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
+    "verification_source": "realtor.com-reverified",
+    "verification_note": "reverify active (Active)",
+    "is_stale": false,
+    "needs_review": false,
+    "notes": "Check out this amazing condo with low HOA AND just few a minutes away from the vibrant downtown Wheaton district, packed with restaurants, shops, and market, plus Metra service to downtown Chicago and in close proximity to Wheaton college. The property is sold as is.",
+    "all_sources": [],
+    "all_urls": [],
+    "property_id": "8084315120",
+    "listing_id": "3001116162",
+    "lat": 41.856334,
+    "lon": -88.082646,
+    "waterfront": false,
+    "hoa_fee": 291.0,
+    "manufactured": false,
+    "lot_rent_monthly": null,
     "subdivision": "Wheaton",
-    "list_date": "2026-09-24T15:32:02.000000Z",
-    "google_url": "https://www.google.com/search?q=1S670+Winfield+Rd+Wheaton+IL+60189+for+sale",
-    "zillow_url": "https://www.zillow.com/homes/1S670+Winfield+Rd+Wheaton+IL+60189_rb/",
-    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=1S670+Winfield+Rd+Wheaton+IL+60189",
-    "assessor_url": "https://www.google.com/search?q=1S670+Winfield+Rd+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
-    "parcel_search_url": "https://www.google.com/search?q=1S670+Winfield+Rd+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
-    "price_history": [],
-    "dom_history": [],
-    "id": 41,
+    "list_date": "2026-09-25T16:25:54Z",
+    "google_url": "https://www.google.com/search?q=1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189+for+sale",
+    "zillow_url": "https://www.zillow.com/homes/1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189_rb/",
+    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189",
+    "assessor_url": "https://www.google.com/search?q=1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
+    "parcel_search_url": "https://www.google.com/search?q=1000+S+Lorraine+Rd+Apt+212+Wheaton+IL+60189+DuPage+County+IL+parcel+viewer",
+    "price_history": [
+      {
+        "t": "20260912-120611",
+        "v": 175000
+      },
+      {
+        "t": "20260914-113344",
+        "v": 175000
+      },
+      {
+        "t": "20260914-142844",
+        "v": 175000
+      },
+      {
+        "t": "20260917-232401",
+        "v": 175000
+      },
+      {
+        "t": "20260921-115848",
+        "v": 175000
+      },
+      {
+        "t": "20260921-171651",
+        "v": 175000
+      },
+      {
+        "t": "20260924-120254",
+        "v": 175000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 175000
+      }
+    ],
+    "dom_history": [
+      {
+        "t": "20260912-120611",
+        "v": 2
+      },
+      {
+        "t": "20260914-113344",
+        "v": 2
+      },
+      {
+        "t": "20260914-142844",
+        "v": 2
+      },
+      {
+        "t": "20260917-232401",
+        "v": 7
+      },
+      {
+        "t": "20260921-115848",
+        "v": 7
+      },
+      {
+        "t": "20260921-171651",
+        "v": 13
+      },
+      {
+        "t": "20260924-120254",
+        "v": 13
+      },
+      {
+        "t": "20260925-151532",
+        "v": 13
+      }
+    ],
+    "id": 45,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -4863,8 +5301,8 @@
     "photo_url": "https://ap.rdcpix.com/cc6b70adff8f7944205fb13719feeff9l-m173745006s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -4903,6 +5341,10 @@
       {
         "t": "20260924-120254",
         "v": 249999
+      },
+      {
+        "t": "20260925-151532",
+        "v": 249999
       }
     ],
     "dom_history": [
@@ -4921,9 +5363,13 @@
       {
         "t": "20260924-120254",
         "v": 78
+      },
+      {
+        "t": "20260925-151532",
+        "v": 78
       }
     ],
-    "id": 42,
+    "id": 46,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -4960,8 +5406,8 @@
     "photo_url": "https://ap.rdcpix.com/57c5631cc0a300d8abdca14da23b3408l-m3385725391s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -4988,144 +5434,23 @@
       {
         "t": "20260924-120254",
         "v": 270000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 270000
       }
     ],
     "dom_history": [
       {
         "t": "20260924-120254",
         "v": 72
+      },
+      {
+        "t": "20260925-151532",
+        "v": 72
       }
     ],
-    "id": 43,
-    "reverify_note": "reverify active (Active)",
-    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
-    "consensus": "active",
-    "consensus_note": "single-source verified",
-    "stale_hours": 0.0
-  },
-  {
-    "address": "481 Lasalle Dr",
-    "city": "Lake Holiday",
-    "state": "IL",
-    "zip": "60552",
-    "county": "LaSalle",
-    "nearest_target": "Lake Holiday",
-    "property_type": "SFH",
-    "list_price": 279000,
-    "original_list_price": 329000.0,
-    "price_reductions": 1,
-    "total_reduced": 50000.0,
-    "price_per_sqft": 167.67,
-    "assessed_value": null,
-    "dom": 64,
-    "beds": 3,
-    "baths": 2.5,
-    "sqft": 1664,
-    "lot_size": "",
-    "acres": null,
-    "year_built": 1981,
-    "distress_types": [
-      "price-reduced"
-    ],
-    "distress_score": 1,
-    "listing_source": "Realtor.com",
-    "listing_url": "https://www.realtor.com/realestateandhomes-detail/481-Lasalle-Dr_Somonauk_IL_60552_M71070-66524",
-    "photo_url": "https://ap.rdcpix.com/0f612edbd38bb97b852e42e1fa39b014l-m2585474384s.jpg",
-    "status": "Active",
-    "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
-    "verification_source": "realtor.com-reverified",
-    "verification_note": "reverify active (Active)",
-    "is_stale": false,
-    "needs_review": false,
-    "notes": "PRICED TO SELL!!! Do the work that's needed & VALUE GOES WAY UP ENJOY LAKE LIFE!!GREAT 3 BR, 2.5 bath 2 Story home w/possible 4th BR in basement Beautiful eat-in kitchen w/all appliances 2 sliding doors to deck overlooking back yard w/several trees very well landscaped property updated windows, siding, roof 8-10 yrs, furnace 2018 Full basement",
-    "all_sources": [],
-    "all_urls": [],
-    "property_id": "7107066524",
-    "listing_id": "2998510852",
-    "lat": 41.6209,
-    "lon": -88.679459,
-    "waterfront": true,
-    "hoa_fee": 85.75,
-    "manufactured": false,
-    "lot_rent_monthly": null,
-    "subdivision": "Lake Holiday",
-    "list_date": "2026-07-15T13:28:50.000000Z",
-    "google_url": "https://www.google.com/search?q=481+Lasalle+Dr+Lake+Holiday+IL+60552+for+sale",
-    "zillow_url": "https://www.zillow.com/homes/481+Lasalle+Dr+Lake+Holiday+IL+60552_rb/",
-    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=481+Lasalle+Dr+Lake+Holiday+IL+60552",
-    "assessor_url": "https://www.google.com/search?q=481+Lasalle+Dr+Lake+Holiday+IL+60552+LaSalle+County+IL+assessor+parcel",
-    "parcel_search_url": "https://www.google.com/search?q=481+Lasalle+Dr+Lake+Holiday+IL+60552+LaSalle+County+IL+assessor+parcel",
-    "price_history": [
-      {
-        "t": "20260910-200937",
-        "v": 279000
-      },
-      {
-        "t": "20260912-120611",
-        "v": 279000
-      },
-      {
-        "t": "20260914-113344",
-        "v": 279000
-      },
-      {
-        "t": "20260914-142844",
-        "v": 279000
-      },
-      {
-        "t": "20260917-232401",
-        "v": 279000
-      },
-      {
-        "t": "20260921-115848",
-        "v": 279000
-      },
-      {
-        "t": "20260921-171651",
-        "v": 279000
-      },
-      {
-        "t": "20260924-120254",
-        "v": 279000
-      }
-    ],
-    "dom_history": [
-      {
-        "t": "20260910-200937",
-        "v": 58
-      },
-      {
-        "t": "20260912-120611",
-        "v": 58
-      },
-      {
-        "t": "20260914-113344",
-        "v": 58
-      },
-      {
-        "t": "20260914-142844",
-        "v": 58
-      },
-      {
-        "t": "20260917-232401",
-        "v": 64
-      },
-      {
-        "t": "20260921-115848",
-        "v": 64
-      },
-      {
-        "t": "20260921-171651",
-        "v": 64
-      },
-      {
-        "t": "20260924-120254",
-        "v": 64
-      }
-    ],
-    "id": 44,
+    "id": 47,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -5162,8 +5487,8 @@
     "photo_url": "https://ap.rdcpix.com/385b966ba1589287d585bbbae90994f5l-m3087805747s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -5186,138 +5511,19 @@
     "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=88+Crooked+Creek+Dr+Yorkville+IL+60560",
     "assessor_url": "https://www.google.com/search?q=88+Crooked+Creek+Dr+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
     "parcel_search_url": "https://www.google.com/search?q=88+Crooked+Creek+Dr+Yorkville+IL+60560+Kendall+County+IL+assessor+parcel",
-    "price_history": [],
-    "dom_history": [],
-    "id": 45,
-    "reverify_note": "reverify active (Active)",
-    "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
-    "consensus": "active",
-    "consensus_note": "single-source verified",
-    "stale_hours": 0.0
-  },
-  {
-    "address": "1457 Nova Rd",
-    "city": "Sandwich",
-    "state": "IL",
-    "zip": "60548",
-    "county": "LaSalle",
-    "nearest_target": "Lake Holiday",
-    "property_type": "SFH",
-    "list_price": 475000,
-    "original_list_price": 569900.0,
-    "price_reductions": 1,
-    "total_reduced": 94900.0,
-    "price_per_sqft": 147.93,
-    "assessed_value": null,
-    "dom": 35,
-    "beds": 4,
-    "baths": 3.5,
-    "sqft": 3211,
-    "lot_size": "16,988 sq ft",
-    "acres": 0.3899908172635445,
-    "year_built": 1982,
-    "distress_types": [
-      "price-reduced"
-    ],
-    "distress_score": 1,
-    "listing_source": "Realtor.com",
-    "listing_url": "https://www.realtor.com/realestateandhomes-detail/1457-Nova-Rd_Sandwich_IL_60548_M72182-68096",
-    "photo_url": "https://ap.rdcpix.com/278983a6ac3ce7f239db62402376f2d8l-m3057213721s.jpg",
-    "status": "Active",
-    "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
-    "verification_source": "realtor.com-reverified",
-    "verification_note": "reverify active (Active)",
-    "is_stale": false,
-    "needs_review": false,
-    "notes": "Multigenerational Retreat in Lake Holiday - In-Law Suite & Heated Workshop Welcome to 1457 Nova Road, a spacious 5-bedroom, 3.5-bath home offering over 3,200 square feet of living space in the heart of the Lake Holiday community. This one has a little bit of everything - room to spread out, space for extended family, and enough garage and workshop capacity to make any hobbyist or collector take notice. Main-Level In-Law Suite One of the standout features here is the private main-level suite, complete with its own full bath and direct patio access. It's a setup that works beautifully for extended family, long-term guests, or anyone who'd rather avoid the stairs altogether offering real independence while still keeping everyone connected to the main living areas. For multigenerational households, this kind of layout is genuinely hard to come by, and it adds long-term flexibility that pays off no matter how your family's needs change over time. Expansive, Light-Filled Interior Walk in and you're greeted by a dramatic two-story living room, where hardwood floors, a fireplace, and custom wood ceiling details give the space a warm, elevated feel. The kitchen is well equipped for everyday life and entertaining alike, with abundant cabinetry, stainless steel appliances, and a center island that flows naturally into the dining and family rooms. A first-floor laundry room adds a practical touch that busy households will appreciate, and upstairs, a bright loft overlooking the living room below offers flexible space - perfect as a home office, reading nook, or quiet lounge. The primary suite feels like a true retreat, with double sinks, a separate shower, and a relaxing whirlpool tub. The remaining upstairs bedrooms are comfortable and well-sized, giving family members or guests room to settle in. Down in the finished lower level, you'll find a fifth bedroom along with an 18' x 12' recreation and media room - a versatile space that's ready to become a movie room, home gym, game",
-    "all_sources": [],
-    "all_urls": [],
-    "property_id": "7218268096",
-    "listing_id": "2999627452",
-    "lat": 41.622757,
-    "lon": -88.652686,
-    "waterfront": true,
-    "hoa_fee": 85.75,
-    "manufactured": false,
-    "lot_rent_monthly": null,
-    "subdivision": "Lake Holiday",
-    "list_date": "2026-08-13T12:52:54Z",
-    "google_url": "https://www.google.com/search?q=1457+Nova+Rd+Sandwich+IL+60548+for+sale",
-    "zillow_url": "https://www.zillow.com/homes/1457+Nova+Rd+Sandwich+IL+60548_rb/",
-    "redfin_url": "https://www.redfin.com/stingray/do/location-search?location=1457+Nova+Rd+Sandwich+IL+60548",
-    "assessor_url": "https://www.google.com/search?q=1457+Nova+Rd+Sandwich+IL+60548+LaSalle+County+IL+assessor+parcel",
-    "parcel_search_url": "https://www.google.com/search?q=1457+Nova+Rd+Sandwich+IL+60548+LaSalle+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 475000
-      },
-      {
-        "t": "20260912-120611",
-        "v": 475000
-      },
-      {
-        "t": "20260914-113344",
-        "v": 475000
-      },
-      {
-        "t": "20260914-142844",
-        "v": 475000
-      },
-      {
-        "t": "20260917-232401",
-        "v": 475000
-      },
-      {
-        "t": "20260921-115848",
-        "v": 475000
-      },
-      {
-        "t": "20260921-171651",
-        "v": 475000
-      },
-      {
-        "t": "20260924-120254",
-        "v": 475000
+        "t": "20260925-151532",
+        "v": 695000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 29
-      },
-      {
-        "t": "20260912-120611",
-        "v": 29
-      },
-      {
-        "t": "20260914-113344",
-        "v": 29
-      },
-      {
-        "t": "20260914-142844",
-        "v": 29
-      },
-      {
-        "t": "20260917-232401",
-        "v": 35
-      },
-      {
-        "t": "20260921-115848",
-        "v": 35
-      },
-      {
-        "t": "20260921-171651",
-        "v": 35
-      },
-      {
-        "t": "20260924-120254",
-        "v": 35
+        "t": "20260925-151532",
+        "v": 56
       }
     ],
-    "id": 46,
+    "id": 48,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -5355,8 +5561,8 @@
     "photo_url": "https://ap.rdcpix.com/fb48636c6f0c0cda66ae5feb69d8017cl-m789149846s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -5381,10 +5587,6 @@
     "parcel_search_url": "https://www.google.com/search?q=116+N+Hickory+St+Waterman+IL+60556+DeKalb+County+IL+assessor+parcel",
     "price_history": [
       {
-        "t": "20260910-200937",
-        "v": 219900
-      },
-      {
         "t": "20260912-120611",
         "v": 219900
       },
@@ -5410,15 +5612,15 @@
       },
       {
         "t": "20260924-120254",
+        "v": 214000
+      },
+      {
+        "t": "20260925-151532",
         "v": 214000
       }
     ],
     "dom_history": [
       {
-        "t": "20260910-200937",
-        "v": 7
-      },
-      {
         "t": "20260912-120611",
         "v": 7
       },
@@ -5445,9 +5647,13 @@
       {
         "t": "20260924-120254",
         "v": 21
+      },
+      {
+        "t": "20260925-151532",
+        "v": 27
       }
     ],
-    "id": 47,
+    "id": 49,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
@@ -5484,8 +5690,8 @@
     "photo_url": "https://ap.rdcpix.com/05cd992f15b5e7d2cf6f11bd7e7392f6l-m2348017569s.jpg",
     "status": "Active",
     "mls_status": "Active",
-    "verified_at": "2026-09-25T15:14:51.561738+00:00",
-    "last_seen_active_at": "2026-09-25T15:14:51.561738+00:00",
+    "verified_at": "2026-09-27T17:15:28.449391+00:00",
+    "last_seen_active_at": "2026-09-27T17:15:28.449391+00:00",
     "verification_source": "realtor.com-reverified",
     "verification_note": "reverify active (Active)",
     "is_stale": false,
@@ -5524,6 +5730,10 @@
       {
         "t": "20260924-120254",
         "v": 290000
+      },
+      {
+        "t": "20260925-151532",
+        "v": 290000
       }
     ],
     "dom_history": [
@@ -5542,9 +5752,13 @@
       {
         "t": "20260924-120254",
         "v": 21
+      },
+      {
+        "t": "20260925-151532",
+        "v": 21
       }
     ],
-    "id": 48,
+    "id": 50,
     "reverify_note": "reverify active (Active)",
     "url_check_note": "http 429 (blocked/rate-limited \u2014 inconclusive)",
     "consensus": "active",
