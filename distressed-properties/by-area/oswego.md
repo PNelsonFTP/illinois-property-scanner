@@ -1,8 +1,8 @@
 # Distressed Properties — Oswego, IL
 
-**Scan Date:** October 03, 2026 at 8:28 AM CDT  
+**Scan Date:** October 05, 2026 at 7:11 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Properties:** 15
+**Properties:** 14
 
 *Links prefer Zillow/Google — Realtor.com deep-links often block after scanning.*
 
@@ -21,5 +21,4 @@
 | 11 | 32 E Rickard Dr | Oswego | Oswego | $449,999 | SFH | as-is | 48 | 2 | Active | [Zillow](https://www.zillow.com/homes/32+E+Rickard+Dr+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=32+E+Rickard+Dr+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/32-E-Rickard-Dr_Oswego_IL_60543_M88686-27045) |
 | 12 | 3335 Silver City Ct | Montgomery | Oswego | $429,000 | SFH | as-is | 24 | 2 | Active | [Zillow](https://www.zillow.com/homes/3335+Silver+City+Ct+Montgomery+IL+60538_rb/) | [Google](https://www.google.com/search?q=3335+Silver+City+Ct+Montgomery+IL+60538+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/3335-Silver-City-Ct_Montgomery_IL_60538_M72288-62112) |
 | 13 | 402 Gloria Ln | Oswego | Oswego | $319,000 | Townhome | as-is | 9 | 2 | Active | [Zillow](https://www.zillow.com/homes/402+Gloria+Ln+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=402+Gloria+Ln+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/402-Gloria-Ln_Oswego_IL_60543_M74255-93944) |
-| 14 | 6 Guilford Rd | Montgomery | Oswego | $209,900 | SFH | as-is | 2 | 2 | Active | [Zillow](https://www.zillow.com/homes/6+Guilford+Rd+Montgomery+IL+60538_rb/) | [Google](https://www.google.com/search?q=6+Guilford+Rd+Montgomery+IL+60538+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/6-Guilford-Rd_Montgomery_IL_60538_M86254-88355) |
-| 15 | 440 Newport Cir | Oswego | Oswego | $309,900 | Townhome | price-reduced | 76 | 1 | Active | [Zillow](https://www.zillow.com/homes/440+Newport+Cir+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=440+Newport+Cir+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/440-Newport-Cir_Oswego_IL_60543_M89448-20919) |
+| 14 | 440 Newport Cir | Oswego | Oswego | $309,900 | Townhome | price-reduced | 81 | 1 | Active | [Zillow](https://www.zillow.com/homes/440+Newport+Cir+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=440+Newport+Cir+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/440-Newport-Cir_Oswego_IL_60543_M89448-20919) |
