@@ -1,6 +1,6 @@
 # Distressed Properties — Lake Holiday, IL
 
-**Scan Date:** October 09, 2026 at 12:34 PM CDT  
+**Scan Date:** October 11, 2026 at 7:18 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
 **Properties:** 8
 
@@ -8,7 +8,7 @@
 
 | # | Address | City | Area | Price | Type | Distress Tags | DOM | Score | Status | Zillow | Google | Realtor |
 |---|---------|------|------|-------|------|---------------|-----|-------|--------|--------|--------|---------|
-| 1 | 120 Cardinal Ln Unit A | Sandwich | Lake Holiday | $38,900 | Manufactured | below-market, high-dom, price-reduced | 861 | 6 | Active | [Zillow](https://www.zillow.com/homes/120+Cardinal+Ln+Unit+A+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=120+Cardinal+Ln+Unit+A+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/120-Cardinal-Ln-A_Sandwich_IL_60548_M76829-52939) |
+| 1 | 120 Cardinal Ln Unit A | Sandwich | Lake Holiday | $38,900 | Manufactured | below-market, high-dom, price-reduced | 864 | 6 | Active | [Zillow](https://www.zillow.com/homes/120+Cardinal+Ln+Unit+A+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=120+Cardinal+Ln+Unit+A+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/120-Cardinal-Ln-A_Sandwich_IL_60548_M76829-52939) |
 | 2 | 20 Cedar Ln | Sandwich | Lake Holiday | $19,999 | Manufactured | below-market, high-dom, price-reduced | 221 | 5 | Active | [Zillow](https://www.zillow.com/homes/20+Cedar+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=20+Cedar+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/20-Cedar-Ln_Sandwich_IL_60548_M91337-22845) |
 | 3 | 98 Maple Ln | Sandwich | Lake Holiday | $41,000 | Manufactured | as-is, below-market, price-reduced | 52 | 5 | Active | [Zillow](https://www.zillow.com/homes/98+Maple+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=98+Maple+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/98-Maple-Ln_Sandwich_IL_60548_M89794-73324) |
 | 4 | 64 Birch Dr | Sandwich | Lake Holiday | $19,500 | Manufactured | below-market, high-dom, price-reduced | 128 | 4 | Active | [Zillow](https://www.zillow.com/homes/64+Birch+Dr+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=64+Birch+Dr+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/64-Birch-Dr_Sandwich_IL_60548_M81531-87444) |

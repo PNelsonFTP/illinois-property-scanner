@@ -1,6 +1,6 @@
 # Distressed Properties — Somonauk, IL
 
-**Scan Date:** October 09, 2026 at 12:34 PM CDT  
+**Scan Date:** October 11, 2026 at 7:18 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
 **Properties:** 1
 
@@ -8,4 +8,4 @@
 
 | # | Address | City | Area | Price | Type | Distress Tags | DOM | Score | Status | Zillow | Google | Realtor |
 |---|---------|------|------|-------|------|---------------|-----|-------|--------|--------|--------|---------|
-| 1 | 125 E Lasalle St | Somonauk | Somonauk | $349,000 | SFH | high-dom, price-reduced | 91 | 2 | Active | [Zillow](https://www.zillow.com/homes/125+E+Lasalle+St+Somonauk+IL+60552_rb/) | [Google](https://www.google.com/search?q=125+E+Lasalle+St+Somonauk+IL+60552+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/125-E-Lasalle-St_Somonauk_IL_60552_M72281-43571) |
+| 1 | 215 Geraldine Ct | Somonauk | Somonauk | $244,000 | Townhome | reo | 3 | 3 | Active | [Zillow](https://www.zillow.com/homes/215+Geraldine+Ct+Somonauk+IL+60552_rb/) | [Google](https://www.google.com/search?q=215+Geraldine+Ct+Somonauk+IL+60552+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/215-Geraldine-Ct_Somonauk_IL_60552_M72300-81400) |
