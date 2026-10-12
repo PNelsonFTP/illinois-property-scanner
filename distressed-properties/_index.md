@@ -1,10 +1,10 @@
 # Distressed Properties Index — Illinois
 
-**Scan Date:** October 11, 2026 at 7:18 AM CDT  
+**Scan Date:** October 12, 2026 at 6:12 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Total Properties:** 56  
-**Live-Verified:** 56/56  
-**Re-verified:** 56/56  
+**Total Properties:** 58  
+**Live-Verified:** 58/58  
+**Re-verified:** 58/58  
 **Stale:** 0
 
 ## Summary Statistics
@@ -13,7 +13,7 @@
 
 | Town | Count |
 |------|-------|
-| Oswego | 15 |
+| Oswego | 16 |
 | Yorkville | 10 |
 | Lake Holiday | 8 |
 | Wheaton | 7 |
@@ -21,16 +21,16 @@
 | Sandwich | 4 |
 | Earlville | 2 |
 | Leland | 2 |
+| Waterman | 2 |
 | Sheridan | 1 |
 | Somonauk | 1 |
-| Waterman | 1 |
 | Hinckley | 1 |
 
 ## Top 10 Properties by Distress Score
 
 | # | Address | City | Area | Price | Type | Distress Tags | DOM | Score | Status | Zillow | Google | Realtor |
 |---|---------|------|------|-------|------|---------------|-----|-------|--------|--------|--------|---------|
-| 1 | 81 Lillian Ln | Yorkville | Yorkville | $339,200 | SFH | as-is, high-dom, price-reduced, reo | 248 | 8 | Active | [Zillow](https://www.zillow.com/homes/81+Lillian+Ln+Yorkville+IL+60560_rb/) | [Google](https://www.google.com/search?q=81+Lillian+Ln+Yorkville+IL+60560+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/81-Lillian-Ln_Yorkville_IL_60560_M81580-17525) |
+| 1 | 81 Lillian Ln | Yorkville | Yorkville | $339,200 | SFH | as-is, high-dom, price-reduced, reo | 253 | 8 | Active | [Zillow](https://www.zillow.com/homes/81+Lillian+Ln+Yorkville+IL+60560_rb/) | [Google](https://www.google.com/search?q=81+Lillian+Ln+Yorkville+IL+60560+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/81-Lillian-Ln_Yorkville_IL_60560_M81580-17525) |
 | 2 | 120 Cardinal Ln Unit A | Sandwich | Lake Holiday | $38,900 | Manufactured | below-market, high-dom, price-reduced | 864 | 6 | Active | [Zillow](https://www.zillow.com/homes/120+Cardinal+Ln+Unit+A+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=120+Cardinal+Ln+Unit+A+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/120-Cardinal-Ln-A_Sandwich_IL_60548_M76829-52939) |
 | 3 | 20 Cedar Ln | Sandwich | Lake Holiday | $19,999 | Manufactured | below-market, high-dom, price-reduced | 221 | 5 | Active | [Zillow](https://www.zillow.com/homes/20+Cedar+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=20+Cedar+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/20-Cedar-Ln_Sandwich_IL_60548_M91337-22845) |
 | 4 | 495 Timber Oak Ln | Yorkville | Yorkville | $525,000 | SFH | as-is, price-reduced, short-sale | 61 | 5 | Active | [Zillow](https://www.zillow.com/homes/495+Timber+Oak+Ln+Yorkville+IL+60560_rb/) | [Google](https://www.google.com/search?q=495+Timber+Oak+Ln+Yorkville+IL+60560+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/495-Timber-Oak-Ln_Yorkville_IL_60560_M82340-17303) |
@@ -44,11 +44,11 @@
 ## Quick Links
 
 - [by-area/wheaton.md](by-area/wheaton.md) — Wheaton (7 properties)
-- [by-area/oswego.md](by-area/oswego.md) — Oswego (15 properties)
+- [by-area/oswego.md](by-area/oswego.md) — Oswego (16 properties)
 - [by-area/sandwich.md](by-area/sandwich.md) — Sandwich (4 properties)
 - [by-area/somonauk.md](by-area/somonauk.md) — Somonauk (1 properties)
 - [by-area/lake-holiday.md](by-area/lake-holiday.md) — Lake Holiday (8 properties)
 - [by-area/leland.md](by-area/leland.md) — Leland (2 properties)
 - [by-area/earlville.md](by-area/earlville.md) — Earlville (2 properties)
-- [by-area/waterman.md](by-area/waterman.md) — Waterman (1 properties)
+- [by-area/waterman.md](by-area/waterman.md) — Waterman (2 properties)
 - [by-area/sheridan.md](by-area/sheridan.md) — Sheridan (1 properties)
