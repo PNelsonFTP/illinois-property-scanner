@@ -1,8 +1,8 @@
 # Distressed Properties — As-Is / Fixer / Investor Opportunities
 
-**Scan Date:** October 12, 2026 at 6:12 AM CDT  
+**Scan Date:** October 13, 2026 at 7:26 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Properties:** 19
+**Properties:** 20
 
 *Links prefer Zillow/Google — Realtor.com deep-links often block after scanning.*
 
@@ -24,6 +24,7 @@
 | 14 | 1214 Wilson Ave | Wheaton | Wheaton | $460,000 | SFH | as-is | 16 | 2 | Active | [Zillow](https://www.zillow.com/homes/1214+Wilson+Ave+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1214+Wilson+Ave+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1214-Wilson-Ave_Wheaton_IL_60189_M86435-44117) |
 | 15 | 402 Gloria Ln | Oswego | Oswego | $319,000 | Townhome | as-is | 9 | 2 | Active | [Zillow](https://www.zillow.com/homes/402+Gloria+Ln+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=402+Gloria+Ln+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/402-Gloria-Ln_Oswego_IL_60543_M74255-93944) |
 | 16 | 320 E Railroad Ave | Leland | Leland | $146,500 | SFH | as-is | 8 | 2 | Active | [Zillow](https://www.zillow.com/homes/320+E+Railroad+Ave+Leland+IL+60531_rb/) | [Google](https://www.google.com/search?q=320+E+Railroad+Ave+Leland+IL+60531+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/320-E-Railroad-Ave_Leland_IL_60531_M89888-21663) |
-| 17 | 15617 Memory Ln | Sandwich | Sandwich | $415,900 | SFH | as-is | 7 | 2 | Active | [Zillow](https://www.zillow.com/homes/15617+Memory+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=15617+Memory+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/15617-N-Memory-Ln_Sandwich_IL_60548_M78826-94479) |
-| 18 | 1101 Bunker Hill Ct Apt A | Wheaton | Wheaton | $239,000 | Condo | as-is | 1 | 2 | Active | [Zillow](https://www.zillow.com/homes/1101+Bunker+Hill+Ct+Apt+A+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1101+Bunker+Hill+Ct+Apt+A+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1101-Bunker-Hill-Ct-Apt-A_Wheaton_IL_60189_M96689-69891) |
+| 17 | 1101 Bunker Hill Ct Apt A | Wheaton | Wheaton | $239,000 | Condo | as-is | 7 | 2 | Active | [Zillow](https://www.zillow.com/homes/1101+Bunker+Hill+Ct+Apt+A+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1101+Bunker+Hill+Ct+Apt+A+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1101-Bunker-Hill-Ct-Apt-A_Wheaton_IL_60189_M96689-69891) |
+| 18 | 15617 Memory Ln | Sandwich | Sandwich | $415,900 | SFH | as-is | 7 | 2 | Active | [Zillow](https://www.zillow.com/homes/15617+Memory+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=15617+Memory+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/15617-N-Memory-Ln_Sandwich_IL_60548_M78826-94479) |
 | 19 | 603 Wakeman Ave | Wheaton | Wheaton | $425,000 | SFH | as-is | 1 | 2 | Active | [Zillow](https://www.zillow.com/homes/603+Wakeman+Ave+Wheaton+IL+60187_rb/) | [Google](https://www.google.com/search?q=603+Wakeman+Ave+Wheaton+IL+60187+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/603-Wakeman-Ave_Wheaton_IL_60187_M71816-10670) |
+| 20 | 12325 Route 23 | Waterman | Waterman | $348,500 | SFH | as-is | 1 | 2 | Active | [Zillow](https://www.zillow.com/homes/12325+Route+23+Waterman+IL+60556_rb/) | [Google](https://www.google.com/search?q=12325+Route+23+Waterman+IL+60556+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/12325-State-Route-23_Waterman_IL_60556_M94218-43067) |
