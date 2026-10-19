@@ -1,8 +1,8 @@
 # High-Score Distressed Properties (Score 4+)
 
-**Scan Date:** October 17, 2026 at 6:42 AM CDT  
+**Scan Date:** October 19, 2026 at 7:21 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Properties:** 13
+**Properties:** 14
 
 *Links prefer Zillow/Google — Realtor.com deep-links often block after scanning.*
 
@@ -18,6 +18,7 @@
 | 8 | 852 Timber Oak Ln | Yorkville | Yorkville | $599,000 | SFH | high-dom, price-reduced | 387 | 4 | Active | [Zillow](https://www.zillow.com/homes/852+Timber+Oak+Ln+Yorkville+IL+60560_rb/) | [Google](https://www.google.com/search?q=852+Timber+Oak+Ln+Yorkville+IL+60560+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/852-Timber-Oak-Ln_Yorkville_IL_60560_M82472-83978) |
 | 9 | 770 Dartmouth Ln | Oswego | Oswego | $630,900 | SFH | high-dom, price-reduced | 371 | 4 | Active | [Zillow](https://www.zillow.com/homes/770+Dartmouth+Ln+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=770+Dartmouth+Ln+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/770-Dartmouth-Ln_Oswego_IL_60543_M97828-41151) |
 | 10 | 4141 E 2603rd Rd | Sheridan | Sheridan | $1,408,950 | Farm | as-is, high-dom | 359 | 4 | Active | [Zillow](https://www.zillow.com/homes/4141+E+2603rd+Rd+Sheridan+IL+60551_rb/) | [Google](https://www.google.com/search?q=4141+E+2603rd+Rd+Sheridan+IL+60551+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/4141-E-2603rd-Rd_Sheridan_IL_60551_M72031-24886) |
-| 11 | 15555 McGirr Rd | Hinckley | Hinckley | $749,500 | SFH | as-is, high-dom | 186 | 4 | Active | [Zillow](https://www.zillow.com/homes/15555+McGirr+Rd+Hinckley+IL+60520_rb/) | [Google](https://www.google.com/search?q=15555+McGirr+Rd+Hinckley+IL+60520+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/15555-McGirr-Rd_Hinckley_IL_60520_M90720-79710) |
+| 11 | 15555 McGirr Rd | Hinckley | Hinckley | $749,500 | SFH | as-is, high-dom | 199 | 4 | Active | [Zillow](https://www.zillow.com/homes/15555+McGirr+Rd+Hinckley+IL+60520_rb/) | [Google](https://www.google.com/search?q=15555+McGirr+Rd+Hinckley+IL+60520+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/15555-McGirr-Rd_Hinckley_IL_60520_M90720-79710) |
 | 12 | 421 DE Kalb St | Sandwich | Sandwich | $299,000 | SFH | high-dom, price-reduced, short-sale | 156 | 4 | Active | [Zillow](https://www.zillow.com/homes/421+DE+Kalb+St+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=421+DE+Kalb+St+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/421-DE-Kalb-St_Sandwich_IL_60548_M81584-53527) |
-| 13 | 17 Cedar Ln | Sandwich | Lake Holiday | $22,500 | Manufactured | as-is, estate-sale, price-reduced | 23 | 4 | Active | [Zillow](https://www.zillow.com/homes/17+Cedar+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=17+Cedar+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/17-Cedar-Ln_Sandwich_IL_60548_M95509-90798) |
+| 13 | 1332 Douglas Ave Trlr 84 | Montgomery | Oswego | $62,000 | Manufactured | as-is, high-dom, price-reduced | 112 | 4 | Active | [Zillow](https://www.zillow.com/homes/1332+Douglas+Ave+Trlr+84+Montgomery+IL+60538_rb/) | [Google](https://www.google.com/search?q=1332+Douglas+Ave+Trlr+84+Montgomery+IL+60538+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1332-Douglas-Ave-Trlr-84_Montgomery_IL_60538_M98990-08468) |
+| 14 | 17 Cedar Ln | Sandwich | Lake Holiday | $22,500 | Manufactured | as-is, estate-sale, price-reduced | 29 | 4 | Active | [Zillow](https://www.zillow.com/homes/17+Cedar+Ln+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=17+Cedar+Ln+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/17-Cedar-Ln_Sandwich_IL_60548_M95509-90798) |

@@ -1,8 +1,8 @@
 # Distressed Properties — Wheaton, IL
 
-**Scan Date:** October 17, 2026 at 6:42 AM CDT  
+**Scan Date:** October 19, 2026 at 7:21 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Properties:** 8
+**Properties:** 7
 
 *Links prefer Zillow/Google — Realtor.com deep-links often block after scanning.*
 
@@ -12,7 +12,6 @@
 | 2 | 221 N Dorchester Ave | Wheaton | Wheaton | $329,000 | SFH | high-dom, price-reduced | 115 | 2 | Active | [Zillow](https://www.zillow.com/homes/221+N+Dorchester+Ave+Wheaton+IL+60187_rb/) | [Google](https://www.google.com/search?q=221+N+Dorchester+Ave+Wheaton+IL+60187+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/221-N-Dorchester-Ave_Wheaton_IL_60187_M88537-08319) |
 | 3 | 25W451 Plamondon Rd | Wheaton | Wheaton | $2,980,000 | SFH | high-dom, price-reduced | 102 | 2 | Active | [Zillow](https://www.zillow.com/homes/25W451+Plamondon+Rd+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=25W451+Plamondon+Rd+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/25W451-Plamondon-Rd_Wheaton_IL_60189_M89584-38639) |
 | 4 | 1214 Wilson Ave | Wheaton | Wheaton | $460,000 | SFH | as-is | 16 | 2 | Active | [Zillow](https://www.zillow.com/homes/1214+Wilson+Ave+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1214+Wilson+Ave+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1214-Wilson-Ave_Wheaton_IL_60189_M86435-44117) |
-| 5 | 603 Wakeman Ave | Wheaton | Wheaton | $425,000 | SFH | as-is | 7 | 2 | Active | [Zillow](https://www.zillow.com/homes/603+Wakeman+Ave+Wheaton+IL+60187_rb/) | [Google](https://www.google.com/search?q=603+Wakeman+Ave+Wheaton+IL+60187+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/603-Wakeman-Ave_Wheaton_IL_60187_M71816-10670) |
-| 6 | 1101 Bunker Hill Ct Apt A | Wheaton | Wheaton | $239,000 | Condo | as-is | 7 | 2 | Active | [Zillow](https://www.zillow.com/homes/1101+Bunker+Hill+Ct+Apt+A+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1101+Bunker+Hill+Ct+Apt+A+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1101-Bunker-Hill-Ct-Apt-A_Wheaton_IL_60189_M96689-69891) |
-| 7 | 1006 Arbor Ave | Wheaton | Wheaton | $359,900 | SFH | as-is | 1 | 2 | Active | [Zillow](https://www.zillow.com/homes/1006+Arbor+Ave+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1006+Arbor+Ave+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1006-Arbor-Ave_Wheaton_IL_60189_M72464-16847) |
-| 8 | 945 Kingston St | Wheaton | Wheaton | $615,000 | SFH | price-reduced | 65 | 1 | Active | [Zillow](https://www.zillow.com/homes/945+Kingston+St+Wheaton+IL+60187_rb/) | [Google](https://www.google.com/search?q=945+Kingston+St+Wheaton+IL+60187+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/945-Kingston-St_Wheaton_IL_60187_M86754-11603) |
+| 5 | 1101 Bunker Hill Ct Apt A | Wheaton | Wheaton | $239,000 | Condo | as-is | 7 | 2 | Active | [Zillow](https://www.zillow.com/homes/1101+Bunker+Hill+Ct+Apt+A+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1101+Bunker+Hill+Ct+Apt+A+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1101-Bunker-Hill-Ct-Apt-A_Wheaton_IL_60189_M96689-69891) |
+| 6 | 1006 Arbor Ave | Wheaton | Wheaton | $359,900 | SFH | as-is | 1 | 2 | Active | [Zillow](https://www.zillow.com/homes/1006+Arbor+Ave+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1006+Arbor+Ave+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1006-Arbor-Ave_Wheaton_IL_60189_M72464-16847) |
+| 7 | 945 Kingston St | Wheaton | Wheaton | $615,000 | SFH | price-reduced | 65 | 1 | Active | [Zillow](https://www.zillow.com/homes/945+Kingston+St+Wheaton+IL+60187_rb/) | [Google](https://www.google.com/search?q=945+Kingston+St+Wheaton+IL+60187+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/945-Kingston-St_Wheaton_IL_60187_M86754-11603) |

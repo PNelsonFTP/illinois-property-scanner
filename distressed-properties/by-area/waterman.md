@@ -1,13 +1,12 @@
 # Distressed Properties — Waterman, IL
 
-**Scan Date:** October 17, 2026 at 6:42 AM CDT  
+**Scan Date:** October 19, 2026 at 7:21 AM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Properties:** 3
+**Properties:** 2
 
 *Links prefer Zillow/Google — Realtor.com deep-links often block after scanning.*
 
 | # | Address | City | Area | Price | Type | Distress Tags | DOM | Score | Status | Zillow | Google | Realtor |
 |---|---------|------|------|-------|------|---------------|-----|-------|--------|--------|--------|---------|
-| 1 | 703 Kennedy St | Waterman | Waterman | $300,000 | SFH | high-dom, price-reduced | 95 | 2 | Active | [Zillow](https://www.zillow.com/homes/703+Kennedy+St+Waterman+IL+60556_rb/) | [Google](https://www.google.com/search?q=703+Kennedy+St+Waterman+IL+60556+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/703-Kennedy-St_Waterman_IL_60556_M79547-76778) |
-| 2 | 12325 Route 23 | Waterman | Waterman | $348,500 | SFH | as-is | 1 | 2 | Active | [Zillow](https://www.zillow.com/homes/12325+Route+23+Waterman+IL+60556_rb/) | [Google](https://www.google.com/search?q=12325+Route+23+Waterman+IL+60556+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/12325-State-Route-23_Waterman_IL_60556_M94218-43067) |
-| 3 | 116 N Hickory St | Waterman | Waterman | $214,000 | SFH | handyman, price-reduced | 27 | 1 | Active | [Zillow](https://www.zillow.com/homes/116+N+Hickory+St+Waterman+IL+60556_rb/) | [Google](https://www.google.com/search?q=116+N+Hickory+St+Waterman+IL+60556+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/116-N-Hickory-St_Waterman_IL_60556_M75324-60225) |
+| 1 | 12325 Route 23 | Waterman | Waterman | $348,500 | SFH | as-is | 7 | 2 | Active | [Zillow](https://www.zillow.com/homes/12325+Route+23+Waterman+IL+60556_rb/) | [Google](https://www.google.com/search?q=12325+Route+23+Waterman+IL+60556+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/12325-State-Route-23_Waterman_IL_60556_M94218-43067) |
+| 2 | 116 N Hickory St | Waterman | Waterman | $214,000 | SFH | handyman, price-reduced | 27 | 1 | Active | [Zillow](https://www.zillow.com/homes/116+N+Hickory+St+Waterman+IL+60556_rb/) | [Google](https://www.google.com/search?q=116+N+Hickory+St+Waterman+IL+60556+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/116-N-Hickory-St_Waterman_IL_60556_M75324-60225) |
