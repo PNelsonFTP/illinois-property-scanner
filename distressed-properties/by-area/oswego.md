@@ -1,6 +1,6 @@
 # Distressed Properties — Oswego, IL
 
-**Scan Date:** October 25, 2026 at 8:07 AM CDT  
+**Scan Date:** October 27, 2026 at 3:50 PM CDT  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
 **Properties:** 20
 
@@ -26,5 +26,5 @@
 | 16 | 3335 Silver City Ct | Montgomery | Oswego | $429,000 | SFH | as-is | 82 | 2 | Active | [Zillow](https://www.zillow.com/homes/3335+Silver+City+Ct+Montgomery+IL+60538_rb/) | [Google](https://www.google.com/search?q=3335+Silver+City+Ct+Montgomery+IL+60538+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/3335-Silver-City-Ct_Montgomery_IL_60538_M72288-62112) |
 | 17 | 191 Lakeshore Dr | Oswego | Oswego | $369,900 | Townhome | vacant | 48 | 2 | Active | [Zillow](https://www.zillow.com/homes/191+Lakeshore+Dr+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=191+Lakeshore+Dr+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/191-Lakeshore-Dr_Oswego_IL_60543_M97712-02769) |
 | 18 | 2000 Light Dr Unit 211 | Oswego | Oswego | $144,900 | Condo | short-sale | 20 | 2 | Active | [Zillow](https://www.zillow.com/homes/2000+Light+Dr+Unit+211+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=2000+Light+Dr+Unit+211+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/2000-Light-Rd-Apt-211_Oswego_IL_60543_M76435-91821) |
-| 19 | 8 Westleigh Ct | Montgomery | Oswego | $310,000 | SFH | as-is | 1 | 2 | Active | [Zillow](https://www.zillow.com/homes/8+Westleigh+Ct+Montgomery+IL+60538_rb/) | [Google](https://www.google.com/search?q=8+Westleigh+Ct+Montgomery+IL+60538+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/8-Westleigh-Ct_Montgomery_IL_60538_M75153-13887) |
+| 19 | 8 Westleigh Ct | Montgomery | Oswego | $310,000 | SFH | as-is | 5 | 2 | Active | [Zillow](https://www.zillow.com/homes/8+Westleigh+Ct+Montgomery+IL+60538_rb/) | [Google](https://www.google.com/search?q=8+Westleigh+Ct+Montgomery+IL+60538+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/8-Westleigh-Ct_Montgomery_IL_60538_M75153-13887) |
 | 20 | 440 Newport Cir | Oswego | Oswego | $309,900 | Townhome | price-reduced | 81 | 1 | Active | [Zillow](https://www.zillow.com/homes/440+Newport+Cir+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=440+Newport+Cir+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/440-Newport-Cir_Oswego_IL_60543_M89448-20919) |
