@@ -1,8 +1,8 @@
 # Distressed Properties — Wheaton, IL
 
-**Scan Date:** October 30, 2026 at 9:28 AM CDT  
+**Scan Date:** November 02, 2026 at 5:37 AM CST  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Properties:** 6
+**Properties:** 7
 
 *Links prefer Zillow/Google — Realtor.com deep-links often block after scanning.*
 
@@ -14,3 +14,4 @@
 | 4 | 1006 Arbor Ave | Wheaton | Wheaton | $359,900 | SFH | as-is | 50 | 2 | Active | [Zillow](https://www.zillow.com/homes/1006+Arbor+Ave+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1006+Arbor+Ave+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1006-Arbor-Ave_Wheaton_IL_60189_M72464-16847) |
 | 5 | 1677 Trowbridge Ct Apt A | Wheaton | Wheaton | $259,900 | Condo | vacant | 8 | 2 | Active | [Zillow](https://www.zillow.com/homes/1677+Trowbridge+Ct+Apt+A+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=1677+Trowbridge+Ct+Apt+A+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1677-Trowbridge-Ct-Apt-A_Wheaton_IL_60189_M79309-72491) |
 | 6 | 945 Kingston St | Wheaton | Wheaton | $615,000 | SFH | price-reduced | 71 | 1 | Active | [Zillow](https://www.zillow.com/homes/945+Kingston+St+Wheaton+IL+60187_rb/) | [Google](https://www.google.com/search?q=945+Kingston+St+Wheaton+IL+60187+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/945-Kingston-St_Wheaton_IL_60187_M86754-11603) |
+| 7 | 324 W Elm St | Wheaton | Wheaton | $349,000 | SFH | price-reduced | 40 | 1 | Active | [Zillow](https://www.zillow.com/homes/324+W+Elm+St+Wheaton+IL+60189_rb/) | [Google](https://www.google.com/search?q=324+W+Elm+St+Wheaton+IL+60189+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/324-W-Elm-St_Wheaton_IL_60189_M77406-62967) |
