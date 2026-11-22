@@ -1,10 +1,10 @@
 # Distressed Properties Index — Illinois
 
-**Scan Date:** November 17, 2026 at 7:10 PM CST  
+**Scan Date:** November 22, 2026 at 8:21 AM CST  
 **Scope:** Distressed listings only — core towns ~3 mi / optional towns ~6 mi (Leland, Earlville, Waterman, Sheridan). Live-verified via Realtor.com MLS. New / pools / large-land views are dashboard-only (not this markdown tree). City = MLS city; Area = scanner nearest_target (e.g. Wildwood streets → Lake Holiday).  
-**Total Properties:** 54  
-**Live-Verified:** 54/54  
-**Re-verified:** 54/54  
+**Total Properties:** 53  
+**Live-Verified:** 53/53  
+**Re-verified:** 53/53  
 **Stale:** 0
 
 ## Summary Statistics
@@ -13,14 +13,14 @@
 
 | Town | Count |
 |------|-------|
-| Oswego | 19 |
+| Oswego | 20 |
 | Yorkville | 8 |
 | Plano | 5 |
-| Sandwich | 5 |
+| Sandwich | 4 |
 | Earlville | 4 |
-| Wheaton | 4 |
 | Leland | 3 |
 | Lake Holiday | 3 |
+| Wheaton | 3 |
 | Sheridan | 1 |
 | Somonauk | 1 |
 | Hinckley | 1 |
@@ -34,7 +34,7 @@
 | 3 | 1084 Redwood Dr | Yorkville | Yorkville | $485,000 | SFH | high-dom, short-sale | 386 | 5 | Active | [Zillow](https://www.zillow.com/homes/1084+Redwood+Dr+Yorkville+IL+60560_rb/) | [Google](https://www.google.com/search?q=1084+Redwood+Dr+Yorkville+IL+60560+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/1084-Redwood-Dr_Yorkville_IL_60560_M81169-34896) |
 | 4 | 13090 River Rd | Plano | Plano | N/A | SFH | as-is, reo | 12 | 5 | Active | [Zillow](https://www.zillow.com/homes/13090+River+Rd+Plano+IL+60545_rb/) | [Google](https://www.google.com/search?q=13090+River+Rd+Plano+IL+60545+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/13090-River-Rd_Plano_IL_60545_M78042-59484) |
 | 5 | 213 N Main St | Sandwich | Sandwich | $289,000 | SFH | high-dom, price-reduced | 806 | 4 | Active | [Zillow](https://www.zillow.com/homes/213+N+Main+St+Sandwich+IL+60548_rb/) | [Google](https://www.google.com/search?q=213+N+Main+St+Sandwich+IL+60548+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/213-N-Main-St_Sandwich_IL_60548_M86692-18089) |
-| 6 | 281 Fox Chase Dr N | Oswego | Oswego | $449,000 | SFH | high-dom, price-reduced | 469 | 4 | Active | [Zillow](https://www.zillow.com/homes/281+Fox+Chase+Dr+N+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=281+Fox+Chase+Dr+N+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/281-Fox-Chase-Dr-N_Oswego_IL_60543_M78027-15989) |
+| 6 | 281 Fox Chase Dr N | Oswego | Oswego | $449,000 | SFH | high-dom, price-reduced | 475 | 4 | Active | [Zillow](https://www.zillow.com/homes/281+Fox+Chase+Dr+N+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=281+Fox+Chase+Dr+N+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/281-Fox-Chase-Dr-N_Oswego_IL_60543_M78027-15989) |
 | 7 | 407 S Ottawa St | Earlville | Earlville | $149,000 | SFH | high-dom, price-reduced | 407 | 4 | Active | [Zillow](https://www.zillow.com/homes/407+S+Ottawa+St+Earlville+IL+60518_rb/) | [Google](https://www.google.com/search?q=407+S+Ottawa+St+Earlville+IL+60518+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/407-S-Ottawa-St_Earlville_IL_60518_M94522-65503) |
 | 8 | 852 Timber Oak Ln | Yorkville | Yorkville | $599,000 | SFH | high-dom, price-reduced | 387 | 4 | Active | [Zillow](https://www.zillow.com/homes/852+Timber+Oak+Ln+Yorkville+IL+60560_rb/) | [Google](https://www.google.com/search?q=852+Timber+Oak+Ln+Yorkville+IL+60560+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/852-Timber-Oak-Ln_Yorkville_IL_60560_M82472-83978) |
 | 9 | 770 Dartmouth Ln | Oswego | Oswego | $630,900 | SFH | high-dom, price-reduced | 371 | 4 | Active | [Zillow](https://www.zillow.com/homes/770+Dartmouth+Ln+Oswego+IL+60543_rb/) | [Google](https://www.google.com/search?q=770+Dartmouth+Ln+Oswego+IL+60543+for+sale) | [Realtor](https://www.realtor.com/realestateandhomes-detail/770-Dartmouth-Ln_Oswego_IL_60543_M97828-41151) |
@@ -42,9 +42,9 @@
 
 ## Quick Links
 
-- [by-area/wheaton.md](by-area/wheaton.md) — Wheaton (4 properties)
-- [by-area/oswego.md](by-area/oswego.md) — Oswego (19 properties)
-- [by-area/sandwich.md](by-area/sandwich.md) — Sandwich (5 properties)
+- [by-area/wheaton.md](by-area/wheaton.md) — Wheaton (3 properties)
+- [by-area/oswego.md](by-area/oswego.md) — Oswego (20 properties)
+- [by-area/sandwich.md](by-area/sandwich.md) — Sandwich (4 properties)
 - [by-area/somonauk.md](by-area/somonauk.md) — Somonauk (1 properties)
 - [by-area/lake-holiday.md](by-area/lake-holiday.md) — Lake Holiday (3 properties)
 - [by-area/leland.md](by-area/leland.md) — Leland (3 properties)
